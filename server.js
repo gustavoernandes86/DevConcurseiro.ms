@@ -21,8 +21,21 @@ app.use(express.static(path.join(__dirname), {
 // Serve os PDFs e demais arquivos do diretório raiz do projeto (um nível acima)
 app.use(express.static(path.join(__dirname, '..')));
 
+// Ensure data directory exists
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'data', 'estudos.db');
+const dbDir = path.dirname(DB_PATH);
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
+// ─── Database Backup ───
+const { backupDatabase } = require('./tools/backup');
+backupDatabase(DB_PATH).catch(err => {
+    console.error('[Backup Error] Failed to run startup backup:', err.message);
+});
+
 // ─── Database Init ───
-const db = new Database(path.join(__dirname, 'estudos.db'));
+const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 

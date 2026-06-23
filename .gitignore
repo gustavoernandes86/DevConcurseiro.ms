@@ -1,6 +1,12 @@
 .env
-node_modules/*
+*.db
+*.db-shm
+*.db-wal
+data/backups/
+node_modules/
+frontend/node_modules/
+frontend/dist/
+.DS_Store
 pdfjs/*
 *.zip
 yarn.lock
-package-lock.json
