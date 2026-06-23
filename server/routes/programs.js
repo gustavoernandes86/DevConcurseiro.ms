@@ -6,6 +6,10 @@ const { resolveInsideRoot, assertPdfPath } = require('../utils/safePath');
 const path = require('path');
 const fs = require('fs');
 
+// Services
+const { getTextForMaterialPages } = require('../services/pdfTextExtractor');
+const { generateExercisesForContent } = require('../services/exerciseGenerator');
+
 // Helper to check if program exists
 function assertProgramExists(programId) {
     const program = db.prepare('SELECT id FROM learning_programs WHERE id = ?').get(programId);
@@ -412,13 +416,6 @@ router.post('/:programId/exercises/generate', asyncRoute(async (req, res) => {
 
     assertProgramExists(programId);
 
-    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-    if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_api_key_here') {
-        const err = new Error('GEMINI_API_KEY não configurada.');
-        err.statusCode = 500;
-        throw err;
-    }
-
     if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
         const err = new Error('O campo dateStr é obrigatório e deve seguir o formato YYYY-MM-DD.');
         err.statusCode = 400;
@@ -451,181 +448,37 @@ router.post('/:programId/exercises/generate', asyncRoute(async (req, res) => {
     // Group pages by material
     const matPages = {};
     pagesRead.forEach(row => {
-        if (!matPages[row.material_id]) matPages[row.material_id] = new Set();
-        matPages[row.material_id].add(row.page_number);
+        if (!matPages[row.material_id]) matPages[row.material_id] = [];
+        matPages[row.material_id].push(row.page_number);
     });
 
     let extractedContent = '';
-    const pdfParse = require('pdf-parse');
-    const rootDir = process.env.PDF_ROOT || path.join(__dirname, '../../public/pdfs');
 
-    for (const [matId, pagesSet] of Object.entries(matPages)) {
-        // Resolve material details from database
-        const material = db.prepare('SELECT path, title FROM materials WHERE id = ?').get(matId);
-        if (!material || !material.path) {
-            console.warn(`[Exercise Generator] Material not found or path missing: ${matId}`);
-            continue;
-        }
-
-        const pdfAbsPath = resolveInsideRoot(rootDir, material.path);
-        assertPdfPath(pdfAbsPath);
-
-        if (!fs.existsSync(pdfAbsPath)) {
-            console.warn(`PDF file not found: ${pdfAbsPath}`);
-            continue;
-        }
-
+    // Extract text from pages (utilizing cache service!)
+    for (const [matId, pagesArray] of Object.entries(matPages)) {
+        const material = db.prepare('SELECT title FROM materials WHERE id = ?').get(matId);
+        const displayTitle = material ? material.title : matId;
+        
         try {
-            const dataBuffer = fs.readFileSync(pdfAbsPath);
-            const sortedPages = Array.from(pagesSet).sort((a, b) => a - b);
-            const pagesToExtract = sortedPages.slice(0, 30);
-
-            const parsed = await pdfParse(dataBuffer, {
-                max: Math.max(...pagesToExtract),
-                pagerender: function(pageData) {
-                    return pageData.getTextContent().then(function(textContent) {
-                        return textContent.items.map(item => item.str).join(' ');
-                    });
-                }
-            });
-
-            const trimmedText = parsed.text.trim().substring(0, 8000);
-            if (trimmedText.length > 100) {
-                extractedContent += `\n\n=== CONTEÚDO: ${material.title} (páginas lidas: ${pagesToExtract.join(', ')}) ===\n${trimmedText}`;
+            const pagesText = await getTextForMaterialPages(matId, pagesArray);
+            const combinedText = Object.values(pagesText).join(' ');
+            
+            if (combinedText.trim().length > 100) {
+                extractedContent += `\n\n=== CONTEÚDO: ${displayTitle} (páginas lidas: ${pagesArray.join(', ')}) ===\n${combinedText.substring(0, 8000)}`;
             }
-        } catch (pdfErr) {
-            console.error(`Erro ao extrair PDF ${material.path}:`, pdfErr.message);
+        } catch (err) {
+            console.error(`[Exercise Route] Failed to extract text for material ${matId}:`, err.message);
         }
     }
 
     if (!extractedContent.trim()) {
-        const err = new Error('Não foi possível extrair texto dos PDFs lidos. Verifique se os arquivos existem.');
+        const err = new Error('Não foi possível obter texto dos PDFs lidos para gerar questões.');
         err.statusCode = 500;
         throw err;
     }
 
-    // Build prompt for Cesgranrio
-    const prompt = `Você é um especialista em concursos públicos brasileiros e irá criar uma lista de exercícios de fixação no estilo da banca CESGRANRIO.
-
-Com base no conteúdo estudado abaixo, elabore EXATAMENTE 10 questões de múltipla escolha (estilo Cesgranrio), cada uma com 5 alternativas (A, B, C, D e E) e apenas uma resposta correta.
-
-REGRAS OBRIGATÓRIAS:
-- As questões devem ser baseadas exclusivamente no conteúdo fornecido
-- O nível de dificuldade deve ser moderado a alto (nível concurso público federal)
-- As alternativas incorretas devem ser plausíveis (não óbvias)
-- Cada questão deve ter um gabarito comentado objetivo e muito sucinto (máximo de 3 frases) explicando por que a resposta correta é a certa e por que as outras estão erradas. Evite explicações excessivamente longas para não estourar limites.
-- Responda APENAS com JSON válido, sem nenhum texto fora do JSON
-
-FORMATO JSON OBRIGATÓRIO (array com exatamente 10 objetos):
-[
-  {
-    "id": 1,
-    "enunciado": "Texto da questão...",
-    "alternativas": {
-      "A": "Texto da alternativa A",
-      "B": "Texto da alternativa B",
-      "C": "Texto da alternativa C",
-      "D": "Texto da alternativa D",
-      "E": "Texto da alternativa E"
-    },
-    "resposta_correta": "A",
-    "comentario": "A alternativa A está correta porque..."
-  }
-]
-
-CONTEÚDO ESTUDADO HOJE:
-${extractedContent.substring(0, 30000)}`;
-
-    let attempts = 0;
-    const maxRetries = 2;
-    let questions = null;
-    let lastError = null;
-
-    while (attempts < maxRetries) {
-        attempts++;
-        try {
-            console.log(`Tentativa ${attempts} de gerar exercícios com Gemini...`);
-            const geminiRes = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: {
-                            temperature: 0.7,
-                            maxOutputTokens: 8192,
-                            responseMimeType: 'application/json',
-                            responseSchema: {
-                                type: 'ARRAY',
-                                items: {
-                                    type: 'OBJECT',
-                                    properties: {
-                                        id: { type: 'INTEGER' },
-                                        enunciado: { type: 'STRING' },
-                                        alternativas: {
-                                            type: 'OBJECT',
-                                            properties: {
-                                                A: { type: 'STRING' },
-                                                B: { type: 'STRING' },
-                                                C: { type: 'STRING' },
-                                                D: { type: 'STRING' },
-                                                E: { type: 'STRING' }
-                                            },
-                                            required: ["A", "B", "C", "D", "E"]
-                                        },
-                                        resposta_correta: { type: 'STRING' },
-                                        comentario: { type: 'STRING' }
-                                    },
-                                    required: ["id", "enunciado", "alternativas", "resposta_correta", "comentario"]
-                                }
-                            }
-                        }
-                    })
-                }
-            );
-
-            if (!geminiRes.ok) {
-                const errText = await geminiRes.text();
-                throw new Error('Erro na API do Gemini: ' + geminiRes.status + ' - ' + errText);
-            }
-
-            const geminiData = await geminiRes.json();
-            const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-            if (!rawText) {
-                throw new Error('A API do Gemini não retornou conteúdo');
-            }
-
-            try {
-                questions = JSON.parse(rawText);
-            } catch (parseErr) {
-                const match = rawText.match(/\[[\s\S]*\]/);
-                if (match) {
-                    questions = JSON.parse(match[0]);
-                } else {
-                    throw new Error('Resposta da IA em formato JSON inválido');
-                }
-            }
-
-            if (!Array.isArray(questions) || questions.length < 5) {
-                throw new Error('A IA não gerou questões suficientes.');
-            }
-            break;
-        } catch (err) {
-            console.error(`Falha na geração de simulado (tentativa ${attempts}):`, err.message);
-            lastError = err;
-            if (attempts < maxRetries) {
-                await new Promise(resolve => setTimeout(resolve, 1500));
-            }
-        }
-    }
-
-    if (!questions) {
-        const err = new Error(lastError?.message || 'Erro ao gerar simulado no Gemini.');
-        err.statusCode = 500;
-        throw err;
-    }
+    // Generate questions using the AI service
+    const questions = await generateExercisesForContent(programId, extractedContent);
 
     const sessionId = `session-${Date.now()}`;
     const now = Date.now();
@@ -681,6 +534,119 @@ router.post('/:programId/exercises/:sessionId/save', asyncRoute(async (req, res)
         return res.status(404).json({ error: 'Sessão de exercícios não encontrada ou não pertence a este programa.' });
     }
 
+    res.json({ ok: true });
+}));
+
+// GET /api/programs/:programId/videos - Get modules, subjects, and videos with progress
+router.get('/:programId/videos', asyncRoute(async (req, res) => {
+    const { programId } = req.params;
+    assertProgramExists(programId);
+    
+    // 1. Get modules
+    const modules = db.prepare('SELECT * FROM video_modules WHERE program_id = ? ORDER BY sort_order, module_number').all(programId);
+    
+    // 2. Get all subjects for these modules
+    const moduleIds = modules.map(m => m.id);
+    if (moduleIds.length === 0) {
+        return res.json([]);
+    }
+    
+    const placeholders = moduleIds.map(() => '?').join(',');
+    const subjects = db.prepare(`SELECT * FROM video_subjects WHERE module_id IN (${placeholders}) ORDER BY sort_order`).all(moduleIds);
+    
+    // 3. Get all videos for these subjects
+    const subjectIds = subjects.map(s => s.id);
+    let videos = [];
+    let progress = [];
+    if (subjectIds.length > 0) {
+        const subPlaceholders = subjectIds.map(() => '?').join(',');
+        videos = db.prepare(`SELECT * FROM videos WHERE subject_id IN (${subPlaceholders}) ORDER BY video_number`).all(subjectIds);
+        
+        const videoIds = videos.map(v => v.id);
+        if (videoIds.length > 0) {
+            const vidPlaceholders = videoIds.map(() => '?').join(',');
+            progress = db.prepare(`SELECT * FROM video_progress WHERE video_id IN (${vidPlaceholders})`).all(videoIds);
+        }
+    }
+    
+    // Build structure
+    const progressMap = {};
+    progress.forEach(p => {
+        progressMap[p.video_id] = {
+            status: p.status,
+            lastPositionSeconds: p.last_position_seconds,
+            completedAt: p.completed_at
+        };
+    });
+    
+    const videosMap = {};
+    videos.forEach(v => {
+        if (!videosMap[v.subject_id]) videosMap[v.subject_id] = [];
+        videosMap[v.subject_id].push({
+            id: v.id,
+            videoNumber: v.video_number,
+            title: v.title,
+            durationSeconds: v.duration_seconds,
+            url: v.url,
+            progress: progressMap[v.id] || { status: 'todo', lastPositionSeconds: 0, completedAt: null }
+        });
+    });
+    
+    const subjectsMap = {};
+    subjects.forEach(s => {
+        if (!subjectsMap[s.module_id]) subjectsMap[s.module_id] = [];
+        subjectsMap[s.module_id].push({
+            id: s.id,
+            name: s.name,
+            videos: videosMap[s.id] || []
+        });
+    });
+    
+    const result = modules.map(m => ({
+        id: m.id,
+        moduleNumber: m.module_number,
+        title: m.title,
+        subjects: subjectsMap[m.id] || []
+    }));
+    
+    res.json(result);
+}));
+
+// PUT /api/programs/:programId/videos/:videoId/progress - Update progress of a video
+router.put('/:programId/videos/:videoId/progress', asyncRoute(async (req, res) => {
+    const { programId, videoId } = req.params;
+    const { status, lastPositionSeconds } = req.body;
+    
+    assertProgramExists(programId);
+    
+    // Check if video exists
+    const video = db.prepare('SELECT id FROM videos WHERE id = ?').get(videoId);
+    if (!video) {
+        const err = new Error('Vídeo não encontrado.');
+        err.statusCode = 404;
+        throw err;
+    }
+    
+    if (!status || !['todo', 'watching', 'done'].includes(status)) {
+        const err = new Error('Status inválido.');
+        err.statusCode = 400;
+        throw err;
+    }
+    
+    const pos = lastPositionSeconds ? parseInt(lastPositionSeconds, 10) : 0;
+    const completedAt = status === 'done' ? Date.now() : null;
+    const now = Date.now();
+    
+    db.prepare(`
+        INSERT INTO video_progress (video_id, status, last_position_seconds, completed_at, updated_at)
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(video_id) DO UPDATE SET
+            status = excluded.status,
+            last_position_seconds = excluded.last_position_seconds,
+            completed_at = excluded.completed_at,
+            updated_at = excluded.updated_at
+    `).run(videoId, status, pos, completedAt, now);
+    
     res.json({ ok: true });
 }));
 

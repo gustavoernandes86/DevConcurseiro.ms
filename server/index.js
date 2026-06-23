@@ -761,6 +761,14 @@ runMigrations()
             console.error('[Loader Error] Failed to load contest configurations during boot:', loaderErr.message);
         }
 
+        // Run legacy data migration (idempotent)
+        try {
+            const { migrateLegacyData } = require('./services/legacyMigrationService');
+            await migrateLegacyData();
+        } catch (migrationErr) {
+            console.error('[Migration Service Error] Failed to migrate legacy tables:', migrationErr.message);
+        }
+
         app.listen(PORT, () => {
             console.log(`\n  🛢️  Plano de Estudos Petrobras (Restruturado)`);
             console.log(`  ─────────────────────────────`);
