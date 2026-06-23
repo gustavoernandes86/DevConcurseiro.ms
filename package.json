@@ -1,0 +1,16 @@
+{
+  "name": "plano-estudos-petrobras",
+  "version": "1.0.0",
+  "description": "Plano de Estudos Petrobras — Engenharia de Software",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.0",
+    "pdf-parse": "^1.1.1"
+  }
+}

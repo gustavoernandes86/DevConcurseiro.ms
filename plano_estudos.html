@@ -1,0 +1,4530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Estudos — Petrobras | Ênfase 4: Engenharia de Software</title>
+    <meta name="description"
+        content="Plano de estudos otimizado para o concurso da Petrobras - Analista de Sistemas - Engenharia de Software">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: #1a2236;
+            --bg-card-hover: #1f2a42;
+            --bg-glass: rgba(26, 34, 54, 0.7);
+            --border-color: rgba(99, 138, 255, 0.15);
+            --border-glow: rgba(99, 138, 255, 0.3);
+            --text-primary: #e8ecf4;
+            --text-secondary: #8b95a8;
+            --text-muted: #5a6478;
+            --accent-blue: #638aff;
+            --accent-blue-dim: rgba(99, 138, 255, 0.15);
+            --accent-green: #34d399;
+            --accent-green-dim: rgba(52, 211, 153, 0.15);
+            --accent-yellow: #fbbf24;
+            --accent-yellow-dim: rgba(251, 191, 36, 0.15);
+            --accent-red: #f87171;
+            --accent-red-dim: rgba(248, 113, 113, 0.15);
+            --accent-purple: #a78bfa;
+            --accent-purple-dim: rgba(167, 139, 250, 0.15);
+            --accent-orange: #fb923c;
+            --accent-orange-dim: rgba(251, 146, 60, 0.15);
+            --gradient-primary: linear-gradient(135deg, #638aff 0%, #a78bfa 100%);
+            --gradient-green: linear-gradient(135deg, #34d399 0%, #06b6d4 100%);
+            --gradient-fire: linear-gradient(135deg, #f87171 0%, #fb923c 100%);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 30px rgba(99, 138, 255, 0.1);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(99, 138, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(167, 139, 250, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-blue-dim);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+
+        /* ─── LAYOUT ─── */
+        .app {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(99, 138, 255, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-text span {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .stat-badge .num {
+            color: var(--accent-green);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .stat-badge .label {
+            color: var(--text-secondary);
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px 80px;
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* ─── POMODORO SIDEBAR ─── */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .pomodoro-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pomodoro-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .pomodoro-title .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-red-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .timer-display {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .timer-ring-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 16px;
+        }
+
+        .timer-ring {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-ring-bg {
+            fill: none;
+            stroke: var(--bg-secondary);
+            stroke-width: 6;
+        }
+
+        .timer-ring-progress {
+            fill: none;
+            stroke: url(#timerGradient);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .timer-ring-progress.break-mode {
+            stroke: url(#breakGradient);
+        }
+
+        .timer-time {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 138, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(99, 138, 255, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--gradient-fire);
+            color: white;
+            box-shadow: 0 4px 15px rgba(248, 113, 113, 0.3);
+        }
+
+        .btn-ghost {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-ghost:hover {
+            color: var(--text-primary);
+            border-color: var(--border-glow);
+        }
+
+        .timer-config {
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .config-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+
+        .config-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .config-row label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .config-row input[type="number"] {
+            width: 60px;
+            padding: 6px 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .config-row input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .pomodoro-count {
+            text-align: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pomodoro-count .number {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pomodoro-count .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ─── PROGRESS SECTION ─── */
+        .progress-overview {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .progress-overview h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phase-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .phase-stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .phase-stat-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 0 10px rgba(99, 138, 255, 0.05);
+        }
+
+        .phase-stat-ring {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            margin-bottom: 6px;
+        }
+
+        .phase-stat-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .phase-stat-ring-bg {
+            fill: none;
+            stroke: var(--bg-card);
+            stroke-width: 5;
+        }
+
+        .phase-stat-ring-fill {
+            fill: none;
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 201.06;
+            stroke-dashoffset: 201.06;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .phase-stat-ring-fill.fase1 {
+            stroke: var(--accent-red);
+        }
+
+        .phase-stat-ring-fill.fase2 {
+            stroke: var(--accent-yellow);
+        }
+
+        .phase-stat-ring-fill.fase3 {
+            stroke: var(--accent-green);
+        }
+
+        .phase-stat-ring-fill.basico {
+            stroke: var(--accent-purple);
+        }
+
+        .phase-stat-pct {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .phase-stat-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .phase-stat-count {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ─── CONTENT AREA ─── */
+        .content {
+            min-width: 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 10px 18px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+        }
+
+        /* ─── PHASE SECTIONS ─── */
+        .phase-section {
+            margin-bottom: 28px;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .phase-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .phase-badge.fase1 {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+        }
+
+        .phase-badge.fase2 {
+            background: var(--accent-yellow-dim);
+            color: var(--accent-yellow);
+        }
+
+        .phase-badge.fase3 {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+        }
+
+        .phase-badge.basico {
+            background: var(--accent-purple-dim);
+            color: var(--accent-purple);
+        }
+
+        .phase-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .phase-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ─── WEEK CARDS ─── */
+        .week-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            margin-bottom: 14px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .week-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .week-header:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .week-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .week-number {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .week-number.completed {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+        }
+
+        .week-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .week-info span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .week-progress-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .week-progress-mini .bar {
+            width: 80px;
+            height: 4px;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .week-progress-mini .bar-fill {
+            height: 100%;
+            background: var(--gradient-green);
+            border-radius: 2px;
+            transition: width 0.4s;
+        }
+
+        .week-progress-mini .pct {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-green);
+            min-width: 36px;
+            text-align: right;
+        }
+
+        .week-toggle {
+            font-size: 18px;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+
+        .week-card.open .week-toggle {
+            transform: rotate(180deg);
+        }
+
+        .week-body {
+            display: none;
+            padding: 0 20px 16px;
+        }
+
+        .week-card.open .week-body {
+            display: block;
+        }
+
+        /* ─── TOPIC ITEMS ─── */
+        .topic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: var(--radius-xs);
+            margin-bottom: 4px;
+            transition: background 0.15s;
+        }
+
+        .topic-item:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .topic-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            border: 2px solid var(--text-muted);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            margin-top: 1px;
+        }
+
+        .topic-checkbox:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .topic-checkbox:checked {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .topic-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .topic-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topic-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topic-name {
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .topic-item.done .topic-name {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .btn-notes-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0.4;
+            transition: all 0.2s;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-notes-toggle:hover,
+        .btn-notes-toggle.has-note {
+            opacity: 1;
+            background: var(--bg-secondary);
+        }
+
+        .topic-detail {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topic-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .topic-tag {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-red {
+            background: var(--accent-red-dim);
+            color: var(--accent-red);
+        }
+
+        .tag-yellow {
+            background: var(--accent-yellow-dim);
+            color: var(--accent-yellow);
+        }
+
+        .tag-green {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+        }
+
+        .tag-blue {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+        }
+
+        .tag-purple {
+            background: var(--accent-purple-dim);
+            color: var(--accent-purple);
+        }
+
+        .topic-notes-editor {
+            margin-top: 10px;
+            animation: fadeInUp 0.2s ease;
+        }
+
+        .topic-notes-editor textarea {
+            width: 100%;
+            height: 60px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            padding: 8px 10px;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        .topic-notes-editor textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        /* ─── SEARCH & FILTERS ─── */
+        .search-filter-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-wrapper .search-icon {
+            position: absolute;
+            left: 16px;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .search-input-wrapper input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(99, 138, 255, 0.15);
+        }
+
+        .filter-groups {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 4px;
+        }
+
+        .filter-pill {
+            padding: 6px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill:hover {
+            color: var(--text-primary);
+            border-color: var(--border-glow);
+        }
+
+        .filter-pill.active {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        /* ─── STREAK & LOGS ─── */
+        .streak-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .streak-badge {
+            background: var(--accent-orange-dim);
+            border: 1px solid var(--accent-orange);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            min-width: 100px;
+            animation: flameGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes flameGlow {
+            0% {
+                box-shadow: 0 0 10px rgba(251, 146, 60, 0.1);
+            }
+
+            100% {
+                box-shadow: 0 0 20px rgba(251, 146, 60, 0.3);
+            }
+        }
+
+        .streak-num {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--accent-orange);
+            line-height: 1;
+        }
+
+        .streak-label {
+            font-size: 9px;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .streak-stats {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .streak-stat-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 4px;
+        }
+
+        .streak-stat-item span {
+            color: var(--text-secondary);
+        }
+
+        .streak-stat-item strong {
+            color: var(--text-primary);
+        }
+
+        .log-table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        /* ─── INFO CARDS ─── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 22px;
+        }
+
+        .info-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        .info-card li strong {
+            color: var(--text-primary);
+        }
+
+        .strategy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .strategy-table th,
+        .strategy-table td {
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .strategy-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .strategy-table td {
+            color: var(--text-secondary);
+        }
+
+        /* ─── RESET BUTTON ─── */
+        .reset-section {
+            margin-top: 32px;
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-reset {
+            padding: 10px 24px;
+            background: transparent;
+            border: 1px solid var(--accent-red-dim);
+            color: var(--accent-red);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: var(--accent-red-dim);
+        }
+
+        /* ─── ALARM OVERLAY ─── */
+        .alarm-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 12, 20, 0.88);
+            backdrop-filter: blur(4px);
+            z-index: 10;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+        }
+
+        .alarm-overlay.active {
+            display: flex;
+        }
+
+        .alarm-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 24px rgba(99, 138, 255, 0.2);
+            animation: alarmPulse 1s ease-in-out infinite;
+            width: 90%;
+            max-width: 320px;
+        }
+
+        @keyframes alarmPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+        }
+
+        .alarm-modal .alarm-icon {
+            font-size: 44px;
+            margin-bottom: 12px;
+        }
+
+        .alarm-modal h2 {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .alarm-modal p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        /* ─── TAB CONTENT ─── */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 900px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+                order: -1;
+            }
+
+            .header-stats {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header-inner {
+                padding: 0 16px;
+            }
+
+            .main {
+                padding: 20px 16px;
+            }
+
+            .pomodoro-card {
+                padding: 20px;
+            }
+
+            .timer-ring-container {
+                width: 160px;
+                height: 160px;
+            }
+
+            .timer-time {
+                font-size: 38px;
+            }
+
+            .nav-tabs {
+                gap: 0;
+            }
+
+            .nav-tab {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .streak-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .week-card {
+            animation: fadeInUp 0.3s ease backwards;
+        }
+
+        .week-card:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .week-card:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        .week-card:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ─── PDF READING PROGRESS (inline in topic list) ─── */
+        .pdf-read-progress {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .pdf-read-progress .micro-bar {
+            width: 48px;
+            height: 4px;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .pdf-read-progress .micro-bar-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        .pdf-read-progress .micro-pct {
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        .pdf-read-progress .bookmark-icon {
+            color: var(--accent-yellow);
+            font-size: 11px;
+        }
+
+        /* ─── PDF BOOKMARK BAR ─── */
+        .pdf-bookmark-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .pdf-bookmark-bar label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .pdf-bookmark-bar .bookmark-val {
+            min-width: 48px;
+            padding: 4px 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 750;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .pdf-bookmark-progress {
+            flex: 1;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pdf-bookmark-progress .progress-track {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-card);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .pdf-bookmark-progress .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .pdf-bookmark-progress .progress-pct {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--accent-blue);
+            min-width: 36px;
+            text-align: right;
+        }
+
+        .btn-bookmark {
+            padding: 5px 12px;
+            border: none;
+            border-radius: var(--radius-xs);
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .btn-bookmark:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-bookmark.saved {
+            background: var(--accent-green-dim);
+            color: var(--accent-green);
+        }
+
+        /* ─── PDF VIEWER PANEL ─── */
+        .pdf-viewer-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 50vw;
+            z-index: 1000;
+            background: var(--bg-secondary);
+            border-left: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .pdf-viewer-panel.open {
+            transform: translateX(0);
+        }
+
+        .pdf-resize-handle {
+            position: absolute;
+            top: 0;
+            left: -4px;
+            width: 8px;
+            height: 100%;
+            cursor: col-resize;
+            z-index: 1010;
+        }
+
+        .pdf-resize-handle:hover {
+            background: rgba(99, 138, 255, 0.2);
+        }
+
+        .pdf-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pdf-title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .pdf-icon {
+            font-size: 20px;
+        }
+
+        .pdf-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pdf-body {
+            flex: 1;
+            background: #242424;
+            position: relative;
+        }
+
+        .pdf-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .pdf-link-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent-blue);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            transition: color 0.15s;
+            text-align: left;
+        }
+
+        .pdf-link-btn:hover {
+            color: var(--text-primary);
+        }
+
+        body.pdf-view-open {
+            padding-right: 50vw;
+            transition: padding-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.pdf-view-open .main {
+            grid-template-columns: 1fr;
+        }
+
+        body.pdf-view-open .sidebar {
+            position: relative;
+            top: 0;
+            order: -1;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 900px) {
+            body.pdf-view-open {
+                padding-right: 0 !important;
+            }
+
+            .pdf-viewer-panel {
+                width: 100vw !important;
+            }
+        }
+
+        /* ─── EXERCISES / QUIZ ─── */
+        .ex-locked {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            text-align: center;
+            gap: 16px;
+        }
+        .ex-locked-icon {
+            font-size: 56px;
+            filter: grayscale(0.4);
+        }
+        .ex-locked-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .ex-locked-sub {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 420px;
+            line-height: 1.7;
+        }
+        .ex-ready {
+            padding: 24px 0;
+        }
+        .ex-pages-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+        .ex-pages-list h4 {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        .ex-pages-list ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .ex-pages-list li {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+            border-radius: var(--radius-xs);
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .ex-generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            letter-spacing: 0.02em;
+        }
+        .ex-generate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .ex-generate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .ex-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 48px 0;
+            text-align: center;
+        }
+        .ex-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .ex-loading p { color: var(--text-secondary); font-size: 14px; }
+        /* Quiz */
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .quiz-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .quiz-score-badge {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+            border-radius: 999px;
+            padding: 5px 14px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .quiz-question {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+        .quiz-question.answered { border-color: var(--border-glow); }
+        .quiz-q-num {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+        .quiz-enunciado {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        .quiz-alternativas {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .quiz-alt {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .quiz-alt:hover:not(.disabled) { background: var(--bg-card-hover); border-color: var(--border-glow); color: var(--text-primary); }
+        .quiz-alt.selected { border-color: var(--accent-blue); background: var(--accent-blue-dim); color: var(--text-primary); }
+        .quiz-alt.correct { border-color: var(--accent-green) !important; background: var(--accent-green-dim) !important; color: var(--text-primary) !important; }
+        .quiz-alt.wrong { border-color: var(--accent-red) !important; background: var(--accent-red-dim) !important; color: var(--text-primary) !important; }
+        .quiz-alt.disabled { cursor: default; }
+        .quiz-alt-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .quiz-alt.correct .quiz-alt-letter { background: var(--accent-green); color: #000; }
+        .quiz-alt.wrong .quiz-alt-letter { background: var(--accent-red); color: #fff; }
+        .quiz-alt.selected:not(.correct):not(.wrong) .quiz-alt-letter { background: var(--accent-blue); color: #fff; }
+        .quiz-commentary {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent-blue);
+            border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            display: none;
+        }
+        .quiz-commentary.visible { display: block; }
+        .quiz-confirm-btn {
+            margin-top: 12px;
+            padding: 8px 20px;
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        .quiz-confirm-btn:hover { opacity: 0.85; }
+        .quiz-confirm-btn:disabled { opacity: 0.5; cursor: default; }
+        .quiz-final {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+        }
+        .quiz-final-score {
+            font-size: 64px;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+        .quiz-final-label { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; }
+        .quiz-final-sub { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+
+        /* ─── EXERCISES REPORT & HISTÓRICO ─── */
+        .ex-sub-tabs {
+            display: flex;
+            gap: 6px;
+            background: rgba(17, 24, 39, 0.6);
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+        .ex-sub-tab {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ex-sub-tab:hover {
+            color: var(--text-primary);
+        }
+        .ex-sub-tab.active {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+        }
+        .ex-report-dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .ex-report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .ex-report-card {
+            background: rgba(26, 34, 54, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .ex-report-card-num {
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .ex-report-card-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        .ex-report-chart-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            background: rgba(26, 34, 54, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 24px;
+            flex-wrap: wrap;
+        }
+        .ex-report-ring-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        .ex-report-ring-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
+        .ex-report-chart-desc {
+            flex: 1;
+            min-width: 200px;
+        }
+        .ex-report-chart-desc h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .ex-report-chart-desc p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .ex-history-section {
+            margin-top: 10px;
+        }
+        .ex-history-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ex-history-table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+        }
+        .ex-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+        .ex-history-table th,
+        .ex-history-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .ex-history-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+        }
+        .ex-history-table tr:last-child td {
+            border-bottom: none;
+        }
+        .ex-history-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .ex-history-status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .ex-history-status-badge.excellent { background: var(--accent-green-dim); color: var(--accent-green); }
+        .ex-history-status-badge.good { background: var(--accent-blue-dim); color: var(--accent-blue); }
+        .ex-history-status-badge.try-hard { background: var(--accent-yellow-dim); color: var(--accent-yellow); }
+        
+        .ex-btn-action {
+            background: var(--accent-blue-dim);
+            color: var(--accent-blue);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .ex-btn-action:hover {
+            border-color: var(--border-glow);
+            background: var(--accent-blue);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <div class="logo-icon">🛢️</div>
+                    <div class="logo-text">
+                        <h1>Plano Petrobras</h1>
+                        <span>Ênfase 4 — Engenharia de Software | Cesgranrio</span>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <span class="num" id="globalProgress">0%</span>
+                        <span class="label">concluído</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="num" id="globalDone">0</span>
+                        <span class="label">/ <span id="globalTotal">0</span> tópicos</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main">
+            <!-- CONTENT -->
+            <div class="content">
+                <nav class="nav-tabs" role="tablist">
+                    <button class="nav-tab active" data-tab="plano" role="tab">📋 Plano de Estudos</button>
+                    <button class="nav-tab" data-tab="visao" role="tab">📊 Painel Geral</button>
+                    <button class="nav-tab" data-tab="historico" role="tab">📈 Histórico & Backup</button>
+                    <button class="nav-tab" data-tab="estrategia" role="tab">🎯 Estratégias</button>
+                    <button class="nav-tab" data-tab="exercicios" role="tab" id="tab-btn-exercicios">📝 Exercícios <span id="exBadge" style="display:none; background: var(--accent-green); color:#000; border-radius:999px; font-size:10px; padding:1px 7px; font-weight:700; vertical-align:middle; margin-left:4px;">HOJE</span></button>
+                </nav>
+
+                <!-- TAB: PLANO DE ESTUDOS -->
+                <div class="tab-content active" id="tab-plano">
+                    <div class="search-filter-bar">
+                        <div class="search-input-wrapper">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchInput" placeholder="Pesquisar assuntos ou PDFs..."
+                                oninput="onSearchFilterChange()">
+                        </div>
+                        <div class="filter-groups">
+                            <div class="filter-group">
+                                <span class="filter-label">Status:</span>
+                                <button class="filter-pill active" data-filter-status="all"
+                                    onclick="setStatusFilter('all', this)">Todos</button>
+                                <button class="filter-pill" data-filter-status="todo"
+                                    onclick="setStatusFilter('todo', this)">Pendentes</button>
+                                <button class="filter-pill" data-filter-status="done"
+                                    onclick="setStatusFilter('done', this)">Concluídos</button>
+                            </div>
+                            <div class="filter-group">
+                                <span class="filter-label">Matéria/Bloco:</span>
+                                <button class="filter-pill active" data-filter-tag="all"
+                                    onclick="setTagFilter('all', this)">Todos</button>
+                                <button class="filter-pill" data-filter-tag="bloco-i"
+                                    onclick="setTagFilter('Bloco I', this)">Bloco I</button>
+                                <button class="filter-pill" data-filter-tag="bloco-ii"
+                                    onclick="setTagFilter('Bloco II', this)">Bloco II</button>
+                                <button class="filter-pill" data-filter-tag="bloco-iii"
+                                    onclick="setTagFilter('Bloco III', this)">Bloco III</button>
+                                <button class="filter-pill" data-filter-tag="portugues"
+                                    onclick="setTagFilter('Português', this)">Português</button>
+                                <button class="filter-pill" data-filter-tag="ingles"
+                                    onclick="setTagFilter('Inglês', this)">Inglês</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="studyPlanContainer"></div>
+
+                    <div class="reset-section">
+                        <button class="btn-reset" onclick="resetProgress()">🗑️ Resetar todo o progresso</button>
+                    </div>
+                </div>
+
+                <!-- TAB: PAINEL GERAL -->
+                <div class="tab-content" id="tab-visao">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>📌 Dados do Concurso</h3>
+                            <ul>
+                                <li>📋 <strong>Cargo:</strong> Profissional Petrobras NS Júnior</li>
+                                <li>📜 <strong>Edital:</strong> <button class="pdf-link-btn"
+                                        onclick="openPdfViewer('editalpetroleobrasileiro.pdf', 'Edital Completo')"
+                                        style="display: inline; font-size: 13px; font-weight: 600;">Abrir Edital
+                                        PDF</button></li>
+                                <li>🎯 <strong>Ênfase:</strong> 4 — Engenharia de Software</li>
+                                <li>💼 <strong>Vagas:</strong> 26 imediatas / 130 cadastro</li>
+                                <li>💰 <strong>Remuneração:</strong> R$ 11.716,82 (mín. garantida)</li>
+                                <li>🏛️ <strong>Banca:</strong> Cesgranrio</li>
+                                <li>📝 <strong>Formato:</strong> Múltipla escolha (A-E)</li>
+                                <li>✅ <strong>Pontuação negativa:</strong> NÃO</li>
+                            </ul>
+                        </div>
+                        <div class="info-card">
+                            <h3>📐 Estrutura da Prova</h3>
+                            <ul>
+                                <li>🇧🇷 <strong>Português:</strong> Apenas eliminatória ❌ não classifica</li>
+                                <li>🇬🇧 <strong>Inglês:</strong> Apenas eliminatória ❌ não classifica</li>
+                                <li>💻 <strong>Específicos:</strong> Eliminatória + Classificatória ✅</li>
+                                <li>⚡ <strong>Regra:</strong> NUNCA deixe em branco!</li>
+                            </ul>
+                        </div>
+                        <div class="info-card">
+                            <h3>⏱️ Seu Tempo</h3>
+                            <ul>
+                                <li>📅 <strong>Seg-Sex:</strong> 2h/dia = 10h/semana</li>
+                                <li>📅 <strong>Sáb-Dom:</strong> 4h/dia = 8h/semana</li>
+                                <li>⏰ <strong>Total:</strong> 18h/semana</li>
+                                <li>💻 <strong>Em específicos:</strong> ~15h30 (86%)</li>
+                                <li>📚 <strong>Em eliminatórias:</strong> ~1h30 (14%)</li>
+                                <li>📆 <strong>Ciclo:</strong> 12 semanas (~216h total)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>🗓️ Distribuição Semanal</h3>
+                        <table class="strategy-table">
+                            <thead>
+                                <tr>
+                                    <th>Dia</th>
+                                    <th>Duração</th>
+                                    <th>Atividade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Segunda</strong></td>
+                                    <td>2h</td>
+                                    <td>📗 Bloco I — Eng. Software / Arquitetura</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Terça</strong></td>
+                                    <td>2h</td>
+                                    <td>📗 Bloco II — BD / Qualidade / Algoritmos</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Quarta</strong></td>
+                                    <td>2h</td>
+                                    <td>📗 Bloco III — Segurança / Governança / BI</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Quinta</strong></td>
+                                    <td>2h</td>
+                                    <td>📗 Rodízio (DevOps, nuvem, redes, linguagens)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sexta</strong></td>
+                                    <td>2h</td>
+                                    <td>📗 Reforço tema fraco + exercícios intensivos</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sábado</strong></td>
+                                    <td>4h</td>
+                                    <td>🔄 Revisão (2h) + Provas anteriores (2h)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Domingo</strong></td>
+                                    <td>4h</td>
+                                    <td>📘 PT/EN (1h30) + 📗 Específicos (1h30) + 📝 Simulado (1h)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: HISTÓRICO & BACKUP -->
+                <div class="tab-content" id="tab-historico">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>🔥 Streak & Estatísticas</h3>
+                            <div class="streak-container">
+                                <div class="streak-badge">
+                                    <div class="streak-num" id="studyStreak">0</div>
+                                    <div class="streak-label">Dias Consecutivos</div>
+                                </div>
+                                <div class="streak-stats">
+                                    <div class="streak-stat-item">
+                                        <span>Total de Pomodoros:</span>
+                                        <strong id="statsTotalPomodoros">0</strong>
+                                    </div>
+                                    <div class="streak-stat-item">
+                                        <span>Horas de Foco:</span>
+                                        <strong id="statsTotalHours">0.0h</strong>
+                                    </div>
+                                    <div class="streak-stat-item">
+                                        <span>Último dia estudado:</span>
+                                        <strong id="statsLastStudyDate">-</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>💾 Backup de Progresso</h3>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+                                Salve o seu progresso de estudos e anotações em um arquivo para não perder as
+                                informações ou para transferir para outro dispositivo.
+                            </p>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="btn btn-primary" onclick="exportData()">📤 Exportar Dados</button>
+                                <button class="btn btn-ghost" onclick="triggerImport()">📥 Importar Dados</button>
+                                <input type="file" id="importFile" style="display: none;" accept=".json"
+                                    onchange="importData(event)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card" style="margin-top: 20px;">
+                        <h3>📋 Histórico de Sessões</h3>
+                        <div class="log-table-container">
+                            <table class="strategy-table" id="logTable">
+                                <thead>
+                                    <tr>
+                                        <th>Data/Hora</th>
+                                        <th>Tipo</th>
+                                        <th>Duração</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logTableBody">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; color: var(--text-muted);">Nenhuma
+                                            sessão registrada ainda.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: ESTRATÉGIAS -->
+                <div class="tab-content" id="tab-estrategia">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>🎯 Regra de Ouro — Cesgranrio</h3>
+                            <table class="strategy-table">
+                                <thead>
+                                    <tr>
+                                        <th>Situação</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sabe a resposta</td>
+                                        <td>✅ Marque com confiança</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dúvida entre 2-3</td>
+                                        <td>✅ Elimine absurdas, marque a melhor</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Não faz ideia</td>
+                                        <td>✅ Marque mesmo assim (chute educado)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sem tempo</td>
+                                        <td>✅ Marque qualquer (20% > 0%)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="info-card">
+                            <h3>📖 Técnicas de Resolução</h3>
+                            <ul>
+                                <li>1️⃣ Eliminação por absurdo — descarte alternativas erradas</li>
+                                <li>2️⃣ Alternativas parecidas geralmente contêm a certa</li>
+                                <li>3️⃣ Leia o enunciado com atenção — cenários práticos</li>
+                                <li>4️⃣ "A mais completa" — quando duas parecem corretas</li>
+                                <li>5️⃣ Palavras absolutas (sempre, nunca) = geralmente errado</li>
+                                <li>6️⃣ Espere questões com código (SQL, Python)</li>
+                                <li>7️⃣ Normas/frameworks cobram detalhes específicos</li>
+                            </ul>
+                        </div>
+                        <div class="info-card">
+                            <h3>⚡ Cesgranrio vs Cebraspe</h3>
+                            <table class="strategy-table">
+                                <thead>
+                                    <tr>
+                                        <th>Aspecto</th>
+                                        <th>Cesgranrio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Formato</td>
+                                        <td>Múltipla escolha (A-E)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pontuação negativa</td>
+                                        <td><strong>NÃO</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Para dúvidas</td>
+                                        <td><strong>Sempre marcar</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Estilo</td>
+                                        <td>Enunciados contextualizados</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dificuldade</td>
+                                        <td>Mais técnica e objetiva</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PT/EN</td>
+                                        <td><strong>Apenas eliminatórios</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="info-card">
+                            <h3>💡 Dicas Finais</h3>
+                            <ul>
+                                <li>📝 Faça resumos ativos — 1 página por PDF</li>
+                                <li>🔄 Revisão espaçada — a cada 7 dias</li>
+                                <li>🎯 Resolva provas Cesgranrio (Petrobras, BNDES, BB)</li>
+                                <li>⏱️ Simule tempo — ~3min/questão</li>
+                                <li>🚫 Não gaste tempo extra em eliminatórias</li>
+                                <li>✅ NUNCA deixe questão em branco</li>
+                                <li>💤 Respeite o descanso</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: EXERCÍCIOS -->
+                <div class="tab-content" id="tab-exercicios">
+                    <div class="info-card">
+                        <!-- Sub-Navegação de Exercícios -->
+                        <div class="ex-sub-tabs">
+                            <button class="ex-sub-tab active" id="ex-sub-tab-quiz" onclick="switchExSubTab('quiz')">
+                                📋 Simulado de Hoje
+                            </button>
+                            <button class="ex-sub-tab" id="ex-sub-tab-report" onclick="switchExSubTab('report')">
+                                📊 Histórico & Desempenho
+                            </button>
+                        </div>
+
+                        <!-- PANEL: SIMULADO DE HOJE -->
+                        <div id="exPanelQuiz">
+                            <h3>📝 Exercícios de Fixação — Baseados no que você estudou hoje</h3>
+                            <p style="font-size:13px; color:var(--text-secondary); margin: 8px 0 20px;">
+                                O sistema identifica as páginas dos PDFs que você leu hoje (ao permanecer pelo menos 15 segundos em uma página) e gera 10 questões de múltipla escolha no estilo Cesgranrio usando Inteligência Artificial.
+                            </p>
+                            <div id="exContent">
+                                <!-- State: loading -->
+                                <div id="exLoading" class="ex-loading">
+                                    <div class="ex-spinner"></div>
+                                    <p>Verificando suas leituras de hoje...</p>
+                                </div>
+                                <!-- State: locked -->
+                                <div id="exLocked" class="ex-locked" style="display:none;">
+                                    <div class="ex-locked-icon">📖</div>
+                                    <div class="ex-locked-title">Nenhuma leitura registrada hoje</div>
+                                    <div class="ex-locked-sub">Abra um PDF do plano de estudos e permaneça por pelo menos 15 segundos em cada página. Ao registrar sua primeira leitura, esta seção será liberada automaticamente.</div>
+                                </div>
+                                <!-- State: ready to generate -->
+                                <div id="exReady" class="ex-ready" style="display:none;">
+                                    <div class="ex-pages-list">
+                                        <h4>📚 Páginas lidas hoje</h4>
+                                        <ul id="exPagesList"></ul>
+                                    </div>
+                                    <button class="ex-generate-btn" id="exGenerateBtn" onclick="generateExercises()">
+                                        🤖 Gerar 10 Questões Cesgranrio com IA
+                                    </button>
+                                    <p style="font-size:12px; color:var(--text-muted); margin-top:10px; text-align:center;">A geração leva entre 20 e 60 segundos. Requer a chave GEMINI_API_KEY configurada no arquivo <code style="background:var(--bg-secondary);padding:1px 5px;border-radius:3px;">.env</code>.</p>
+                                </div>
+                                <!-- State: generating -->
+                                <div id="exGenerating" class="ex-loading" style="display:none;">
+                                    <div class="ex-spinner"></div>
+                                    <p>🤖 A IA está elaborando suas questões...<br><span style="font-size:12px; opacity:0.6;">Isso pode levar até 1 minuto</span></p>
+                                </div>
+                                <!-- State: quiz -->
+                                <div id="exQuiz" style="display:none;">
+                                    <div class="quiz-header">
+                                        <div class="quiz-title" id="quizTitleText">📋 Lista de Exercícios — Hoje</div>
+                                        <div class="quiz-score-badge" id="quizScoreBadge">0 / 0 respondidas</div>
+                                    </div>
+                                    <div id="quizQuestions"></div>
+                                    <div id="quizFinal" class="quiz-final" style="display:none;">
+                                        <div class="quiz-final-score" id="quizFinalScore">8/10</div>
+                                        <div class="quiz-final-label">acertos — <span id="quizFinalPct">80%</span></div>
+                                        <div class="quiz-final-sub" id="quizFinalMsg"></div>
+                                        <button class="btn btn-ghost" style="margin-top:20px;" onclick="scrollToTop()">↑ Ver questões novamente</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL: REPORT & HISTÓRICO -->
+                        <div id="exPanelReport" class="ex-report-dashboard" style="display: none;">
+                            <h3>📊 Relatório de Desempenho</h3>
+                            <p style="font-size:13px; color:var(--text-secondary); margin-bottom: 20px;">
+                                Acompanhe seu aproveitamento nas questões e revise seus simulados anteriores para fixar o aprendizado.
+                            </p>
+
+                            <!-- Cards de Estatísticas -->
+                            <div class="ex-report-grid">
+                                <div class="ex-report-card">
+                                    <span class="ex-report-card-num" id="exStatTotal">0</span>
+                                    <span class="ex-report-card-label">Questões Respondidas</span>
+                                </div>
+                                <div class="ex-report-card">
+                                    <span class="ex-report-card-num" id="exStatCorrect">0</span>
+                                    <span class="ex-report-card-label">Acertos Totais</span>
+                                </div>
+                                <div class="ex-report-card">
+                                    <span class="ex-report-card-num" id="exStatDays">0</span>
+                                    <span class="ex-report-card-label">Dias Praticados</span>
+                                </div>
+                            </div>
+
+                            <!-- Aproveitamento Geral Ring -->
+                            <div class="ex-report-chart-container">
+                                <div class="ex-report-ring-container">
+                                    <svg width="100" height="100" viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="40" stroke="var(--border-color)" stroke-width="8" fill="none" />
+                                        <circle id="exReportRingProgress" cx="50" cy="50" r="40" stroke="var(--accent-blue)" stroke-width="8" fill="none"
+                                            stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" transform="rotate(-90 50 50)" style="transition: stroke-dashoffset 0.5s ease-out;" />
+                                    </svg>
+                                    <div class="ex-report-ring-label" id="exStatAccuracyPct">0%</div>
+                                </div>
+                                <div class="ex-report-chart-desc">
+                                    <h4>Aproveitamento Geral</h4>
+                                    <p id="exReportFeedback">Responda a simulados na aba "Simulado de Hoje" para obter uma análise do seu aproveitamento nos estudos.</p>
+                                </div>
+                            </div>
+
+                            <!-- Lista de Sessões Passadas (Histórico) -->
+                            <div class="ex-history-section">
+                                <h3>📈 Histórico de Simulados</h3>
+                                <div class="ex-history-table-container">
+                                    <table class="ex-history-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Resultado</th>
+                                                <th>Aproveitamento</th>
+                                                <th>Status</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="exHistoryTableBody">
+                                            <tr>
+                                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                                                    Nenhum simulado registrado no histórico.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div class="pomodoro-card" style="position: relative;">
+                    <div class="pomodoro-title">
+                        <div class="icon">🍅</div>
+                        <span>Pomodoro Timer</span>
+                    </div>
+
+                    <div class="timer-display">
+                        <div class="timer-ring-container">
+                            <svg class="timer-ring" viewBox="0 0 200 200">
+                                <defs>
+                                    <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#638aff" />
+                                        <stop offset="100%" style="stop-color:#a78bfa" />
+                                    </linearGradient>
+                                    <linearGradient id="breakGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#34d399" />
+                                        <stop offset="100%" style="stop-color:#06b6d4" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="timer-ring-bg" cx="100" cy="100" r="90" />
+                                <circle class="timer-ring-progress" id="timerProgress" cx="100" cy="100" r="90" />
+                            </svg>
+                            <div class="timer-time" id="timerDisplay">25:00</div>
+                        </div>
+                        <div class="timer-label" id="timerLabel">Foco</div>
+                    </div>
+
+                    <div class="timer-controls">
+                        <button class="btn btn-primary" id="btnStart" onclick="toggleTimer()">▶ Iniciar</button>
+                        <button class="btn btn-ghost" onclick="resetTimer()">↻ Resetar</button>
+                    </div>
+
+                    <div class="timer-config">
+                        <div class="config-title">⚙️ Configuração</div>
+                        <div class="config-row">
+                            <label>Presets de Tempo</label>
+                            <select id="cfgPreset" onchange="applyPreset()"
+                                style="padding: 6px 8px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-xs); color: var(--text-primary); font-family: inherit; font-size: 13px;">
+                                <option value="classic">Clássico (25/5)</option>
+                                <option value="short">Foco Curto (15/3)</option>
+                                <option value="long">Estudo Longo (50/10)</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+                        <div class="config-row">
+                            <label>Foco (min)</label>
+                            <input type="number" id="cfgWork" value="25" min="1" max="90" onchange="updateConfig()">
+                        </div>
+                        <div class="config-row">
+                            <label>Pausa curta (min)</label>
+                            <input type="number" id="cfgBreak" value="5" min="1" max="30" onchange="updateConfig()">
+                        </div>
+                        <div class="config-row">
+                            <label>Pausa longa (min)</label>
+                            <input type="number" id="cfgLongBreak" value="15" min="1" max="60"
+                                onchange="updateConfig()">
+                        </div>
+                        <div class="config-row">
+                            <label>Pomodoros até pausa longa</label>
+                            <input type="number" id="cfgCycles" value="4" min="2" max="8" onchange="updateConfig()">
+                        </div>
+                        <div class="config-row">
+                            <label>Som do Alarme</label>
+                            <select id="cfgSound" onchange="updateSoundConfig()"
+                                style="padding: 6px 8px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-xs); color: var(--text-primary); font-family: inherit; font-size: 13px;">
+                                <option value="zen">Sino Zen</option>
+                                <option value="digital">Bipe Digital</option>
+                                <option value="gong">Gongo Oriental</option>
+                                <option value="fanfare">Fanfarra de Vitória</option>
+                            </select>
+                        </div>
+                        <div class="config-row">
+                            <label>Volume do Alarme</label>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <input type="range" id="cfgVolume" min="0" max="1" step="0.1" value="0.5"
+                                    onchange="updateSoundConfig()"
+                                    style="width: 80px; accent-color: var(--accent-blue);">
+                                <button class="btn-notes-toggle" onclick="playAlarmSound()" title="Testar Som"
+                                    style="padding: 4px; border: 1px solid var(--border-color); border-radius: 4px;">🔊</button>
+                            </div>
+                        </div>
+                        <div class="config-row">
+                            <label>Notificações Desktop</label>
+                            <input type="checkbox" id="cfgNotify" onchange="toggleNotifications()"
+                                style="accent-color: var(--accent-blue);">
+                        </div>
+                    </div>
+
+                    <div class="pomodoro-count">
+                        <div class="number" id="pomodoroCount">0</div>
+                        <div class="label">pomodoros hoje</div>
+                    </div>
+
+                    <!-- ALARM OVERLAY (scoped to pomodoro card) -->
+                    <div class="alarm-overlay" id="alarmOverlay">
+                        <div class="alarm-modal">
+                            <div class="alarm-icon" id="alarmIcon">🍅</div>
+                            <h2 id="alarmTitle">Tempo esgotado!</h2>
+                            <p id="alarmMessage">Hora de fazer uma pausa.</p>
+                            <button class="btn btn-primary" onclick="dismissAlarm()">✓ Entendido</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-overview">
+                    <h3>📊 Progresso por Bloco</h3>
+                    <div id="phaseProgressBars"></div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+
+
+    <!-- PDF VIEWER PANEL -->
+    <div class="pdf-viewer-panel" id="pdfPanel">
+        <div class="pdf-resize-handle"></div>
+        <div class="pdf-header">
+            <div class="pdf-title-container">
+                <span class="pdf-icon">📄</span>
+                <span class="pdf-title" id="pdfTitle">Nome do Arquivo</span>
+            </div>
+            <div class="pdf-actions">
+                <a href="#" class="btn-notes-toggle" id="btnOpenNewTab" target="_blank" title="Abrir em Nova Aba"
+                    style="font-size: 16px; opacity: 0.8; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; text-decoration: none;">🔗</a>
+                <button class="btn-notes-toggle" onclick="closePdfViewer()" title="Fechar Visualizador"
+                    style="font-size: 16px; opacity: 0.8; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px;">✕</button>
+            </div>
+        </div>
+        <div class="pdf-bookmark-bar" id="pdfBookmarkBar">
+            <label>📌 Página</label>
+            <span id="bmCurrentPage" class="bookmark-val">1</span>
+            <label>de</label>
+            <span id="bmTotalPages" class="bookmark-val">1</span>
+            <div class="pdf-bookmark-progress">
+                <div class="progress-track">
+                    <div class="progress-fill" id="bmProgressFill" style="width: 0%"></div>
+                </div>
+                <span class="progress-pct" id="bmProgressPct">0%</span>
+            </div>
+            <span id="bookmarkSavedStatus" style="opacity: 0; transition: opacity 0.3s; margin-left: 10px; color: var(--accent-green); font-weight: 600; font-size: 13px;">
+                💾 Salvo!
+            </span>
+        </div>
+        <div class="pdf-body">
+            <iframe id="pdfIframe" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // ════════════════════════════════════════
+        //  API LAYER (replaces localStorage)
+        // ════════════════════════════════════════
+        const API = {
+            async getTopics() {
+                const r = await fetch('/api/topics'); return r.json();
+            },
+            async setTopic(id, completedAt) {
+                await fetch(`/api/topics/${id}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ completed_at: completedAt }) });
+            },
+            async deleteTopic(id) {
+                await fetch(`/api/topics/${id}`, { method: 'DELETE' });
+            },
+            async deleteAllTopics() {
+                await fetch('/api/topics', { method: 'DELETE' });
+            },
+            async getNotes() {
+                const r = await fetch('/api/notes'); return r.json();
+            },
+            async saveNote(id, note) {
+                await fetch(`/api/notes/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ note }) });
+            },
+            async getLog() {
+                const r = await fetch('/api/log'); return r.json();
+            },
+            async addLog(entry) {
+                const r = await fetch('/api/log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entry) });
+                return r.json();
+            },
+            async deleteLog(id) {
+                await fetch(`/api/log/${id}`, { method: 'DELETE' });
+            },
+            async getConfig() {
+                const r = await fetch('/api/config'); return r.json();
+            },
+            async setConfig(key, value) {
+                await fetch(`/api/config/${key}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ value }) });
+            },
+            async getBookmarks() {
+                const r = await fetch('/api/bookmarks'); return r.json();
+            },
+            async saveBookmark(pdfKey, currentPage, totalPages) {
+                await fetch(`/api/bookmarks/${encodeURIComponent(pdfKey)}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPage, totalPages }) });
+            },
+            async exportAll() {
+                const r = await fetch('/api/export'); return r.json();
+            },
+            async importAll(data) {
+                const r = await fetch('/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                return r.json();
+            },
+            async migrate(data) {
+                const r = await fetch('/api/migrate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                return r.json();
+            }
+        };
+
+        // ════════════════════════════════════════
+        //  STUDY PLAN DATA
+        // ════════════════════════════════════════
+        const studyPlan = [
+            {
+                phase: "FASE 1 — FUNDAÇÃO",
+                phaseClass: "fase1",
+                subtitle: "Semanas 1-4 · Temas de Alta Prioridade 🔴",
+                weeks: [
+                    {
+                        number: 1,
+                        title: "Engenharia de Software",
+                        topics: [
+                            { id: "s1_1", name: "Modelos de Ciclo de Vida (Cascata, Espiral, Iterativo, Incremental)", tag: "Bloco I", tagClass: "tag-red", detail: "engenharia-de-software.pdf", startPage: 1, endPage: 28 },
+                            { id: "s1_2", name: "RUP (Rational Unified Process)", tag: "Bloco I", tagClass: "tag-red", detail: "engenharia-de-software.pdf", startPage: 28, endPage: 36 },
+                            { id: "s1_3", name: "CMMI e MPS.BR", tag: "Bloco I", tagClass: "tag-red", detail: "conceitos-qualidade-de-software.pdf" },
+                            { id: "s1_4", name: "Metodologias Ágeis — Scrum", tag: "Bloco I", tagClass: "tag-red", detail: "metodologias-e-praticas-ageis.pdf" },
+                            { id: "s1_5", name: "Metodologias Ágeis — Kanban e XP", tag: "Bloco I", tagClass: "tag-red", detail: "metodologias-e-praticas-ageis.pdf" },
+                            { id: "s1_6", name: "Integração e Implantação Contínua (CI/CD)", tag: "Bloco I", tagClass: "tag-red", detail: "metodologias-e-praticas-ageis.pdf" },
+                        ]
+                    },
+                    {
+                        number: 2,
+                        title: "DevOps + Containers",
+                        topics: [
+                            { id: "s2_1", name: "DevOps e DevSecOps — Conceitos e Cultura", tag: "Bloco I", tagClass: "tag-red", detail: "devops-e-devsecops.pdf" },
+                            { id: "s2_2", name: "Versionamento e Git (GIT Flow, branching)", tag: "Bloco II", tagClass: "tag-yellow", detail: "versionamento-e-integracao-continua.pdf" },
+                            { id: "s2_3", name: "Conteinerização e Docker", tag: "Bloco I", tagClass: "tag-red", detail: "conteinerizacao-e-docker.pdf" },
+                            { id: "s2_4", name: "Kubernetes — Orquestração de Containers", tag: "Bloco I", tagClass: "tag-red", detail: "kubernets.pdf" },
+                            { id: "s2_5", name: "Pipelines CI/CD na prática", tag: "Bloco I", tagClass: "tag-red", detail: "versionamento-e-integracao-continua.pdf" },
+                        ]
+                    },
+                    {
+                        number: 3,
+                        title: "Banco de Dados",
+                        topics: [
+                            { id: "s3_1", name: "Modelagem de Dados (Conceitual, Lógica, Física)", tag: "Bloco II", tagClass: "tag-yellow", detail: "banco-de-dados-parte-i.pdf" },
+                            { id: "s3_2", name: "Modelo Relacional e Normalização", tag: "Bloco II", tagClass: "tag-yellow", detail: "banco-de-dados-parte-ii.pdf" },
+                            { id: "s3_3", name: "SQL — DDL, DML, Consultas complexas", tag: "Bloco II", tagClass: "tag-yellow", detail: "banco-de-dados-parte-iii.pdf" },
+                            { id: "s3_4", name: "SQL Avançado (Joins, Subqueries, Window Functions)", tag: "Bloco II", tagClass: "tag-yellow", detail: "sql-avancado.pdf" },
+                            { id: "s3_5", name: "SGBD, ACID, Transações, Performance", tag: "Bloco II", tagClass: "tag-yellow", detail: "banco-de-dados-parte-iv.pdf" },
+                            { id: "s3_6", name: "Bancos NoSQL (Document, Key-Value, Graph, Column)", tag: "Bloco II", tagClass: "tag-yellow", detail: "bancos-de-dados-nosql.pdf" },
+                            { id: "s3_7", name: "ETL, Data Lakes, Big Data (conceitos)", tag: "Bloco II", tagClass: "tag-yellow", detail: "big-data-hadoop-e-spark.pdf" },
+                        ]
+                    },
+                    {
+                        number: 4,
+                        title: "Segurança da Informação",
+                        topics: [
+                            { id: "s4_1", name: "Segurança Física e Lógica, Firewall, IDS/IPS, WAF", tag: "Bloco III", tagClass: "tag-green", detail: "seguranca-da-informacao.pdf" },
+                            { id: "s4_2", name: "Criptografia, Certificação e Assinatura Digital", tag: "Bloco III", tagClass: "tag-green", detail: "seguranca-da-informacao-criptografia.pdf" },
+                            { id: "s4_3", name: "ISO 27002 — Gestão de Segurança", tag: "Bloco III", tagClass: "tag-green", detail: "gestao-de-seguranca-iso-27002.pdf" },
+                            { id: "s4_4", name: "Ataques (DDoS, SQL Injection, XSS, CSRF)", tag: "Bloco III", tagClass: "tag-green", detail: "seguranca-da-informacao.pdf" },
+                            { id: "s4_5", name: "Gestão de Identidade e Acesso (RBAC, ABAC, SSO, MFA)", tag: "Bloco III", tagClass: "tag-green", detail: "gestao-de-identidade-e-acesso.pdf" },
+                            { id: "s4_6", name: "NIST SP 800-61, MITRE ATT&CK, Threat Hunting", tag: "Bloco III", tagClass: "tag-green", detail: "testes-e-incidentes-de-seguranca.pdf" },
+                            { id: "s4_7", name: "ISO 31000 (Riscos), ISO 22301 (Continuidade), Sarbanes-Oxley", tag: "Bloco III", tagClass: "tag-green", detail: "abnt-nbr-22301-2020.pdf" },
+                        ]
+                    },
+                ]
+            },
+            {
+                phase: "FASE 2 — CONSTRUÇÃO",
+                phaseClass: "fase2",
+                subtitle: "Semanas 5-8 · Temas de Alta e Média Prioridade 🔴🟡",
+                weeks: [
+                    {
+                        number: 5,
+                        title: "Arquitetura de Software",
+                        topics: [
+                            { id: "s5_1", name: "Padrão MVC, N-Camadas, Microsserviços", tag: "Bloco I", tagClass: "tag-red", detail: "arquitetura-de-software.pdf" },
+                            { id: "s5_2", name: "SOA, ESB, Arquitetura Orientada a Eventos", tag: "Bloco I", tagClass: "tag-red", detail: "arquitetura-de-software.pdf" },
+                            { id: "s5_3", name: "Web Services: REST, SOAP, JSON, XML, WSDL", tag: "Bloco I", tagClass: "tag-red", detail: "web-services-padroes.pdf" },
+                            { id: "s5_4", name: "OO, UML (diagramas de classes, sequência, casos de uso)", tag: "Bloco I", tagClass: "tag-red", detail: "orientacao-a-objetos-e-uml.pdf" },
+                            { id: "s5_5", name: "Padrões de Projeto (GoF) e Anti-patterns", tag: "Bloco I", tagClass: "tag-red", detail: "Estudo online / complementar" },
+                            { id: "s5_6", name: "Cloud Native, Serverless, Mensageria", tag: "Bloco I", tagClass: "tag-red", detail: "arquitetura-de-software.pdf" },
+                        ]
+                    },
+                    {
+                        number: 6,
+                        title: "Qualidade + Testes + Requisitos",
+                        topics: [
+                            { id: "s6_1", name: "Conceitos de Qualidade de Software (ISO 25010)", tag: "Bloco II", tagClass: "tag-yellow", detail: "conceitos-qualidade-de-software.pdf" },
+                            { id: "s6_2", name: "Testes: Unitário, Integração, Funcional, Carga", tag: "Bloco II", tagClass: "tag-yellow", detail: "testes-de-software.pdf" },
+                            { id: "s6_3", name: "Técnicas: Caixa-Branca, Caixa-Preta, Regressão", tag: "Bloco II", tagClass: "tag-yellow", detail: "testes-de-software.pdf" },
+                            { id: "s6_4", name: "Refatoração, Débito Técnico, Code Smell, Métricas", tag: "Bloco II", tagClass: "tag-yellow", detail: "conceitos-qualidade-de-software.pdf" },
+                            { id: "s6_5", name: "Engenharia de Requisitos e Elicitação", tag: "Bloco I", tagClass: "tag-red", detail: "engenharia-de-requisitos.pdf" },
+                            { id: "s6_6", name: "Design Thinking, MVP, Prototipação, Personas", tag: "Bloco I", tagClass: "tag-red", detail: "design-thinking.pdf" },
+                        ]
+                    },
+                    {
+                        number: 7,
+                        title: "Algoritmos + Lógica",
+                        topics: [
+                            { id: "s7_1", name: "Tipos de Dados e Tipos Abstratos (Lista, Fila, Pilha)", tag: "Bloco II", tagClass: "tag-yellow", detail: "algoritmos-e-estruturas-de-dados.pdf" },
+                            { id: "s7_2", name: "Árvores (Binária, AVL, B, B+) e Grafos", tag: "Bloco II", tagClass: "tag-yellow", detail: "algoritmos-e-estruturas-de-dados.pdf" },
+                            { id: "s7_3", name: "Algoritmos de Busca e Ordenação", tag: "Bloco II", tagClass: "tag-yellow", detail: "algoritmos-e-estruturas-de-dados.pdf" },
+                            { id: "s7_4", name: "Complexidade de Algoritmos (Big O)", tag: "Bloco II", tagClass: "tag-yellow", detail: "algoritmos-e-estruturas-de-dados.pdf" },
+                            { id: "s7_5", name: "Lógica de Programação e Recursão", tag: "Bloco III", tagClass: "tag-green", detail: "logica-de-programacao.pdf" },
+                        ]
+                    },
+                    {
+                        number: 8,
+                        title: "BI + Governança + ITIL",
+                        topics: [
+                            { id: "s8_1", name: "Business Intelligence — Conceitos e Ferramentas", tag: "Bloco III", tagClass: "tag-green", detail: "business-intelligence-parte-i.pdf" },
+                            { id: "s8_2", name: "Data Warehouse, OLAP, Modelagem Dimensional", tag: "Bloco III", tagClass: "tag-green", detail: "business-intelligence-parte-ii.pdf" },
+                            { id: "s8_3", name: "Dashboards e Relatórios interativos", tag: "Bloco III", tagClass: "tag-green", detail: "business-intelligence-parte-ii.pdf" },
+                            { id: "s8_4", name: "ITIL v4 — Práticas e Processos", tag: "Bloco III", tagClass: "tag-green", detail: "itil-4-parte-i.pdf + parte-ii.pdf" },
+                            { id: "s8_5", name: "Governança de Dados (DAMA-DMBoK)", tag: "Bloco III", tagClass: "tag-green", detail: "governanca-de-dados.pdf" },
+                            { id: "s8_6", name: "SAFe (Scaled Agile Framework)", tag: "Bloco III", tagClass: "tag-green", detail: "Estudo online / complementar" },
+                        ]
+                    },
+                ]
+            },
+            {
+                phase: "FASE 3 — CONSOLIDAÇÃO",
+                phaseClass: "fase3",
+                subtitle: "Semanas 9-12 · Temas Médios + Revisão + Simulados 🟡🟢",
+                weeks: [
+                    {
+                        number: 9,
+                        title: "Nuvem + Infra + Redes",
+                        topics: [
+                            { id: "s9_1", name: "Computação em Nuvem (IaaS, PaaS, SaaS, Alta Disponibilidade)", tag: "Bloco II", tagClass: "tag-yellow", detail: "arquitetura-de-sistemas-em-nuvem.pdf" },
+                            { id: "s9_2", name: "Segurança em Cloud Native", tag: "Bloco III", tagClass: "tag-green", detail: "seguranca-em-cloud-native.pdf" },
+                            { id: "s9_3", name: "IaC (Infrastructure as Code) e Terraform", tag: "Bloco II", tagClass: "tag-yellow", detail: "infrastructure-as-code-iac.pdf" },
+                            { id: "s9_4", name: "Redes — TCP/IP, HTTP, HTTPS, FTP, SMTP, LDAP", tag: "Bloco III", tagClass: "tag-green", detail: "redes-de-computadores-parte-i.pdf" },
+                            { id: "s9_5", name: "Protocolos de Autenticação: OAuth, SAML 2.0, SSL", tag: "Bloco III", tagClass: "tag-green", detail: "redes-de-computadores-parte-ii.pdf" },
+                            { id: "s9_6", name: "Virtualização e HPC", tag: "Bloco III", tagClass: "tag-green", detail: "virtualizacao.pdf" },
+                        ]
+                    },
+                    {
+                        number: 10,
+                        title: "Linguagens + Frontend",
+                        topics: [
+                            { id: "s10_1", name: "Python 3.7+ (conceitos, OO, bibliotecas)", tag: "Bloco I", tagClass: "tag-red", detail: "linguagem-python.pdf + bibliotecas.pdf" },
+                            { id: "s10_2", name: "JavaScript (fundamentos, DOM, ES6+)", tag: "Bloco I", tagClass: "tag-red", detail: "linguagem-javascript.pdf" },
+                            { id: "s10_3", name: "HTML5 e Semântica Web", tag: "Bloco I", tagClass: "tag-red", detail: "html.pdf" },
+                            { id: "s10_4", name: "CSS3 (Flexbox, Grid, Responsividade)", tag: "Bloco I", tagClass: "tag-red", detail: "linguagem-css.pdf" },
+                            { id: "s10_5", name: "Persistência e Integração de Dados", tag: "Bloco II", tagClass: "tag-yellow", detail: "persistencia-e-integracao-de-dados.pdf" },
+                        ]
+                    },
+                    {
+                        number: 11,
+                        title: "Revisão Geral + Provas",
+                        topics: [
+                            { id: "s11_1", name: "Revisão Bloco I — Eng. Software + Arquitetura", tag: "Revisão", tagClass: "tag-purple", detail: "Resumos das semanas 1-6" },
+                            { id: "s11_2", name: "Revisão Bloco II — BD + Qualidade + Algoritmos", tag: "Revisão", tagClass: "tag-purple", detail: "Resumos das semanas 3, 6, 7" },
+                            { id: "s11_3", name: "Revisão Bloco III — Segurança + Governança + BI", tag: "Revisão", tagClass: "tag-purple", detail: "Resumos das semanas 4, 8, 9" },
+                            { id: "s11_4", name: "Prova Anterior 2022 (Analista Eng. Software)", tag: "Prova", tagClass: "tag-blue", detail: "analise_de_sistemas_engenharia_de_software.pdf" },
+                            { id: "s11_5", name: "Prova Anterior (Caderno C)", tag: "Prova", tagClass: "tag-blue", detail: "petro_005_3.pdf" },
+                        ]
+                    },
+                    {
+                        number: 12,
+                        title: "Simulados Finais",
+                        topics: [
+                            { id: "s12_1", name: "Simulado Completo Cronometrado #1", tag: "Simulado", tagClass: "tag-blue", detail: "3min/questão — todas as disciplinas" },
+                            { id: "s12_2", name: "Análise de Erros e Revisão Direcionada", tag: "Revisão", tagClass: "tag-purple", detail: "Focar nos temas com menor acerto" },
+                            { id: "s12_3", name: "Simulado Completo Cronometrado #2", tag: "Simulado", tagClass: "tag-blue", detail: "3min/questão — todas as disciplinas" },
+                            { id: "s12_4", name: "Revisão Final — Fórmulas, Tabelas, Conceitos-chave", tag: "Revisão", tagClass: "tag-purple", detail: "Resumo de 1 página por tema" },
+                        ]
+                    },
+                ]
+            },
+            {
+                phase: "ELIMINATÓRIAS — Português e Inglês",
+                phaseClass: "basico",
+                subtitle: "Domingos · ~1h30/semana · Apenas nota mínima",
+                weeks: [
+                    {
+                        number: "PT/EN",
+                        title: "Português e Inglês (Manutenção)",
+                        topics: [
+                            { id: "e1", name: "Interpretação e Compreensão de Textos", tag: "Português", tagClass: "tag-purple", detail: "compreensao-e-interpretacao-de-textos.pdf" },
+                            { id: "e2", name: "Coesão, Coerência, Figuras de Linguagem", tag: "Português", tagClass: "tag-purple", detail: "coesao-e-coerencia.pdf" },
+                            { id: "e3", name: "Classes Gramaticais (Parte I e II)", tag: "Português", tagClass: "tag-purple", detail: "classes-gramaticais.pdf" },
+                            { id: "e4", name: "Sintaxe do Período Simples e Composto", tag: "Português", tagClass: "tag-purple", detail: "sintaxe.pdf" },
+                            { id: "e5", name: "Concordância, Regência e Crase", tag: "Português", tagClass: "tag-purple", detail: "sintaxe.pdf" },
+                            { id: "e6", name: "Fonética, Acentuação e Ortografia", tag: "Português", tagClass: "tag-purple", detail: "fonetica-acentuacao-ortografia.pdf" },
+                            { id: "e7", name: "Inglês — Vocabulário e Gramática Básica", tag: "Inglês", tagClass: "tag-blue", detail: "vocabulario-basico-e-gramatica.pdf" },
+                            { id: "e8", name: "Inglês — Leitura e Interpretação de Texto Técnico", tag: "Inglês", tagClass: "tag-blue", detail: "leitura-e-interpretacao-de-texto.pdf" },
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // ════════════════════════════════════════
+        //  PDF FILE MAPPING
+        // ════════════════════════════════════════
+        const PDF_FILE_MAP = {
+            "engenharia-de-software.pdf": ["Engenharia de Software/2025-08-06-12-32-53-115352055-engenharia-de-software-e1754494373.pdf"],
+            "metodologias-e-praticas-ageis.pdf": ["Engenharia de Software/2025-04-02-16-35-00-110259450-metodologias-e-praticas-ageis-e1743622500.pdf"],
+            "devops-e-devsecops.pdf": ["Engenharia de Software/2025-04-02-16-00-44-110263275-devops-e-devsecops-e1743620444.pdf"],
+            "versionamento-e-integracao-continua.pdf": ["Engenharia de Software/2025-09-03-10-52-13-120278655-versionamento-e-integracao-continua-e1756907533.pdf"],
+            "conteinerizacao-e-docker.pdf": ["Engenharia de Software/2024-07-24-14-55-46-99998505-conteinerizacao-e-docker-e1721843746.pdf"],
+            "kubernets.pdf": ["Engenharia de Software/2024-07-31-15-34-24-100296855-kubernets-e1722450864.pdf"],
+            "banco-de-dados-parte-i.pdf": ["Qualidade de Software/2025-08-07-14-32-17-115356645-banco-de-dados-parte-i-e1754587937.pdf"],
+            "banco-de-dados-parte-ii.pdf": ["Qualidade de Software/2025-08-05-15-35-40-115357410-banco-de-dados-parte-ii-e1754418940.pdf"],
+            "banco-de-dados-parte-iii.pdf": ["Qualidade de Software/2025-08-07-09-14-41-115358175-banco-de-dados-parte-iii-e1754568880.pdf"],
+            "banco-de-dados-parte-iv.pdf": ["Qualidade de Software/2025-08-05-15-54-30-115358940-banco-de-dados-parte-iv-e1754420070.pdf"],
+            "sql-avancado.pdf": ["Qualidade de Software/2025-04-14-18-46-55-110287755-sql-avancado-e1744667215.pdf"],
+            "bancos-de-dados-nosql.pdf": ["Qualidade de Software/2023-01-06-18-23-29-80967600-bancos-de-dados-nosql-e1673040209.pdf"],
+            "big-data-hadoop-e-spark.pdf": ["Qualidade de Software/2025-12-05-12-15-47-89151570-big-data-hadoop-e-spark-e1764947747.pdf"],
+            "seguranca-da-informacao.pdf": ["Gerenciamento de Produtos de Software/2025-06-27-11-23-53-116494200-seguranca-da-informacao-e1751034232.pdf"],
+            "seguranca-da-informacao-criptografia.pdf": ["Gerenciamento de Produtos de Software/2022-10-26-13-41-33-75474135-seguranca-da-informacao-criptografia-e1666802492.pdf"],
+            "gestao-de-seguranca-iso-27002.pdf": ["Gerenciamento de Produtos de Software/2024-12-12-15-38-27-105224220-gestao-de-seguranca-da-informacao-norma-nbr-iso-iec-n-27002-2022-e1734028706.pdf"],
+            "gestao-de-identidade-e-acesso.pdf": ["Gerenciamento de Produtos de Software/2025-04-16-14-57-17-110265570-gestao-de-identidade-e-acesso-e1744826236.pdf"],
+            "testes-e-incidentes-de-seguranca.pdf": ["Gerenciamento de Produtos de Software/2025-09-25-12-54-13-121453695-testes-e-incidentes-de-seguranca-da-informacao-e1758815653.pdf"],
+            "abnt-nbr-22301-2020.pdf": ["Gerenciamento de Produtos de Software/2023-02-16-15-42-03-74877435-abnt-nbr-22301-2020-e1676572923.pdf"],
+            "arquitetura-de-software.pdf": ["Engenharia de Software/2025-08-13-14-26-58-118473255-arquitetura-de-software-e1755106018.pdf"],
+            "web-services-padroes.pdf": ["Engenharia de Software/2023-01-12-13-49-53-82375200-web-services-padroes-xml-xslt-uddi-wsdl-soap-rest-e-json-e1673542192.pdf"],
+            "orientacao-a-objetos-e-uml.pdf": ["Engenharia de Software/2025-04-02-18-57-07-110258685-orientacao-a-objetos-e-uml-e1743631027.pdf"],
+            "conceitos-qualidade-de-software.pdf": ["Qualidade de Software/2025-12-19-10-52-48-76837365-conceitos-relacionados-a-qualidade-de-software-e1766152368.pdf"],
+            "testes-de-software.pdf": ["Qualidade de Software/2025-04-02-18-58-44-110260215-testes-de-software-e1743631124.pdf"],
+            "engenharia-de-requisitos.pdf": ["Engenharia de Software/2024-05-08-17-29-59-97766235-engenharia-de-requisitos-e1715200198.pdf"],
+            "design-thinking.pdf": ["Engenharia de Software/2025-11-13-09-42-59-122756490-design-thinking-e1763037779.pdf"],
+            "algoritmos-e-estruturas-de-dados.pdf": ["Qualidade de Software/2025-08-05-11-21-10-115360470-algoritmos-e-estruturas-de-dados-e1754403670.pdf"],
+            "logica-de-programacao.pdf": ["Engenharia de Software/2025-03-31-12-49-48-110283930-logica-de-programacao-e-resolucao-de-problemas-de-logica-e1743436187.pdf"],
+            "business-intelligence-parte-i.pdf": ["Gerenciamento de Produtos de Software/2024-07-11-16-04-05-70928505-business-intelligence-parte-i-e1720724645.pdf"],
+            "business-intelligence-parte-ii.pdf": ["Gerenciamento de Produtos de Software/2025-05-21-14-03-12-115292385-business-intelligence-parte-ii-e1747846992.pdf"],
+            "itil-4-parte-i.pdf + parte-ii.pdf": [
+                "Gerenciamento de Produtos de Software/2025-09-24-16-48-06-117644760-itil-4-parte-i-e1758743286.pdf",
+                "Gerenciamento de Produtos de Software/2025-09-26-10-49-25-117645525-itil-4-parte-ii-e1758894565.pdf"
+            ],
+            "governanca-de-dados.pdf": ["Gerenciamento de Produtos de Software/2025-04-02-19-01-10-110261745-governanca-de-dados-e1743631269.pdf"],
+            "arquitetura-de-sistemas-em-nuvem.pdf": ["Qualidade de Software/2022-11-04-16-18-35-75473370-arquitetura-de-sistemas-em-nuvem-e1667589515.pdf"],
+            "seguranca-em-cloud-native.pdf": ["Engenharia de Software/2025-09-24-11-18-41-121455225-seguranca-em-cloud-native-e1758723521.pdf"],
+            "infrastructure-as-code-iac.pdf": ["Qualidade de Software/2025-12-02-10-42-47-121466700-infrastructure-as-code-iac-fundamentos-e-terraform-e1764682966.pdf"],
+            "redes-de-computadores-parte-i.pdf": ["Gerenciamento de Produtos de Software/2025-10-31-12-32-36-116492670-redes-de-computadores-parte-i-e1761924756.pdf"],
+            "redes-de-computadores-parte-ii.pdf": ["Gerenciamento de Produtos de Software/2025-06-27-11-22-07-116493435-redes-de-computadores-parte-ii-e1751034127.pdf"],
+            "virtualizacao.pdf": ["Gerenciamento de Produtos de Software/2023-01-04-08-22-23-78944175-virtualizacao-e1672831343.pdf"],
+            "linguagem-python.pdf": ["Engenharia de Software/2025-01-31-16-29-34-108518310-linguagem-python-e1738351774.pdf"],
+            "bibliotecas.pdf": ["Engenharia de Software/2025-08-18-11-48-52-118792260-bibliotecas-do-python-e1755528532.pdf"],
+            "linguagem-python.pdf + bibliotecas.pdf": [
+                "Engenharia de Software/2025-01-31-16-29-34-108518310-linguagem-python-e1738351774.pdf",
+                "Engenharia de Software/2025-08-18-11-48-52-118792260-bibliotecas-do-python-e1755528532.pdf"
+            ],
+            "linguagem-javascript.pdf": ["Engenharia de Software/2025-04-03-16-26-18-110260980-linguagem-javascript-e1743708377.pdf"],
+            "html.pdf": ["Engenharia de Software/2024-10-11-15-14-17-101869695-html-e1728670457.pdf"],
+            "linguagem-css.pdf": ["Engenharia de Software/2025-09-22-10-27-37-120492090-linguagem-css-e1758547656.pdf"],
+            "persistencia-e-integracao-de-dados.pdf": ["Engenharia de Software/2025-09-03-10-58-17-119177055-persistencia-e-integracao-de-dados-e1756907897.pdf"],
+            "qualidade-de-dados-e-mlops.pdf": ["Engenharia de Software/2025-10-20-10-55-57-121459815-qualidade-de-dados-e-mlops-e1760968557.pdf"],
+            "compreensao-e-interpretacao-de-textos.pdf": ["Portugues/2025-12-12-09-33-54-110312235-compreensao-e-interpretacao-de-textos-e1765542833.pdf"],
+            "coesao-e-coerencia.pdf": ["Portugues/2026-03-09-11-39-37-110313765-coesao-e-coerencia-semantica-figuras-e-vicios-de-linguagem-reescrita-e1773067177.pdf"],
+            "classes-gramaticais.pdf": [
+                "Portugues/2025-12-22-09-08-26-110321415-emprego-e-sentido-das-classes-gramaticais-parte-i-e1766405306.pdf",
+                "Portugues/2025-02-21-14-21-02-110322180-emprego-e-sentido-das-classes-gramaticais-parte-ii-e1740158462.pdf"
+            ],
+            "sintaxe.pdf": [
+                "Portugues/2025-02-21-14-42-26-110322945-a-sintaxe-do-periodo-simples-parte-i-e1740159746.pdf",
+                "Portugues/2025-02-21-14-58-30-110323710-a-sintaxe-do-periodo-simples-parte-ii-e1740160709.pdf",
+                "Portugues/2025-02-21-15-46-32-110324475-a-sintaxe-do-periodo-composto-e1740163591.pdf"
+            ],
+            "fonetica-acentuacao-ortografia.pdf": ["Portugues/2026-03-25-15-58-52-110318355-nocoes-de-fonetica-acentuacao-grafica-e-ortografia-oficial-e1774465132.pdf"],
+            "vocabulario-basico-e-gramatica.pdf": ["Ingles/2025-10-20-14-31-58-121019940-vocabulario-basico-e-gramatica-e1760981518.pdf"],
+            "leitura-e-interpretacao-de-texto.pdf": ["Ingles/2025-10-21-15-03-54-121020705-leitura-e-interpretacao-de-texto-e1761069834.pdf"],
+            "analise_de_sistemas_engenharia_de_software.pdf": ["Provas anteriores/analise_de_sistemas_engenharia_de_software.pdf"],
+            "petro_005_3.pdf": ["Provas anteriores/petro_005_3.pdf"],
+            "editalpetroleobrasileiro.pdf": ["editalpetroleobrasileiro.pdf"]
+        };
+
+        // ════════════════════════════════════════
+        //  STATE (loaded async from server)
+        // ════════════════════════════════════════
+        let completedTopics = {};
+        let pomodoroState = { count: 0, date: '' };
+        let studyNotes = {};
+        let studyLog = [];
+        let pdfBookmarks = {};
+        let searchQuery = '';
+        let statusFilter = 'all';
+        let tagFilter = 'all';
+        let weekCardOpenStates = {};
+        let currentPdfKey = null;
+
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let timerTotal = 0;
+        let isRunning = false;
+        let isBreak = false;
+        let cycleCount = 0;
+        let audioCtx = null;
+
+        let _noteDebounceTimers = {};
+
+        // ════════════════════════════════════════
+        //  SEARCH & FILTERS
+        // ════════════════════════════════════════
+        function onSearchFilterChange() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderPlan();
+        }
+
+        function setStatusFilter(value, btn) {
+            statusFilter = value;
+            document.querySelectorAll('[data-filter-status]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderPlan();
+        }
+
+        function setTagFilter(value, btn) {
+            tagFilter = value;
+            document.querySelectorAll('[data-filter-tag]').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderPlan();
+        }
+
+        // ════════════════════════════════════════
+        //  NOTES SYSTEM (debounced save)
+        // ════════════════════════════════════════
+        function toggleNotesEditor(topicId) {
+            const editor = document.getElementById(`notes_${topicId}`);
+            if (editor) {
+                const isHidden = editor.style.display === 'none';
+                editor.style.display = isHidden ? 'block' : 'none';
+                if (isHidden) {
+                    const textarea = editor.querySelector('textarea');
+                    textarea.focus();
+                    adjustTextareaHeight(textarea);
+                }
+            }
+        }
+
+        function saveTopicNote(topicId, val) {
+            if (val.trim()) {
+                studyNotes[topicId] = val;
+            } else {
+                delete studyNotes[topicId];
+            }
+
+            // Update UI immediately
+            const topicItem = document.getElementById(`topic_${topicId}`);
+            if (topicItem) {
+                const btn = topicItem.querySelector('.btn-notes-toggle');
+                if (btn) {
+                    if (val.trim()) btn.classList.add('has-note');
+                    else btn.classList.remove('has-note');
+                }
+            }
+
+            // Debounce API call (500ms)
+            clearTimeout(_noteDebounceTimers[topicId]);
+            _noteDebounceTimers[topicId] = setTimeout(() => {
+                API.saveNote(topicId, val);
+            }, 500);
+        }
+
+        function adjustTextareaHeight(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+
+        // ════════════════════════════════════════
+        //  PDF BOOKMARK HELPERS
+        // ════════════════════════════════════════
+        function getPdfProgressHtml(topic) {
+            const paths = PDF_FILE_MAP[topic.detail];
+            if (!paths || paths.length === 0) return '';
+
+            let html = '';
+            paths.forEach(path => {
+                const bookmarkKey = topic.id ? `${path}#${topic.id}` : path;
+                const bm = pdfBookmarks[bookmarkKey];
+
+                const start = topic.startPage || 1;
+                const end = topic.endPage || (bm ? bm.totalPages : 1);
+
+                if (bm && bm.totalPages > 1) {
+                    let pct;
+                    if (topic.startPage && topic.endPage) {
+                        if (bm.currentPage < start) {
+                            pct = 0;
+                        } else if (bm.currentPage > end) {
+                            pct = 100;
+                        } else {
+                            const range = end - start;
+                            pct = range > 0 ? Math.min(100, Math.round(((bm.currentPage - start) / range) * 100)) : 100;
+                        }
+                    } else {
+                        pct = Math.min(100, Math.round((bm.currentPage / bm.totalPages) * 100));
+                    }
+                    html += `<span class="pdf-read-progress">
+                    <span class="bookmark-icon">📌</span>
+                    <span class="micro-bar"><span class="micro-bar-fill" style="width:${pct}%"></span></span>
+                    <span class="micro-pct">${pct}%</span>
+                    <span>p.${bm.currentPage}/${bm.totalPages}</span>
+                </span>`;
+                }
+            });
+            return html;
+        }
+
+        let activeStartPage = null;
+        let activeEndPage = null;
+
+        function onBookmarkChange() {
+            const cur = parseInt(document.getElementById('bmCurrentPage').textContent) || 1;
+            const total = parseInt(document.getElementById('bmTotalPages').textContent) || 1;
+            
+            let pct;
+            if (activeStartPage && activeEndPage) {
+                if (cur < activeStartPage) {
+                    pct = 0;
+                } else if (cur > activeEndPage) {
+                    pct = 100;
+                } else {
+                    const range = activeEndPage - activeStartPage;
+                    pct = range > 0 ? Math.min(100, Math.round(((cur - activeStartPage) / range) * 100)) : 100;
+                }
+            } else {
+                pct = total > 0 ? Math.min(100, Math.round((cur / total) * 100)) : 0;
+            }
+            
+            document.getElementById('bmProgressFill').style.width = pct + '%';
+            document.getElementById('bmProgressPct').textContent = pct + '%';
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        let savedIndicatorTimeout;
+        function showSavedIndicator() {
+            const el = document.getElementById('bookmarkSavedStatus');
+            if (!el) return;
+            el.style.opacity = '1';
+            clearTimeout(savedIndicatorTimeout);
+            savedIndicatorTimeout = setTimeout(() => {
+                el.style.opacity = '0';
+            }, 2000);
+        }
+
+        const debouncedSaveBookmark = debounce(async (pdfKey, page, total) => {
+            if (!pdfKey) return;
+            await API.saveBookmark(pdfKey, page, total);
+            pdfBookmarks[pdfKey] = { currentPage: page, totalPages: total, lastReadAt: Date.now() };
+            showSavedIndicator();
+            renderPlan();
+        }, 1500);
+
+        function handlePdfDocumentLoaded(totalPages) {
+            document.getElementById('bmTotalPages').textContent = totalPages;
+            onBookmarkChange();
+        }
+
+        // Reading log: register page after 15s of permanence
+        let _readingLogTimer = null;
+
+        function getLocalDateStr() {
+            const d = new Date();
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        function registerPageRead(pdfKey, pageNumber) {
+            const dateStr = getLocalDateStr();
+            fetch('/api/reading-log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pdfKey, pageNumber, dateStr })
+            }).then(() => {
+                // Refresh exercises tab badge if it's already visible
+                refreshExercisesState();
+            }).catch(err => console.warn('Reading log error:', err));
+        }
+
+        function handlePdfPageChanging(pageNumber) {
+            document.getElementById('bmCurrentPage').textContent = pageNumber;
+            onBookmarkChange();
+            
+            const total = parseInt(document.getElementById('bmTotalPages').textContent) || 1;
+            if (currentPdfKey) {
+                debouncedSaveBookmark(currentPdfKey, pageNumber, total);
+
+                // Start 15s timer for reading log
+                clearTimeout(_readingLogTimer);
+                _readingLogTimer = setTimeout(() => {
+                    registerPageRead(currentPdfKey, pageNumber);
+                }, 15000);
+            }
+        }
+
+        function onPdfIframeLoad() {
+            const iframe = document.getElementById('pdfIframe');
+            if (!iframe.src || iframe.src === 'about:blank' || iframe.src === window.location.href) {
+                return;
+            }
+            const win = iframe.contentWindow;
+            if (!win) return;
+
+            if (!iframe.src.includes('/pdfjs/web/viewer.html')) {
+                return;
+            }
+
+            function checkInit() {
+                if (!iframe.src || !iframe.src.includes('/pdfjs/web/viewer.html')) return;
+
+                if (win.PDFViewerApplication) {
+                    const app = win.PDFViewerApplication;
+                    app.initializedPromise.then(() => {
+                        if (app.pagesCount > 0) {
+                            handlePdfDocumentLoaded(app.pagesCount);
+                        }
+                        app.eventBus.on('pagesinit', () => {
+                            handlePdfDocumentLoaded(app.pagesCount);
+                        });
+                        app.eventBus.on('pagechanging', (e) => {
+                            handlePdfPageChanging(e.pageNumber);
+                        });
+                    }).catch(err => console.error("Error initializing PDF.js viewer:", err));
+                } else {
+                    setTimeout(checkInit, 50);
+                }
+            }
+            checkInit();
+        }
+
+        // ════════════════════════════════════════
+        //  RENDER STUDY PLAN
+        // ════════════════════════════════════════
+        function renderPlan() {
+            const container = document.getElementById('studyPlanContainer');
+            let html = '';
+            let matchedAny = false;
+
+            studyPlan.forEach(phase => {
+                let phaseHtml = '';
+                let phaseHasMatch = false;
+
+                phase.weeks.forEach(week => {
+                    const filteredTopics = week.topics.filter(topic => {
+                        const matchesSearch = topic.name.toLowerCase().includes(searchQuery) ||
+                            topic.detail.toLowerCase().includes(searchQuery);
+                        const isDone = !!completedTopics[topic.id];
+                        const matchesStatus = statusFilter === 'all' ||
+                            (statusFilter === 'todo' && !isDone) ||
+                            (statusFilter === 'done' && isDone);
+                        const matchesTag = tagFilter === 'all' || topic.tag === tagFilter;
+                        return matchesSearch && matchesStatus && matchesTag;
+                    });
+
+                    if (filteredTopics.length === 0) return;
+
+                    phaseHasMatch = true;
+                    matchedAny = true;
+
+                    const weekDone = week.topics.filter(t => completedTopics[t.id]).length;
+                    const weekTotal = week.topics.length;
+                    const weekPct = weekTotal > 0 ? Math.round((weekDone / weekTotal) * 100) : 0;
+                    const isComplete = weekPct === 100;
+
+                    const isOpen = searchQuery.length > 0 || statusFilter !== 'all' || tagFilter !== 'all' || weekCardOpenStates[week.number];
+
+                    phaseHtml += `<div class="week-card ${isOpen ? 'open' : ''}" data-week="${week.number}">
+                    <div class="week-header" onclick="toggleWeek('${week.number}')">
+                        <div class="week-header-left">
+                            <div class="week-number ${isComplete ? 'completed' : ''}">${typeof week.number === 'number' ? 'S' + week.number : week.number}</div>
+                            <div class="week-info">
+                                <h3>${week.title}</h3>
+                                <span>${weekDone}/${weekTotal} tópicos</span>
+                            </div>
+                        </div>
+                        <div class="week-progress-mini">
+                            <div class="bar"><div class="bar-fill" style="width:${weekPct}%"></div></div>
+                            <span class="pct">${weekPct}%</span>
+                            <span class="week-toggle">▼</span>
+                        </div>
+                    </div>
+                    <div class="week-body" style="display: ${isOpen ? 'block' : 'none'};">`;
+
+                    filteredTopics.forEach(topic => {
+                        const isDone = !!completedTopics[topic.id];
+                        const hasNote = !!studyNotes[topic.id];
+                        const progressHtml = getPdfProgressHtml(topic);
+
+                        phaseHtml += `<div class="topic-item ${isDone ? 'done' : ''}" id="topic_${topic.id}">
+                        <input type="checkbox" class="topic-checkbox" id="chk_${topic.id}"
+                            ${isDone ? 'checked' : ''} onchange="toggleTopic('${topic.id}', this.checked)">
+                        <div class="topic-content">
+                            <div class="topic-header-row">
+                                <div class="topic-name">${topic.name}</div>
+                                <button class="btn-notes-toggle ${hasNote ? 'has-note' : ''}" onclick="toggleNotesEditor('${topic.id}')" title="Anotações">
+                                    📝
+                                </button>
+                            </div>
+                             <div class="topic-detail">${getTopicDetailHtml(topic)}${progressHtml}</div>
+                            <div class="topic-tags">
+                                <span class="topic-tag ${topic.tagClass}">${topic.tag}</span>
+                            </div>
+                            <div class="topic-notes-editor" id="notes_${topic.id}" style="display: none;">
+                                <textarea placeholder="Escreva suas anotações para este assunto..." oninput="saveTopicNote('${topic.id}', this.value); adjustTextareaHeight(this)">${studyNotes[topic.id] || ''}</textarea>
+                            </div>
+                        </div>
+                    </div>`;
+                    });
+
+                    phaseHtml += `</div></div>`;
+                });
+
+                if (phaseHasMatch) {
+                    html += `<div class="phase-section">
+                    <div class="phase-header">
+                        <span class="phase-badge ${phase.phaseClass}">${phase.phase}</span>
+                        <div>
+                            <div class="phase-title">${phase.subtitle.split('·')[0]}</div>
+                            <div class="phase-subtitle">${phase.subtitle.split('·').slice(1).join('·')}</div>
+                        </div>
+                    </div>
+                    ${phaseHtml}
+                </div>`;
+                }
+            });
+
+            if (!matchedAny) {
+                html = `<div style="text-align: center; padding: 40px; color: var(--text-secondary); background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius);">
+                <span style="font-size: 32px; display: block; margin-bottom: 12px;">🔍</span>
+                Nenhum assunto correspondente aos filtros foi encontrado.
+            </div>`;
+            }
+
+            container.innerHTML = html;
+            updateGlobalProgress();
+            updatePhaseProgress();
+        }
+
+        function toggleWeek(weekNumber) {
+            weekCardOpenStates[weekNumber] = !weekCardOpenStates[weekNumber];
+            const card = document.querySelector(`.week-card[data-week="${weekNumber}"]`);
+            if (card) {
+                card.classList.toggle('open');
+                const body = card.querySelector('.week-body');
+                if (body) {
+                    body.style.display = card.classList.contains('open') ? 'block' : 'none';
+                }
+            }
+        }
+
+        async function toggleTopic(id, checked) {
+            if (checked) {
+                completedTopics[id] = Date.now();
+                await API.setTopic(id, completedTopics[id]);
+            } else {
+                delete completedTopics[id];
+                await API.deleteTopic(id);
+            }
+            renderPlan();
+        }
+
+        function updateGlobalProgress() {
+            let total = 0, done = 0;
+            studyPlan.forEach(p => p.weeks.forEach(w => {
+                total += w.topics.length;
+                done += w.topics.filter(t => completedTopics[t.id]).length;
+            }));
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+            document.getElementById('globalProgress').textContent = pct + '%';
+            document.getElementById('globalDone').textContent = done;
+            document.getElementById('globalTotal').textContent = total;
+        }
+
+        function updatePhaseProgress() {
+            const container = document.getElementById('phaseProgressBars');
+            const classes = ['fase1', 'fase2', 'fase3', 'basico'];
+            let html = '<div class="phase-stats-grid">';
+
+            studyPlan.forEach((phase, i) => {
+                let total = 0, done = 0;
+                phase.weeks.forEach(w => {
+                    total += w.topics.length;
+                    done += w.topics.filter(t => completedTopics[t.id]).length;
+                });
+                const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+                const circ = 201.06;
+                const offset = circ - (pct / 100) * circ;
+                const titleShort = phase.phase.split('—')[0].trim().replace('FASE ', 'F');
+
+                html += `<div class="phase-stat-card">
+                <div class="phase-stat-ring">
+                    <svg viewBox="0 0 74 74">
+                        <circle class="phase-stat-ring-bg" cx="37" cy="37" r="32"/>
+                        <circle class="phase-stat-ring-fill ${classes[i]}" cx="37" cy="37" r="32" 
+                            style="stroke-dasharray: ${circ}; stroke-dashoffset: ${offset};"/>
+                    </svg>
+                    <div class="phase-stat-pct">${pct}%</div>
+                </div>
+                <div class="phase-stat-title" title="${phase.phase}">${titleShort}</div>
+                <div class="phase-stat-count">${done}/${total}</div>
+            </div>`;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        async function resetProgress() {
+            if (confirm('Tem certeza que deseja resetar TODO o progresso de tópicos? Esta ação não pode ser desfeita.')) {
+                completedTopics = {};
+                await API.deleteAllTopics();
+                renderPlan();
+            }
+        }
+
+        // ════════════════════════════════════════
+        //  STREAK & STUDY STATS
+        // ════════════════════════════════════════
+        function getLocalDateString(timestampOrDate) {
+            const d = new Date(timestampOrDate);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        function calculateStreak() {
+            const focusLogs = studyLog.filter(entry => entry.type === 'Foco');
+            if (focusLogs.length === 0) return 0;
+
+            const uniqueDates = Array.from(new Set(focusLogs.map(entry => {
+                return getLocalDateString(entry.timestamp);
+            }))).sort((a, b) => new Date(b.replace(/-/g, '/')) - new Date(a.replace(/-/g, '/')));
+
+            if (uniqueDates.length === 0) return 0;
+
+            const todayStr = getLocalDateString(new Date());
+            const yesterdayStr = getLocalDateString(new Date(Date.now() - 86400000));
+
+            if (uniqueDates[0] !== todayStr && uniqueDates[0] !== yesterdayStr) {
+                return 0;
+            }
+
+            let streak = 1;
+            for (let i = 1; i < uniqueDates.length; i++) {
+                const currentDate = new Date(uniqueDates[i].replace(/-/g, '/'));
+                const prevDate = new Date(uniqueDates[i - 1].replace(/-/g, '/'));
+                const diffTime = Math.abs(prevDate - currentDate);
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays === 1) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
+        function updateStatsUI() {
+            const focusLogs = studyLog.filter(entry => entry.type === 'Foco');
+            const totalPomodoros = focusLogs.length;
+            const totalMinutes = focusLogs.reduce((sum, entry) => sum + (entry.duration || 0), 0);
+            const totalHours = (totalMinutes / 60).toFixed(1);
+
+            const streak = calculateStreak();
+
+            const streakEl = document.getElementById('studyStreak');
+            if (streakEl) streakEl.textContent = streak;
+
+            const totPom = document.getElementById('statsTotalPomodoros');
+            if (totPom) totPom.textContent = totalPomodoros;
+
+            const totHours = document.getElementById('statsTotalHours');
+            if (totHours) totHours.textContent = totalHours + 'h';
+
+            const lastStudy = document.getElementById('statsLastStudyDate');
+            if (lastStudy) {
+                if (focusLogs.length > 0) {
+                    const lastLogTime = focusLogs[focusLogs.length - 1].timestamp;
+                    lastStudy.textContent = new Date(lastLogTime).toLocaleString('pt-BR');
+                } else {
+                    lastStudy.textContent = '-';
+                }
+            }
+
+            renderLogTable();
+        }
+
+        function renderLogTable() {
+            const tbody = document.getElementById('logTableBody');
+            if (!tbody) return;
+
+            if (studyLog.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Nenhuma sessão registrada ainda.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            const recentLogs = [...studyLog].reverse().slice(0, 10);
+            recentLogs.forEach((entry) => {
+                const dateStr = new Date(entry.timestamp).toLocaleString('pt-BR');
+                const badgeClass = entry.type === 'Foco' ? 'tag-red' : 'tag-green';
+                html += `<tr>
+                <td>${dateStr}</td>
+                <td><span class="topic-tag ${badgeClass}">${entry.type}</span></td>
+                <td>${entry.duration} min</td>
+                <td><button class="btn-notes-toggle" onclick="deleteLogEntry(${entry.id})" title="Excluir" style="color: var(--accent-red); opacity: 1;">🗑️</button></td>
+            </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        async function deleteLogEntry(id) {
+            if (confirm('Deseja excluir este registro de estudo do histórico?')) {
+                await API.deleteLog(id);
+                studyLog = studyLog.filter(e => e.id !== id);
+                updateStatsUI();
+            }
+        }
+
+        // ════════════════════════════════════════
+        //  TABS
+        // ════════════════════════════════════════
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ════════════════════════════════════════
+        //  POMODORO PRESETS & SOUNDS
+        // ════════════════════════════════════════
+        function applyPreset() {
+            const preset = document.getElementById('cfgPreset').value;
+            const cfgWork = document.getElementById('cfgWork');
+            const cfgBreak = document.getElementById('cfgBreak');
+            const cfgLongBreak = document.getElementById('cfgLongBreak');
+            const cfgCycles = document.getElementById('cfgCycles');
+
+            if (preset === 'classic') {
+                cfgWork.value = 25; cfgBreak.value = 5; cfgLongBreak.value = 15; cfgCycles.value = 4;
+            } else if (preset === 'short') {
+                cfgWork.value = 15; cfgBreak.value = 3; cfgLongBreak.value = 10; cfgCycles.value = 4;
+            } else if (preset === 'long') {
+                cfgWork.value = 50; cfgBreak.value = 10; cfgLongBreak.value = 30; cfgCycles.value = 4;
+            }
+
+            updateConfig();
+        }
+
+        function updateSoundConfig() {
+            const cfg = {
+                sound: document.getElementById('cfgSound').value,
+                volume: parseFloat(document.getElementById('cfgVolume').value)
+            };
+            API.setConfig('soundConfig', cfg);
+        }
+
+        function loadSoundConfig(savedConfig) {
+            const saved = savedConfig && savedConfig.soundConfig;
+            if (saved) {
+                document.getElementById('cfgSound').value = saved.sound || 'zen';
+                document.getElementById('cfgVolume').value = saved.volume !== undefined ? saved.volume : 0.5;
+            }
+        }
+
+        function toggleNotifications() {
+            const checkbox = document.getElementById('cfgNotify');
+            if (checkbox.checked) {
+                if (!("Notification" in window)) {
+                    alert("Este navegador não suporta notificações desktop.");
+                    checkbox.checked = false;
+                    return;
+                }
+                if (Notification.permission === "default") {
+                    Notification.requestPermission().then(permission => {
+                        if (permission !== "granted") checkbox.checked = false;
+                    });
+                } else if (Notification.permission !== "granted") {
+                    alert("As notificações foram bloqueadas nas configurações deste site. Por favor, ative-as manualmente.");
+                    checkbox.checked = false;
+                }
+            }
+        }
+
+        function sendSystemNotification(title, message) {
+            const checkbox = document.getElementById('cfgNotify');
+            if (checkbox.checked && "Notification" in window && Notification.permission === "granted") {
+                try { new Notification(title, { body: message, icon: '🍅' }); }
+                catch (e) { console.warn("Failed to send notification:", e); }
+            }
+        }
+
+        // ════════════════════════════════════════
+        //  POMODORO TIMER
+        // ════════════════════════════════════════
+        function getConfig() {
+            return {
+                work: parseInt(document.getElementById('cfgWork').value) || 25,
+                break: parseInt(document.getElementById('cfgBreak').value) || 5,
+                longBreak: parseInt(document.getElementById('cfgLongBreak').value) || 15,
+                cycles: parseInt(document.getElementById('cfgCycles').value) || 4,
+            };
+        }
+
+        function loadConfig(savedConfig) {
+            const saved = savedConfig && savedConfig.pomodoroConfig;
+            if (saved) {
+                document.getElementById('cfgWork').value = saved.work || 25;
+                document.getElementById('cfgBreak').value = saved.break || 5;
+                document.getElementById('cfgLongBreak').value = saved.longBreak || 15;
+                document.getElementById('cfgCycles').value = saved.cycles || 4;
+            }
+            loadSoundConfig(savedConfig);
+        }
+
+        function updateConfig() {
+            const cfg = getConfig();
+            API.setConfig('pomodoroConfig', cfg);
+
+            const work = parseInt(document.getElementById('cfgWork').value);
+            const sBreak = parseInt(document.getElementById('cfgBreak').value);
+            const lBreak = parseInt(document.getElementById('cfgLongBreak').value);
+
+            const select = document.getElementById('cfgPreset');
+            if (work === 25 && sBreak === 5 && lBreak === 15) select.value = 'classic';
+            else if (work === 15 && sBreak === 3 && lBreak === 10) select.value = 'short';
+            else if (work === 50 && sBreak === 10 && lBreak === 30) select.value = 'long';
+            else select.value = 'custom';
+
+            if (!isRunning) {
+                timerSeconds = cfg.work * 60;
+                timerTotal = timerSeconds;
+                updateTimerDisplay();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const min = Math.floor(timerSeconds / 60);
+            const sec = timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent =
+                String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+
+            const circumference = 2 * Math.PI * 90;
+            const progress = timerTotal > 0 ? (1 - timerSeconds / timerTotal) : 0;
+            const offset = circumference * (1 - progress);
+            const ring = document.getElementById('timerProgress');
+            ring.style.strokeDashoffset = offset;
+
+            if (isBreak) ring.classList.add('break-mode');
+            else ring.classList.remove('break-mode');
+
+            document.title = (isRunning ? `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')} — ` : '') + 'Plano Petrobras';
+        }
+
+        function toggleTimer() {
+            if (!audioCtx) {
+                try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+                catch (e) { console.warn("Could not init AudioContext on gesture:", e); }
+            } else if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (isRunning) pauseTimer();
+            else startTimer();
+        }
+
+        function startTimer() {
+            if (timerSeconds <= 0) {
+                const cfg = getConfig();
+                timerSeconds = isBreak
+                    ? (cycleCount % cfg.cycles === 0 ? cfg.longBreak : cfg.break) * 60
+                    : cfg.work * 60;
+                timerTotal = timerSeconds;
+            }
+
+            isRunning = true;
+            document.getElementById('btnStart').innerHTML = '⏸ Pausar';
+            document.getElementById('btnStart').className = 'btn btn-danger';
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    onTimerComplete();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            document.getElementById('btnStart').innerHTML = '▶ Continuar';
+            document.getElementById('btnStart').className = 'btn btn-primary';
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            isBreak = false;
+            const cfg = getConfig();
+            timerSeconds = cfg.work * 60;
+            timerTotal = timerSeconds;
+            document.getElementById('timerLabel').textContent = 'Foco';
+            document.getElementById('btnStart').innerHTML = '▶ Iniciar';
+            document.getElementById('btnStart').className = 'btn btn-primary';
+            updateTimerDisplay();
+        }
+
+        async function onTimerComplete() {
+            const cfg = getConfig();
+            if (!isBreak) {
+                cycleCount++;
+                updatePomodoroCount();
+
+                const entry = { timestamp: Date.now(), type: 'Foco', duration: cfg.work };
+                const result = await API.addLog(entry);
+                entry.id = result.id;
+                studyLog.push(entry);
+                updateStatsUI();
+
+                const isLong = cycleCount % cfg.cycles === 0;
+                isBreak = true;
+                timerSeconds = (isLong ? cfg.longBreak : cfg.break) * 60;
+                timerTotal = timerSeconds;
+                document.getElementById('timerLabel').textContent = isLong ? 'Pausa Longa' : 'Pausa Curta';
+                showAlarm('🎉', 'Pomodoro completo!', isLong ? 'Hora de uma pausa longa. Levante, beba água!' : 'Hora de uma pausa curta. Descanse os olhos!');
+                sendSystemNotification('🎉 Pomodoro completo!', isLong ? 'Hora de uma pausa longa!' : 'Hora de uma pausa curta!');
+            } else {
+                isBreak = false;
+
+                const isLong = (cycleCount - 1) % cfg.cycles === 0;
+                const breakDur = isLong ? cfg.longBreak : cfg.break;
+                const entry = { timestamp: Date.now(), type: 'Pausa', duration: breakDur };
+                const result = await API.addLog(entry);
+                entry.id = result.id;
+                studyLog.push(entry);
+                updateStatsUI();
+
+                timerSeconds = cfg.work * 60;
+                timerTotal = timerSeconds;
+                document.getElementById('timerLabel').textContent = 'Foco';
+                showAlarm('🔥', 'Pausa encerrada!', 'Hora de voltar ao foco. Vamos lá!');
+                sendSystemNotification('🔥 Pausa encerrada!', 'Hora de voltar ao foco!');
+            }
+
+            document.getElementById('btnStart').innerHTML = '▶ Iniciar';
+            document.getElementById('btnStart').className = 'btn btn-primary';
+            updateTimerDisplay();
+        }
+
+        function updatePomodoroCount() {
+            const today = getLocalDateString(new Date());
+            if (pomodoroState.date !== today) {
+                pomodoroState = { count: 0, date: today };
+            }
+            pomodoroState.count++;
+            API.setConfig('pomodoroState', pomodoroState);
+            document.getElementById('pomodoroCount').textContent = pomodoroState.count;
+        }
+
+        function loadPomodoroCount(savedConfig) {
+            const today = getLocalDateString(new Date());
+            const saved = savedConfig && savedConfig.pomodoroState;
+            if (saved) pomodoroState = saved;
+            if (pomodoroState.date !== today) {
+                pomodoroState = { count: 0, date: today };
+            }
+            document.getElementById('pomodoroCount').textContent = pomodoroState.count;
+        }
+
+        // ════════════════════════════════════════
+        //  ALARM SOUND (Web Audio API Synthesizer)
+        // ════════════════════════════════════════
+        function playAlarmSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+                const volumeVal = parseFloat(document.getElementById('cfgVolume').value);
+                if (volumeVal === 0) return;
+
+                const soundType = document.getElementById('cfgSound').value;
+                const now = audioCtx.currentTime;
+
+                const mainGain = audioCtx.createGain();
+                mainGain.gain.setValueAtTime(volumeVal, now);
+                mainGain.connect(audioCtx.destination);
+
+                if (soundType === 'zen') {
+                    const freqs = [440, 554.37, 659.25, 880];
+                    freqs.forEach((freq, idx) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now);
+                        const decay = idx === 0 ? 3.0 : 1.5 - (idx * 0.3);
+                        gain.gain.setValueAtTime(0, now);
+                        gain.gain.linearRampToValueAtTime(0.2 / freqs.length, now + 0.05);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + decay);
+                        osc.connect(gain);
+                        gain.connect(mainGain);
+                        osc.start(now);
+                        osc.stop(now + decay + 0.1);
+                    });
+                } else if (soundType === 'digital') {
+                    for (let i = 0; i < 4; i++) {
+                        const startTime = now + i * 0.3;
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'square';
+                        osc.frequency.setValueAtTime(880, startTime);
+                        gain.gain.setValueAtTime(0, startTime);
+                        gain.gain.linearRampToValueAtTime(0.15, startTime + 0.01);
+                        gain.gain.setValueAtTime(0.15, startTime + 0.14);
+                        gain.gain.linearRampToValueAtTime(0, startTime + 0.15);
+                        osc.connect(gain);
+                        gain.connect(mainGain);
+                        osc.start(startTime);
+                        osc.stop(startTime + 0.2);
+                    }
+                } else if (soundType === 'gong') {
+                    for (let i = 1; i <= 6; i++) {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = i % 2 === 0 ? 'sawtooth' : 'triangle';
+                        osc.frequency.setValueAtTime(120 * i + (Math.random() * 4 - 2), now);
+                        const decay = 3.5 / i;
+                        gain.gain.setValueAtTime(0, now);
+                        gain.gain.linearRampToValueAtTime(0.25 / 6, now + 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + decay);
+                        osc.connect(gain);
+                        gain.connect(mainGain);
+                        osc.start(now);
+                        osc.stop(now + decay + 0.1);
+                    }
+                } else if (soundType === 'fanfare') {
+                    const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const startTime = now + idx * 0.1;
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        const isLast = idx === notes.length - 1;
+                        const dur = isLast ? 0.6 : 0.12;
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, startTime);
+                        gain.gain.setValueAtTime(0, startTime);
+                        gain.gain.linearRampToValueAtTime(0.2, startTime + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
+                        osc.connect(gain);
+                        gain.connect(mainGain);
+                        osc.start(startTime);
+                        osc.stop(startTime + dur + 0.1);
+                    });
+                }
+            } catch (e) {
+                console.warn('Audio not available:', e);
+            }
+        }
+
+        function showAlarm(icon, title, message) {
+            playAlarmSound();
+            document.getElementById('alarmIcon').textContent = icon;
+            document.getElementById('alarmTitle').textContent = title;
+            document.getElementById('alarmMessage').textContent = message;
+            document.getElementById('alarmOverlay').classList.add('active');
+        }
+
+        function dismissAlarm() {
+            document.getElementById('alarmOverlay').classList.remove('active');
+        }
+
+        // ════════════════════════════════════════
+        //  BACKUP IMPORT & EXPORT
+        // ════════════════════════════════════════
+        async function exportData() {
+            const data = await API.exportAll();
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup_estudos_petrobras_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function triggerImport() {
+            document.getElementById('importFile').click();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    await API.importAll(data);
+
+                    // Reload all data from server
+                    await loadAllData();
+
+                    alert('Dados importados com sucesso!');
+                    event.target.value = '';
+                } catch (err) {
+                    alert('Erro ao processar o arquivo de backup. Verifique o formato do arquivo.');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ════════════════════════════════════════
+        //  PDF VIEWER FUNCTIONS & RESIZING
+        // ════════════════════════════════════════
+        function getTopicDetailHtml(topic) {
+            const detail = topic.detail;
+            const paths = PDF_FILE_MAP[detail];
+            if (paths && paths.length > 0) {
+                let html = '<span style="color: var(--text-muted);">📄</span> ';
+                paths.forEach((path, idx) => {
+                    const parts = path.split('/');
+                    const filename = parts[parts.length - 1];
+                    let displayName = filename.replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d+-/, '')
+                        .replace(/-e\d+\.pdf$/, '.pdf')
+                        .replace(/\.pdf$/, '');
+
+                    displayName = displayName.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+                    let buttonText = displayName;
+                    if (paths.length > 1) {
+                        buttonText += ` (Parte ${idx + 1})`;
+                    }
+
+                    let rangeSuffix = '';
+                    if (topic.startPage && topic.endPage) {
+                        rangeSuffix = ` <span style="font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-left: 4px;">(pág. ${topic.startPage}-${topic.endPage})</span>`;
+                    }
+
+                    html += `<button class="pdf-link-btn" onclick="openPdfViewer('${path}', '${buttonText}', '${topic.id}', ${topic.startPage || 'null'}, ${topic.endPage || 'null'})" title="Visualizar PDF no Painel">${buttonText}</button>${rangeSuffix}`;
+                    if (idx < paths.length - 1) {
+                        html += ' <span style="color: var(--border-color); margin: 0 4px;">|</span> ';
+                    }
+                });
+                return html;
+            }
+
+            return `📄 ${detail}`;
+        }
+
+        function openPdfViewer(path, title, topicId = null, startPage = null, endPage = null) {
+            const panel = document.getElementById('pdfPanel');
+            const iframe = document.getElementById('pdfIframe');
+            const titleEl = document.getElementById('pdfTitle');
+            const newTabBtn = document.getElementById('btnOpenNewTab');
+
+            // Set active topic range variables
+            activeStartPage = startPage || null;
+            activeEndPage = endPage || null;
+
+            // Track bookmark key per topic if topicId is provided, else fallback to path
+            const bookmarkKey = topicId ? `${path}#${topicId}` : path;
+            currentPdfKey = bookmarkKey;
+
+            titleEl.textContent = title;
+
+            const savedPage = (pdfBookmarks[bookmarkKey] && pdfBookmarks[bookmarkKey].currentPage) || startPage || 1;
+            const fileUrl = path.startsWith('/') ? path : '/' + path;
+
+            iframe.src = `/pdfjs/web/viewer.html?file=${encodeURIComponent(fileUrl)}#page=${savedPage}`;
+            newTabBtn.href = fileUrl;
+
+            // Load bookmark for this PDF/Topic combination
+            const bm = pdfBookmarks[bookmarkKey];
+            if (bm) {
+                document.getElementById('bmCurrentPage').textContent = bm.currentPage;
+                document.getElementById('bmTotalPages').textContent = bm.totalPages;
+            } else {
+                document.getElementById('bmCurrentPage').textContent = savedPage;
+                document.getElementById('bmTotalPages').textContent = 1;
+            }
+            onBookmarkChange();
+
+            panel.classList.add('open');
+            document.body.classList.add('pdf-view-open');
+
+            // Use saved width from config
+            const savedWidth = _appConfig.pdfPanelWidth;
+            if (savedWidth) {
+                panel.style.width = savedWidth;
+                if (window.innerWidth > 900) document.body.style.paddingRight = savedWidth;
+            } else {
+                panel.style.width = '50vw';
+                if (window.innerWidth > 900) document.body.style.paddingRight = '50vw';
+            }
+        }
+
+        async function closePdfViewer() {
+            const panel = document.getElementById('pdfPanel');
+            const iframe = document.getElementById('pdfIframe');
+
+            if (currentPdfKey) {
+                const cur = parseInt(document.getElementById('bmCurrentPage').textContent) || 1;
+                const total = parseInt(document.getElementById('bmTotalPages').textContent) || 1;
+                try {
+                    await API.saveBookmark(currentPdfKey, cur, total);
+                    pdfBookmarks[currentPdfKey] = { currentPage: cur, totalPages: total, lastReadAt: Date.now() };
+                    renderPlan();
+                } catch (err) {
+                    console.error("Error saving bookmark on close:", err);
+                }
+            }
+
+            panel.classList.remove('open');
+            document.body.classList.remove('pdf-view-open');
+            document.body.style.paddingRight = '0';
+            iframe.src = '';
+            currentPdfKey = null;
+            activeStartPage = null;
+            activeEndPage = null;
+        }
+
+        let _appConfig = {};
+
+        // Resize panel drag logic
+        let isResizing = false;
+        const pdfPanel = document.getElementById('pdfPanel');
+
+        document.querySelector('.pdf-resize-handle').addEventListener('mousedown', function (e) {
+            isResizing = true;
+            document.body.style.userSelect = 'none';
+            document.body.style.cursor = 'col-resize';
+            pdfPanel.style.transition = 'none';
+            document.body.style.transition = 'none';
+            document.getElementById('pdfIframe').style.pointerEvents = 'none';
+        });
+
+        document.addEventListener('mousemove', function (e) {
+            if (!isResizing) return;
+
+            let width = window.innerWidth - e.clientX;
+            if (width < 320) width = 320;
+            if (width > window.innerWidth * 0.85) width = window.innerWidth * 0.85;
+
+            const widthPx = width + 'px';
+            pdfPanel.style.width = widthPx;
+
+            if (window.innerWidth > 900) {
+                document.body.style.paddingRight = widthPx;
+            }
+
+            _appConfig.pdfPanelWidth = widthPx;
+            API.setConfig('pdfPanelWidth', widthPx);
+        });
+
+        document.addEventListener('mouseup', function (e) {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.userSelect = '';
+                document.body.style.cursor = '';
+                pdfPanel.style.transition = '';
+                document.body.style.transition = '';
+                document.getElementById('pdfIframe').style.pointerEvents = '';
+            }
+        });
+
+        // ════════════════════════════════════════
+        //  EXERCISES / QUIZ LOGIC
+        // ════════════════════════════════════════
+        let _exState = { pagesReadCount: 0, hasExercises: false, session: null };
+        let _quizAnswers = {};
+        let _quizAnswered = 0;
+        let _quizCorrect = 0;
+        let _quizTotal = 0;
+        let _pastSessions = [];
+        let _isRevising = false;
+
+        function switchExSubTab(tab) {
+            const btnQuiz = document.getElementById('ex-sub-tab-quiz');
+            const btnReport = document.getElementById('ex-sub-tab-report');
+            const panelQuiz = document.getElementById('exPanelQuiz');
+            const panelReport = document.getElementById('exPanelReport');
+
+            if (tab === 'quiz') {
+                btnQuiz.classList.add('active');
+                btnReport.classList.remove('active');
+                panelQuiz.style.display = 'block';
+                panelReport.style.display = 'none';
+                if (_isRevising) {
+                    exitReview();
+                }
+            } else if (tab === 'report') {
+                btnReport.classList.add('active');
+                btnQuiz.classList.remove('active');
+                panelQuiz.style.display = 'none';
+                panelReport.style.display = 'block';
+                loadExercisesReport();
+            }
+        }
+
+        async function loadExercisesReport() {
+            try {
+                const r = await fetch('/api/exercises/history');
+                const history = await r.json();
+                _pastSessions = history;
+
+                let totalQuestions = 0;
+                let totalCorrect = 0;
+                let totalDays = history.length;
+
+                history.forEach(session => {
+                    if (session.answers) {
+                        totalQuestions += Object.keys(session.answers).length;
+                    }
+                    totalCorrect += session.score || 0;
+                });
+
+                document.getElementById('exStatTotal').textContent = totalQuestions;
+                document.getElementById('exStatCorrect').textContent = totalCorrect;
+                document.getElementById('exStatDays').textContent = totalDays;
+
+                const accuracyPct = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+                document.getElementById('exStatAccuracyPct').textContent = `${accuracyPct}%`;
+
+                const circle = document.getElementById('exReportRingProgress');
+                if (circle) {
+                    const radius = 40;
+                    const circumference = 2 * Math.PI * radius;
+                    const offset = circumference - (circumference * accuracyPct) / 100;
+                    circle.style.strokeDasharray = `${circumference}`;
+                    circle.style.strokeDashoffset = `${offset}`;
+                }
+
+                let feedback = 'Responda a simulados na aba "Simulado de Hoje" para obter uma análise do seu aproveitamento nos estudos.';
+                if (totalQuestions > 0) {
+                    if (accuracyPct >= 80) {
+                        feedback = '🏆 Excelente aproveitamento! Você está demonstrando um altíssimo nível de retenção do conteúdo. Continue assim!';
+                    } else if (accuracyPct >= 60) {
+                        feedback = '📈 Bom desempenho! Você está no caminho certo. Revise os pontos de falha para subir sua pontuação e consolidar a vaga.';
+                    } else {
+                        feedback = '💪 Foco nas revisões! Estude as anotações e revise as teorias dos PDFs para melhorar sua taxa de acertos.';
+                    }
+                }
+                document.getElementById('exReportFeedback').textContent = feedback;
+
+                const tableBody = document.getElementById('exHistoryTableBody');
+                if (tableBody) {
+                    if (history.length === 0) {
+                        tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                                    Nenhum simulado registrado no histórico.
+                                </td>
+                            </tr>
+                        `;
+                    } else {
+                        tableBody.innerHTML = history.map(session => {
+                            const dateFormatted = session.dateStr.split('-').reverse().join('/');
+                            const totalQuestionsInSession = session.questions ? session.questions.length : 10;
+                            const answeredCount = session.answers ? Object.keys(session.answers).length : 0;
+                            const scoreText = `${session.score || 0} / ${totalQuestionsInSession}`;
+                            
+                            const sessionAccuracy = answeredCount > 0 ? Math.round(((session.score || 0) / answeredCount) * 100) : 0;
+                            const accuracyText = answeredCount > 0 ? `${sessionAccuracy}%` : '0%';
+
+                            let badgeClass = 'try-hard';
+                            let badgeText = 'A revisar';
+                            if (answeredCount > 0) {
+                                if (sessionAccuracy >= 80) {
+                                    badgeClass = 'excellent';
+                                    badgeText = 'Excelente';
+                                } else if (sessionAccuracy >= 60) {
+                                    badgeClass = 'good';
+                                    badgeText = 'Bom';
+                                }
+                            } else {
+                                badgeText = 'Não iniciado';
+                            }
+
+                            return `
+                                <tr>
+                                    <td><strong>${dateFormatted}</strong></td>
+                                    <td>${scoreText} respondidas</td>
+                                    <td>${accuracyText} de acertos</td>
+                                    <td><span class="ex-history-status-badge ${badgeClass}">${badgeText}</span></td>
+                                    <td>
+                                        <button class="ex-btn-action" onclick="reviewSession('${session.dateStr}')">
+                                            🔍 Rever
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading exercises report:', err);
+            }
+        }
+
+        function reviewSession(dateStr) {
+            const session = _pastSessions.find(s => s.dateStr === dateStr);
+            if (!session) return;
+
+            _isRevising = true;
+            
+            const btnQuiz = document.getElementById('ex-sub-tab-quiz');
+            const btnReport = document.getElementById('ex-sub-tab-report');
+            const panelQuiz = document.getElementById('exPanelQuiz');
+            const panelReport = document.getElementById('exPanelReport');
+
+            btnQuiz.classList.add('active');
+            btnReport.classList.remove('active');
+            panelQuiz.style.display = 'block';
+            panelReport.style.display = 'none';
+
+            document.getElementById('exLoading').style.display = 'none';
+            document.getElementById('exLocked').style.display = 'none';
+            document.getElementById('exReady').style.display = 'none';
+            document.getElementById('exGenerating').style.display = 'none';
+            document.getElementById('exQuiz').style.display = 'block';
+
+            const dateFormatted = dateStr.split('-').reverse().join('/');
+            const titleText = document.getElementById('quizTitleText');
+            if (titleText) {
+                titleText.innerHTML = `📋 Revisão do Simulado — ${dateFormatted} <button class="btn btn-ghost" onclick="exitReview()" style="padding: 2px 10px; font-size: 11px; margin-left: 12px; display: inline-flex; align-items: center; gap: 4px; vertical-align: middle;">← Sair da Revisão</button>`;
+            }
+
+            renderQuiz(session.questions, session.answers, session.score);
+        }
+
+        function exitReview() {
+            _isRevising = false;
+            
+            const titleText = document.getElementById('quizTitleText');
+            if (titleText) {
+                titleText.textContent = '📋 Lista de Exercícios — Hoje';
+            }
+
+            refreshExercisesState();
+            switchExSubTab('report');
+        }
+
+        async function refreshExercisesState() {
+            if (_isRevising) return;
+            const dateStr = getLocalDateStr();
+            try {
+                const r = await fetch(`/api/exercises/today?dateStr=${dateStr}`);
+                const data = await r.json();
+                _exState = data;
+                renderExercisesTab(data);
+            } catch (err) {
+                console.error('Error loading exercises state:', err);
+            }
+        }
+
+        function renderExercisesTab(data) {
+            document.getElementById('exLoading').style.display = 'none';
+            document.getElementById('exLocked').style.display = 'none';
+            document.getElementById('exReady').style.display = 'none';
+            document.getElementById('exGenerating').style.display = 'none';
+            document.getElementById('exQuiz').style.display = 'none';
+
+            const badge = document.getElementById('exBadge');
+
+            if (data.pagesReadCount === 0) {
+                document.getElementById('exLocked').style.display = 'flex';
+                badge.style.display = 'none';
+                return;
+            }
+
+            badge.style.display = 'inline';
+
+            if (data.hasExercises && data.session && data.session.questions) {
+                document.getElementById('exQuiz').style.display = 'block';
+                renderQuiz(data.session.questions, data.session.answers, data.session.score);
+                return;
+            }
+
+            // Show ready state with pages
+            document.getElementById('exReady').style.display = 'block';
+            loadExPagesList();
+        }
+
+        async function loadExPagesList() {
+            const dateStr = getLocalDateStr();
+            try {
+                const r = await fetch(`/api/reading-log/${dateStr}`);
+                const rows = await r.json();
+                const list = document.getElementById('exPagesList');
+                if (!list) return;
+
+                // Group by pdf
+                const grouped = {};
+                rows.forEach(row => {
+                    const pdfPath = row.pdf_key.split('#')[0];
+                    const filename = pdfPath.split('/').pop()
+                        .replace(/^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-\d+-/, '')
+                        .replace(/-e\d+\.pdf$/, '')
+                        .replace(/\.pdf$/, '')
+                        .replace(/-/g, ' ');
+                    if (!grouped[filename]) grouped[filename] = [];
+                    grouped[filename].push(row.page_number);
+                });
+
+                let html = '';
+                for (const [name, pages] of Object.entries(grouped)) {
+                    const sortedPages = [...new Set(pages)].sort((a, b) => a - b);
+                    html += `<li title="${name}">${name.substring(0, 30)}${name.length > 30 ? '…' : ''} — p. ${sortedPages.slice(0, 8).join(', ')}${sortedPages.length > 8 ? '…' : ''}</li>`;
+                }
+                list.innerHTML = html || '<li>Nenhuma página registrada</li>';
+            } catch (err) {
+                console.error('Error loading pages list:', err);
+            }
+        }
+
+        async function generateExercises() {
+            const btn = document.getElementById('exGenerateBtn');
+            if (btn) btn.disabled = true;
+            document.getElementById('exReady').style.display = 'none';
+            document.getElementById('exGenerating').style.display = 'flex';
+
+            const dateStr = getLocalDateStr();
+            try {
+                const r = await fetch('/api/exercises/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dateStr })
+                });
+                const data = await r.json();
+
+                document.getElementById('exGenerating').style.display = 'none';
+
+                if (!r.ok || data.error) {
+                    document.getElementById('exReady').style.display = 'block';
+                    if (btn) btn.disabled = false;
+                    alert('Erro ao gerar exercícios: ' + (data.error || 'Tente novamente.'));
+                    return;
+                }
+
+                document.getElementById('exQuiz').style.display = 'block';
+                renderQuiz(data.questions, null, null);
+            } catch (err) {
+                document.getElementById('exGenerating').style.display = 'none';
+                document.getElementById('exReady').style.display = 'block';
+                if (btn) btn.disabled = false;
+                alert('Erro de comunicação: ' + err.message);
+            }
+        }
+
+        let _currentQuestions = [];
+
+        function renderQuiz(questions, savedAnswers, savedScore) {
+            _currentQuestions = questions;
+            _quizTotal = questions.length;
+            _quizAnswers = savedAnswers || {};
+            _quizAnswered = Object.keys(_quizAnswers).length;
+            _quizCorrect = savedScore !== null && savedScore !== undefined ? savedScore : 0;
+
+            const container = document.getElementById('quizQuestions');
+            let html = '';
+
+            questions.forEach((q, idx) => {
+                const qNum = q.id || (idx + 1);
+                const answered = _isRevising || !!_quizAnswers[qNum];
+                html += `<div class="quiz-question${answered ? ' answered' : ''}" id="qq_${qNum}">
+                    <div class="quiz-q-num">Questão ${qNum}</div>
+                    <div class="quiz-enunciado">${q.enunciado}</div>
+                    <div class="quiz-alternativas">`;
+
+                ['A', 'B', 'C', 'D', 'E'].forEach(letter => {
+                    if (!q.alternativas || !q.alternativas[letter]) return;
+                    let cls = 'quiz-alt';
+                    if (answered) {
+                        cls += ' disabled';
+                        if (letter === q.resposta_correta) cls += ' correct';
+                        else if (_quizAnswers[qNum] === letter) cls += ' wrong';
+                    }
+                    const clickHandler = answered ? '' : `onclick="selectAnswer(${qNum}, '${letter}')"`;
+                    html += `<div class="${cls}" id="alt_${qNum}_${letter}" ${clickHandler}>
+                        <span class="quiz-alt-letter">${letter}</span>
+                        <span>${q.alternativas[letter]}</span>
+                    </div>`;
+                });
+
+                html += `</div>`; // alternativas
+
+                if (answered) {
+                    html += `<div class="quiz-commentary visible">
+                        💡 <strong>Gabarito:</strong> ${q.resposta_correta} &nbsp;|&nbsp; ${q.comentario || ''}
+                    </div>`;
+                } else {
+                    html += `<button class="quiz-confirm-btn" id="confirm_${qNum}" disabled onclick="confirmAnswer(${qNum})">Confirmar</button>
+                    <div class="quiz-commentary" id="commentary_${qNum}">
+                        💡 <strong>Gabarito:</strong> ${q.resposta_correta} &nbsp;|&nbsp; ${q.comentario || ''}
+                    </div>`;
+                }
+
+                html += `</div>`; // quiz-question
+            });
+
+            container.innerHTML = html;
+            updateQuizScoreBadge();
+
+            // If all already answered or we are revising, show final
+            if ((savedAnswers && _quizAnswered >= _quizTotal) || _isRevising) {
+                showQuizFinal(savedScore || _quizCorrect, _quizTotal);
+            } else {
+                document.getElementById('quizFinal').style.display = 'none';
+            }
+        }
+
+        let _pendingAnswer = {}; // { qNum: letter }
+
+        function selectAnswer(qNum, letter) {
+            // Deselect all
+            ['A', 'B', 'C', 'D', 'E'].forEach(l => {
+                const el = document.getElementById(`alt_${qNum}_${l}`);
+                if (el) el.classList.remove('selected');
+            });
+            // Select clicked
+            const clicked = document.getElementById(`alt_${qNum}_${letter}`);
+            if (clicked) clicked.classList.add('selected');
+            // Enable confirm button
+            const confirmBtn = document.getElementById(`confirm_${qNum}`);
+            if (confirmBtn) confirmBtn.disabled = false;
+            // Store pending
+            _pendingAnswer[qNum] = letter;
+        }
+
+        async function confirmAnswer(qNum) {
+            const chosenLetter = _pendingAnswer[qNum];
+            if (!chosenLetter) return;
+
+            // Find question details
+            const q = _currentQuestions.find((item, idx) => (item.id === qNum || (idx + 1) === qNum));
+            if (!q) return;
+
+            const correctAnswer = q.resposta_correta;
+            const isCorrect = chosenLetter === correctAnswer;
+
+            // Update UI
+            ['A', 'B', 'C', 'D', 'E'].forEach(l => {
+                const el = document.getElementById(`alt_${qNum}_${l}`);
+                if (!el) return;
+                el.classList.add('disabled');
+                el.onclick = null;
+                if (l === correctAnswer) el.classList.add('correct');
+                else if (l === chosenLetter && !isCorrect) el.classList.add('wrong');
+            });
+
+            // Show commentary
+            const commentEl = document.getElementById(`commentary_${qNum}`);
+            if (commentEl) commentEl.classList.add('visible');
+
+            // Hide confirm button
+            const confirmBtn = document.getElementById(`confirm_${qNum}`);
+            if (confirmBtn) confirmBtn.style.display = 'none';
+
+            // Mark question as answered
+            const qEl = document.getElementById(`qq_${qNum}`);
+            if (qEl) qEl.classList.add('answered');
+
+            // Update state
+            _quizAnswers[qNum] = chosenLetter;
+            _quizAnswered++;
+            if (isCorrect) _quizCorrect++;
+            updateQuizScoreBadge();
+
+            // Save to server
+            const dateStr = getLocalDateStr();
+            try {
+                await fetch('/api/exercises/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dateStr, answers: _quizAnswers, score: _quizCorrect })
+                });
+            } catch (err) {
+                console.warn('Error saving exercise answer:', err);
+            }
+
+            // Show final when all answered
+            if (_quizAnswered >= _quizTotal) {
+                setTimeout(() => showQuizFinal(_quizCorrect, _quizTotal), 600);
+            }
+        }
+
+        function updateQuizScoreBadge() {
+            const badge = document.getElementById('quizScoreBadge');
+            if (badge) badge.textContent = `${_quizAnswered} / ${_quizTotal} respondidas (${_quizCorrect} acerto${_quizCorrect !== 1 ? 's' : ''})`;
+        }
+
+        function showQuizFinal(correct, total) {
+            const finalEl = document.getElementById('quizFinal');
+            if (!finalEl) return;
+            finalEl.style.display = 'block';
+            finalEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+            document.getElementById('quizFinalScore').textContent = `${correct}/${total}`;
+            document.getElementById('quizFinalPct').textContent = `${pct}%`;
+
+            let msg = '';
+            if (pct >= 80) msg = '🏆 Excelente! Você está no caminho certo para a aprovação!';
+            else if (pct >= 60) msg = '📈 Bom desempenho! Revise os temas onde errou e melhore ainda mais.';
+            else msg = '💪 Continue estudando! Revise o conteúdo e tente novamente amanhã.';
+            document.getElementById('quizFinalMsg').textContent = msg;
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ════════════════════════════════════════
+        //  MIGRATION FROM LOCALSTORAGE
+        // ════════════════════════════════════════
+        async function migrateFromLocalStorage() {
+            const STORAGE_KEY = 'petrobras_study_progress';
+            const hasData = localStorage.getItem(STORAGE_KEY);
+            if (!hasData) return false;
+
+            console.log('📦 Migrando dados do localStorage para SQLite...');
+
+            const migrationData = {
+                completedTopics: JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'),
+                studyNotes: JSON.parse(localStorage.getItem('petrobras_study_notes') || '{}'),
+                studyLog: JSON.parse(localStorage.getItem('petrobras_study_log') || '[]'),
+                pomodoroState: JSON.parse(localStorage.getItem('petrobras_pomodoro') || '{"count":0,"date":""}'),
+                pomodoroConfig: JSON.parse(localStorage.getItem('petrobras_pomodoro_config') || 'null'),
+                soundConfig: JSON.parse(localStorage.getItem('petrobras_sound_config') || 'null'),
+                pdfPanelWidth: localStorage.getItem('petrobras_pdf_panel_width')
+            };
+
+            try {
+                await API.migrate(migrationData);
+
+                // Clear old localStorage
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem('petrobras_study_notes');
+                localStorage.removeItem('petrobras_study_log');
+                localStorage.removeItem('petrobras_pomodoro');
+                localStorage.removeItem('petrobras_pomodoro_config');
+                localStorage.removeItem('petrobras_sound_config');
+                localStorage.removeItem('petrobras_pdf_panel_width');
+
+                console.log('✅ Migração concluída! localStorage limpo.');
+                return true;
+            } catch (err) {
+                console.error('❌ Erro na migração:', err);
+                return false;
+            }
+        }
+
+        // ════════════════════════════════════════
+        //  LOAD ALL DATA FROM SERVER
+        // ════════════════════════════════════════
+        async function loadAllData() {
+            const [topics, notes, log, config, bookmarks] = await Promise.all([
+                API.getTopics(),
+                API.getNotes(),
+                API.getLog(),
+                API.getConfig(),
+                API.getBookmarks()
+            ]);
+
+            completedTopics = topics;
+            studyNotes = notes;
+            studyLog = log;
+            _appConfig = config;
+            pdfBookmarks = bookmarks;
+
+            loadConfig(_appConfig);
+            loadPomodoroCount(_appConfig);
+
+            const cfg = getConfig();
+            timerSeconds = cfg.work * 60;
+            timerTotal = timerSeconds;
+            updateTimerDisplay();
+
+            renderPlan();
+            updateStatsUI();
+
+            // Load exercises state
+            await refreshExercisesState();
+        }
+
+        // ════════════════════════════════════════
+        //  INIT
+        // ════════════════════════════════════════
+        (async function init() {
+            // Register PDF iframe load handler for tracking page changes
+            document.getElementById('pdfIframe').addEventListener('load', onPdfIframeLoad);
+
+            // Attempt migration from localStorage first
+            await migrateFromLocalStorage();
+
+            // Load all data from the server
+            await loadAllData();
+
+            console.log('🛢️ Plano de Estudos Petrobras carregado com SQLite!');
+        })();
+    </script>
+</body>
+
+</html>
