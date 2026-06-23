@@ -49,7 +49,16 @@ app.use(express.static(path.join(__dirname, '..'), {
 // Serve PDFs and other files from the parent directory of the project (one level above the project root)
 app.use(express.static(path.join(__dirname, '../..')));
 
-// ─── API Routes with Validation and Error Handling ───
+// ─── Modular API Routes (Phases 3 & 4) ───
+app.use('/api/contests', require('./routes/contests'));
+app.use('/api/programs', require('./routes/programs'));
+app.use('/api/sessions', require('./routes/sessions'));
+app.use('/api/config', require('./routes/config'));
+app.use('/api/materials', require('./routes/materials'));
+app.use('/api/backup', require('./routes/backup'));
+app.use('/api/admin', require('./routes/admin'));
+
+// ─── API Routes with Validation and Error Handling (Legacy) ───
 
 // ════════════════════════════════════════
 //  API: COMPLETED TOPICS
@@ -743,7 +752,15 @@ app.use(errorHandler);
 
 // ─── Startup sequence ───
 runMigrations()
-    .then(() => {
+    .then(async () => {
+        // Automatically load and sync contest configurations on startup
+        try {
+            const { loadAllContests } = require('./services/contestLoader');
+            await loadAllContests();
+        } catch (loaderErr) {
+            console.error('[Loader Error] Failed to load contest configurations during boot:', loaderErr.message);
+        }
+
         app.listen(PORT, () => {
             console.log(`\n  🛢️  Plano de Estudos Petrobras (Restruturado)`);
             console.log(`  ─────────────────────────────`);
