@@ -109,9 +109,10 @@ function buildExamPrompt(boardName, numQuestions, alternativesCount, alternative
 
 Com base no conteúdo estudado abaixo, elabore EXATAMENTE ${numQuestions} questões de múltipla escolha (estilo ${boardName}), cada uma com ${alternativesCount} alternativas (${alternativesList.join(', ')}) e apenas uma resposta correta.
 
-REGRAS OBRIGATÓRIAS:
-- As questões devem ser baseadas exclusivamente no conteúdo fornecido.
-- O nível de dificuldade deve ser moderado a alto (nível concurso público federal).
+REGRAS OBRIGATÓRIAS DE CONTEÚDO E SEGURANÇA:
+- As questões devem ser baseadas no conteúdo fornecido, focando EXCLUSIVAMENTE nos conceitos técnicos, teóricos e acadêmicos do assunto abordado (por exemplo, modelos de ciclo de vida de software, engenharia de requisitos, etc.).
+- NÃO faça perguntas sobre a autoria do PDF, dados biográficos de professores, sumário, índice, introdução do curso ou sobre a estrutura e formatação do próprio documento (evite enunciados como "No material didático...", "Segundo o sumário...", "Conforme o currículo de...").
+- As questões devem ler-se como itens reais de uma prova de concurso público (focando puramente no assunto, por exemplo: "No que se refere a modelos de ciclo de vida de software...").
 - As alternativas incorretas devem ser plausíveis (não óbvias).
 - Cada questão deve ter um gabarito comentado objetivo e muito sucinto (máximo de 3 frases) explicando por que a resposta correta é a certa e por que as outras estão erradas. Evite explicações excessivamente longas para não estourar limites.
 - Responda APENAS com JSON válido, sem nenhum texto fora do JSON.`;
