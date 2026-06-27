@@ -57,8 +57,8 @@ export const useExerciseStore = defineStore('exercise', {
           throw new Error('Falha ao obter histórico de exercícios')
         }
         this.history = await response.json()
-      } catch (err: any) {
-        this.error = err.message || 'Erro ao obter histórico'
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Erro ao obter histórico'
         console.error(err)
       } finally {
         this.loading = false
@@ -89,8 +89,44 @@ export const useExerciseStore = defineStore('exercise', {
           score: null
         }
         await this.fetchHistory(programId)
-      } catch (err: any) {
-        this.error = err.message || 'Erro ao gerar simulado'
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Erro ao gerar simulado'
+        console.error(err)
+        throw err
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async generateCustomExercises(
+      programId: string, 
+      payload: { sourceType: 'pdf_reading' | 'manual_topic'; numQuestions: number; topicIds?: string[] }
+    ) {
+      this.loading = true
+      this.error = null
+      const todayStr = new Date().toISOString().split('T')[0]
+      try {
+        const response = await fetch(`/api/programs/${programId}/exercises/generate-custom`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        if (!response.ok) {
+          const errData = await response.json()
+          throw new Error(errData.error || 'Falha ao gerar simulado customizado por IA')
+        }
+        const data = await response.json()
+        this.todaySession = {
+          id: data.id,
+          dateStr: todayStr,
+          sourceType: payload.sourceType,
+          questions: data.questions,
+          answers: null,
+          score: null
+        }
+        await this.fetchHistory(programId)
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Erro ao gerar simulado personalizado'
         console.error(err)
         throw err
       } finally {
@@ -109,9 +145,12 @@ export const useExerciseStore = defineStore('exercise', {
           throw new Error('Falha ao salvar respostas no servidor')
         }
         
+        const data = await response.json()
+        
         if (this.todaySession && this.todaySession.id === sessionId) {
           this.todaySession.answers = answers
           this.todaySession.score = score
+          this.todaySession.completedAt = data.completedAt || Date.now()
         }
         
         await this.fetchHistory(programId)

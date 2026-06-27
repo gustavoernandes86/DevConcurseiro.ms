@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useProgramStore } from './program'
 import { ref, computed } from 'vue'
 
 export type TimerMode = 'focus' | 'short_break' | 'long_break'
@@ -66,7 +67,9 @@ export const usePomodoroStore = defineStore('pomodoro', () => {
         console.error(e)
       }
     }
-    resetTimer()
+    if (!isActive.value && startedAt.value === null) {
+      resetTimer()
+    }
   }
 
   const saveConfig = (newConfig: PomodoroConfig) => {
@@ -174,7 +177,8 @@ export const usePomodoroStore = defineStore('pomodoro', () => {
     // Save focus session to server
     if (finishedMode === 'focus') {
       totalFocusSessionsToday.value++
-      const activeProgramId = localStorage.getItem('activeProgramId') || 'petrobras-eng-software-2026'
+      const programStore = useProgramStore()
+      const activeProgramId = programStore.activeProgramId || 'petrobras-eng-software-2026'
       try {
         await fetch(`/api/programs/${activeProgramId}/sessions`, {
           method: 'POST',

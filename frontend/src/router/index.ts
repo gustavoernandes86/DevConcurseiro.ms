@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import DashboardView from '../views/DashboardView.vue'
 import StudyPlanView from '../views/StudyPlanView.vue'
 import HistoryView from '../views/HistoryView.vue'
 import ExercisesView from '../views/ExercisesView.vue'
@@ -12,14 +11,12 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     redirect: () => {
       const activeProgramId = localStorage.getItem('activeProgramId') || 'petrobras-eng-software-2026'
-      return `/programs/${activeProgramId}/dashboard`
+      return `/programs/${activeProgramId}/plan`
     }
   },
   {
     path: '/programs/:programId/dashboard',
-    name: 'Dashboard',
-    component: DashboardView,
-    props: true
+    redirect: (to) => `/programs/${to.params.programId}/plan`
   },
   {
     path: '/programs/:programId/plan',

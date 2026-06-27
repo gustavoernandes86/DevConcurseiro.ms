@@ -68,7 +68,7 @@ export const useStudyPlanStore = defineStore('studyPlan', {
           throw new Error('Falha ao buscar concursos')
         }
         const contests = await contestsResponse.json()
-        const contest = contests.find((c: any) => c.program_id === programId)
+        const contest = contests.find((c: { program_id: string, [key: string]: any }) => c.program_id === programId)
 
         if (!contest) {
           // If no contest is associated (e.g. it's a video course), clear plan
@@ -90,8 +90,8 @@ export const useStudyPlanStore = defineStore('studyPlan', {
 
         // 3. Fetch progress and notes
         await this.fetchProgressAndNotes(programId)
-      } catch (err: any) {
-        this.error = err.message || 'Erro ao carregar o plano de estudos'
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Erro ao carregar o plano de estudos'
         console.error(err)
       } finally {
         this.loading = false
@@ -103,7 +103,7 @@ export const useStudyPlanStore = defineStore('studyPlan', {
         // Fetch progress
         const progResponse = await fetch(`/api/programs/${programId}/progress`)
         if (progResponse.ok) {
-          this.progress = await progResponse.ok ? await progResponse.json() : {}
+          this.progress = await progResponse.json()
         }
 
         // Fetch notes
@@ -111,7 +111,7 @@ export const useStudyPlanStore = defineStore('studyPlan', {
         if (notesResponse.ok) {
           const notesList = await notesResponse.json()
           const notesMap: Record<string, string> = {}
-          notesList.forEach((n: any) => {
+          notesList.forEach((n: { topic_id: string, content: string }) => {
             if (n.target_type === 'topic') {
               notesMap[n.target_id] = n.note
             }

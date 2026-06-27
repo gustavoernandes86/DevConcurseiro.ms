@@ -39,18 +39,8 @@ async function getTextForMaterialPages(materialId, pages) {
     }
 
     // Resolve path safely
-    const pdfRoot = process.env.PDF_ROOT ? path.resolve(process.env.PDF_ROOT) : path.join(__dirname, '../../public/pdfs');
-    const parentRoot = path.join(__dirname, '../..');
-    let resolvedPath;
-    
-    try {
-        resolvedPath = resolveInsideRoot(pdfRoot, material.path);
-        if (!fs.existsSync(resolvedPath)) {
-            resolvedPath = resolveInsideRoot(parentRoot, material.path);
-        }
-    } catch (e) {
-        resolvedPath = resolveInsideRoot(parentRoot, material.path);
-    }
+    const pdfRoot = process.env.PDF_ROOT ? path.resolve(process.env.PDF_ROOT) : path.join(__dirname, '../../content/pdfs');
+    const resolvedPath = resolveInsideRoot(pdfRoot, material.path);
 
     assertPdfPath(resolvedPath);
 

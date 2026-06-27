@@ -44,8 +44,8 @@ export const useVideoStore = defineStore('video', {
           throw new Error('Falha ao carregar aulas em vídeo')
         }
         this.modules = await response.json()
-      } catch (err: any) {
-        this.error = err.message || 'Erro ao carregar vídeos'
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Erro ao carregar vídeos'
         console.error(err)
       } finally {
         this.loading = false
@@ -59,13 +59,16 @@ export const useVideoStore = defineStore('video', {
       lastPositionSeconds = 0
     ) {
       // Optimistic update of local state
+      let found = false
       for (const mod of this.modules) {
+        if (found) break
         for (const sub of mod.subjects) {
           const video = sub.videos.find(v => v.id === videoId)
           if (video) {
             video.progress.status = status
             video.progress.lastPositionSeconds = lastPositionSeconds
             video.progress.completedAt = status === 'done' ? Date.now() : null
+            found = true
             break
           }
         }

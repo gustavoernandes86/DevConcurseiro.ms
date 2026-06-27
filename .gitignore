@@ -2,6 +2,7 @@
 *.db
 *.db-shm
 *.db-wal
+content/
 data/backups/
 node_modules/
 frontend/node_modules/
@@ -10,3 +11,10 @@ frontend/dist/
 pdfjs/*
 *.zip
 yarn.lock
+Engenharia de Software/*
+frontend/materials/*
+Gerenciamento de Produtos de Software/*
+Ingles/*
+Portugues/*
+Provas anteriores/*
+Qualidade de Software/*

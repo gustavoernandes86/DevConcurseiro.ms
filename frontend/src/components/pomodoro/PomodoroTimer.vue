@@ -87,7 +87,7 @@ const changeMode = (newMode: TimerMode) => {
     <!-- Timer Ring Display -->
     <div class="timer-display">
       <div class="timer-ring-container">
-        <svg class="timer-ring" width="200" height="200" viewBox="0 0 200 200">
+        <svg class="timer-ring" width="180" height="180" viewBox="0 0 200 200">
           <defs>
             <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#638aff" />
@@ -211,7 +211,7 @@ const changeMode = (newMode: TimerMode) => {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 16px 20px;
   box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
@@ -222,7 +222,7 @@ const changeMode = (newMode: TimerMode) => {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   width: 100%;
 }
 
@@ -251,7 +251,7 @@ const changeMode = (newMode: TimerMode) => {
   padding: 4px;
   border-radius: var(--radius-sm);
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
 }
 
 .mode-btn {
@@ -281,14 +281,14 @@ const changeMode = (newMode: TimerMode) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .timer-ring-container {
   position: relative;
-  width: 200px;
-  height: 200px;
-  margin-bottom: 12px;
+  width: 180px;
+  height: 180px;
+  margin-bottom: 8px;
 }
 
 .timer-ring {
@@ -320,7 +320,7 @@ const changeMode = (newMode: TimerMode) => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 800;
   letter-spacing: -1px;
   color: var(--text-primary);
@@ -340,7 +340,7 @@ const changeMode = (newMode: TimerMode) => {
   gap: 12px;
   justify-content: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .pomodoro-summary {

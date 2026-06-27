@@ -1,16 +1,31 @@
 const db = require('../db/connection');
+const AppError = require('../utils/AppError');
+
+// Simple in-memory rate limiter to prevent abuse/cost spikes
+const rateLimitCache = new Map();
+const RATE_LIMIT_WINDOW_MS = 60000; // 1 minute between generations per program
 
 /**
  * Compiles a profile-based prompt and calls Gemini API to generate questions.
  * @param {string} programId - Learning program ID.
  * @param {string} extractedContent - Text parsed from target pages.
- * @returns {Promise<Array>} - Array of 10 compiled questions.
+ * @param {number} numQuestions - Number of questions to generate.
+ * @returns {Promise<Array>} - Array of compiled questions.
  */
-async function generateExercisesForContent(programId, extractedContent) {
+async function generateExercisesForContent(programId, extractedContent, numQuestions = 10) {
+    // Rate Limiting Check
+    const now = Date.now();
+    const lastRequest = rateLimitCache.get(programId);
+    if (lastRequest && now - lastRequest < RATE_LIMIT_WINDOW_MS) {
+        throw AppError.badRequest(`Aguarde pelo menos um minuto antes de gerar novas questões.`);
+    }
+    
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
     if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_api_key_here') {
-        throw new Error('GEMINI_API_KEY não configurada no servidor.');
+        throw AppError.internal('GEMINI_API_KEY não configurada no servidor.');
     }
+
+    rateLimitCache.set(programId, now);
 
     // Fetch exam profile for the active program's contest
     const contest = db.prepare('SELECT id FROM contests WHERE program_id = ?').get(programId);
@@ -27,39 +42,7 @@ async function generateExercisesForContent(programId, extractedContent) {
         : ['A', 'B', 'C', 'D', 'E'];
     const negativeMarking = examProfile ? examProfile.has_negative_marking : 0;
 
-    // Build the prompt based on exam profile rules
-    let promptRules = `Você é um especialista em concursos públicos brasileiros e irá criar uma lista de exercícios de fixação no estilo da banca ${boardName.toUpperCase()}.
-
-Com base no conteúdo estudado abaixo, elabore EXATAMENTE 10 questões de múltipla escolha (estilo ${boardName}), cada uma com ${alternativesCount} alternativas (${alternativesList.join(', ')}) e apenas uma resposta correta.
-
-REGRAS OBRIGATÓRIAS:
-- As questões devem ser baseadas exclusivamente no conteúdo fornecido.
-- O nível de dificuldade deve ser moderado a alto (nível concurso público federal).
-- As alternativas incorretas devem ser plausíveis (não óbvias).
-- Cada questão deve ter um gabarito comentado objetivo e muito sucinto (máximo de 3 frases) explicando por que a resposta correta é a certa e por que as outras estão erradas. Evite explicações excessivamente longas para não estourar limites.
-- Responda APENAS com JSON válido, sem nenhum texto fora do JSON.`;
-
-    if (negativeMarking) {
-        promptRules += '\n- ATENÇÃO: Esta banca adota pontuação negativa (uma resposta errada anula uma certa), portanto as questões devem exigir máxima precisão técnica.';
-    }
-
-    const prompt = `${promptRules}
-
-FORMATO JSON OBRIGATÓRIO (array com exatamente 10 objetos):
-[
-  {
-    "id": 1,
-    "enunciado": "Texto da questão...",
-    "alternativas": {
-      ${alternativesList.map(a => `"${a}": "Texto da alternativa ${a}"`).join(',\n      ')}
-    },
-    "resposta_correta": "${alternativesList[0]}",
-    "comentario": "A alternativa ${alternativesList[0]} está correta porque..."
-  }
-]
-
-CONTEÚDO ESTUDADO HOJE:
-${extractedContent.substring(0, 30000)}`;
+    const prompt = buildExamPrompt(boardName, numQuestions, alternativesCount, alternativesList, negativeMarking, extractedContent);
 
     let attempts = 0;
     const maxRetries = 2;
@@ -81,27 +64,7 @@ ${extractedContent.substring(0, 30000)}`;
                             temperature: 0.7,
                             maxOutputTokens: 8192,
                             responseMimeType: 'application/json',
-                            responseSchema: {
-                                type: 'ARRAY',
-                                items: {
-                                    type: 'OBJECT',
-                                    properties: {
-                                        id: { type: 'INTEGER' },
-                                        enunciado: { type: 'STRING' },
-                                        alternativas: {
-                                            type: 'OBJECT',
-                                            properties: alternativesList.reduce((acc, alt) => {
-                                                acc[alt] = { type: 'STRING' };
-                                                return acc;
-                                            }, {}),
-                                            required: alternativesList
-                                        },
-                                        resposta_correta: { type: 'STRING' },
-                                        comentario: { type: 'STRING' }
-                                    },
-                                    required: ["id", "enunciado", "alternativas", "resposta_correta", "comentario"]
-                                }
-                            }
+                            responseSchema: buildResponseSchema(alternativesList)
                         }
                     })
                 }
@@ -109,29 +72,20 @@ ${extractedContent.substring(0, 30000)}`;
 
             if (!geminiRes.ok) {
                 const errText = await geminiRes.text();
-                throw new Error('Erro na API do Gemini: ' + geminiRes.status + ' - ' + errText);
+                throw AppError.internal('Erro na API do Gemini: ' + geminiRes.status + ' - ' + errText);
             }
 
             const geminiData = await geminiRes.json();
             const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
 
             if (!rawText) {
-                throw new Error('A API do Gemini não retornou conteúdo.');
+                throw AppError.internal('A API do Gemini não retornou conteúdo.');
             }
 
-            try {
-                questions = JSON.parse(rawText);
-            } catch (parseErr) {
-                const match = rawText.match(/\[[\s\S]*\]/);
-                if (match) {
-                    questions = JSON.parse(match[0]);
-                } else {
-                    throw new Error('Resposta da IA em formato JSON inválido.');
-                }
-            }
+            questions = parseGeminiResponse(rawText);
 
             if (!Array.isArray(questions) || questions.length < 5) {
-                throw new Error('A IA não gerou questões suficientes.');
+                throw AppError.internal('A IA não gerou questões suficientes.');
             }
             break;
         } catch (err) {
@@ -144,12 +98,99 @@ ${extractedContent.substring(0, 30000)}`;
     }
 
     if (!questions) {
-        throw lastError || new Error('Falha ao gerar simulado no Gemini.');
+        throw lastError || AppError.internal('Falha ao gerar simulado no Gemini.');
     }
 
     return questions;
 }
 
+function buildExamPrompt(boardName, numQuestions, alternativesCount, alternativesList, negativeMarking, extractedContent) {
+    let promptRules = `Você é um especialista em concursos públicos brasileiros e irá criar uma lista de exercícios de fixação no estilo da banca ${boardName.toUpperCase()}.
+
+Com base no conteúdo estudado abaixo, elabore EXATAMENTE ${numQuestions} questões de múltipla escolha (estilo ${boardName}), cada uma com ${alternativesCount} alternativas (${alternativesList.join(', ')}) e apenas uma resposta correta.
+
+REGRAS OBRIGATÓRIAS:
+- As questões devem ser baseadas exclusivamente no conteúdo fornecido.
+- O nível de dificuldade deve ser moderado a alto (nível concurso público federal).
+- As alternativas incorretas devem ser plausíveis (não óbvias).
+- Cada questão deve ter um gabarito comentado objetivo e muito sucinto (máximo de 3 frases) explicando por que a resposta correta é a certa e por que as outras estão erradas. Evite explicações excessivamente longas para não estourar limites.
+- Responda APENAS com JSON válido, sem nenhum texto fora do JSON.`;
+
+    if (negativeMarking) {
+        promptRules += '\n- ATENÇÃO: Esta banca adota pontuação negativa (uma resposta errada anula uma certa), portanto as questões devem exigir máxima precisão técnica.';
+    }
+
+    return `${promptRules}
+
+FORMATO JSON OBRIGATÓRIO (array com exatamente ${numQuestions} objetos):
+[
+  {
+    "id": 1,
+    "enunciado": "Texto da questão...",
+    "alternativas": {
+      ${alternativesList.map(a => `"${a}": "Texto da alternativa ${a}"`).join(',\n      ')}
+    },
+    "resposta_correta": "${alternativesList[0]}",
+    "comentario": "A alternativa ${alternativesList[0]} está correta porque..."
+  }
+]
+
+CONTEÚDO ESTUDADO HOJE:
+${extractedContent.substring(0, 30000)}`;
+}
+
+function buildResponseSchema(alternativesList) {
+    return {
+        type: 'ARRAY',
+        items: {
+            type: 'OBJECT',
+            properties: {
+                id: { type: 'INTEGER' },
+                enunciado: { type: 'STRING' },
+                alternativas: {
+                    type: 'OBJECT',
+                    properties: alternativesList.reduce((acc, alt) => {
+                        acc[alt] = { type: 'STRING' };
+                        return acc;
+                    }, {}),
+                    required: alternativesList
+                },
+                resposta_correta: { type: 'STRING' },
+                comentario: { type: 'STRING' }
+            },
+            required: ["id", "enunciado", "alternativas", "resposta_correta", "comentario"]
+        }
+    };
+}
+
+function parseGeminiResponse(rawText) {
+    try {
+        let parsedJson = JSON.parse(rawText);
+        return parsedJson.map((q, i) => ({
+            id: q.id || `q${Date.now()}_${i}`,
+            text: q.enunciado || q.text,
+            options: q.alternativas || q.options,
+            correct: q.resposta_correta || q.correct,
+            explanation: q.comentario || q.explanation
+        }));
+    } catch (parseErr) {
+        const match = rawText.match(/\[[\s\S]*\]/);
+        if (match) {
+            let parsedJson = JSON.parse(match[0]);
+            return parsedJson.map((q, i) => ({
+                id: q.id || `q${Date.now()}_${i}`,
+                text: q.enunciado || q.text,
+                options: q.alternativas || q.options,
+                correct: q.resposta_correta || q.correct,
+                explanation: q.comentario || q.explanation
+            }));
+        } else {
+            throw AppError.internal('Resposta da IA em formato JSON inválido.');
+        }
+    }
+}
+
 module.exports = {
     generateExercisesForContent
 };
+

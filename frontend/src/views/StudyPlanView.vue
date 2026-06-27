@@ -9,12 +9,17 @@ import SplitterPanel from 'primevue/splitterpanel'
 import Button from 'primevue/button'
 import Textarea from 'primevue/textarea'
 import InputText from 'primevue/inputtext'
-import PdfReaderPanel from '../components/pdf/PdfReaderPanel.vue'
 import PomodoroTimer from '../components/pomodoro/PomodoroTimer.vue'
+import PhaseCard from '../components/study/PhaseCard.vue'
+import TopicItem from '../components/study/TopicItem.vue'
+import NoteEditorPanel from '../components/study/NoteEditorPanel.vue'
+import PdfViewerModal from '../components/study/PdfViewerModal.vue'
+import { usePomodoroStore } from '../stores/pomodoro'
 
 const planStore = useStudyPlanStore()
 const programStore = useProgramStore()
 const pdfStore = usePdfStore()
+const pomodoroStore = usePomodoroStore()
 
 const searchQuery = ref('')
 const statusFilter = ref<string>('all')
@@ -22,23 +27,16 @@ const activeTopicForNote = ref<Topic | null>(null)
 const noteContent = ref('')
 const noteSaved = ref(false)
 
-// Expand/Collapse phases state
-const expandedPhases = ref<Record<string, boolean>>({})
+// Controla se o modal do PDF está maximizado (fullscreen) ou no tamanho normal
+const pdfModalMaximized = ref(true)
+
 
 onMounted(async () => {
   if (programStore.activeProgramId) {
     await planStore.fetchPlan(programStore.activeProgramId)
-    // Expand first phase by default
-    if (planStore.phases.length > 0) {
-      expandedPhases.value[planStore.phases[0].id] = true
-    }
   }
 })
 
-// Toggle phase collapse
-const togglePhase = (phaseId: string) => {
-  expandedPhases.value[phaseId] = !expandedPhases.value[phaseId]
-}
 
 // Open note editor
 const editNote = (topic: Topic) => {
@@ -49,17 +47,13 @@ const editNote = (topic: Topic) => {
 }
 
 // Save note
-const saveNote = async () => {
+const saveNote = async (content: string) => {
   if (!activeTopicForNote.value) return
   await planStore.saveTopicNote(
     programStore.activeProgramId,
     activeTopicForNote.value.id,
-    noteContent.value
+    content
   )
-  noteSaved.value = true
-  setTimeout(() => {
-    noteSaved.value = false
-  }, 2000)
 }
 
 // Open PDF file in viewer
@@ -153,115 +147,28 @@ const filteredPhases = computed(() => {
             <p>Nenhum tópico encontrado com os filtros selecionados.</p>
           </div>
 
-          <div v-for="phase in filteredPhases" :key="phase.id" class="phase-card">
-            <!-- Phase Header Collapsible -->
-            <div class="phase-header" @click="togglePhase(phase.id)">
-              <div class="phase-title">
-                <i :class="expandedPhases[phase.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
-                <h3>{{ phase.title }}</h3>
-              </div>
-              <span class="phase-subtitle">{{ phase.subtitle }}</span>
-            </div>
-
-            <!-- Phase Content (Weeks) -->
-            <div v-show="expandedPhases[phase.id]" class="phase-content">
-              <div v-for="week in phase.weeks" :key="week.id" class="week-card">
-                <div class="week-header">
-                  <h4>Semana {{ week.number }}: {{ week.title }}</h4>
-                  <p class="week-subtitle">{{ week.subtitle }}</p>
-                </div>
-
-                <div class="topics-list">
-                  <div 
-                    v-for="topic in week.topics" 
-                    :key="topic.id" 
-                    class="topic-item"
-                    :class="planStore.progress[topic.id]?.status || 'todo'"
-                  >
-                    <!-- Status Icon Button (Cycles on click) -->
-                    <button 
-                      class="status-indicator" 
-                      @click="cycleTopicStatus(topic.id)"
-                      :title="'Clique para alterar o progresso. Status atual: ' + (planStore.progress[topic.id]?.status || 'Pendente')"
-                    >
-                      <i v-if="planStore.progress[topic.id]?.status === 'done'" class="pi pi-check-circle status-icon done"></i>
-                      <i v-else-if="planStore.progress[topic.id]?.status === 'studying'" class="pi pi-bolt status-icon studying"></i>
-                      <i v-else-if="planStore.progress[topic.id]?.status === 'review'" class="pi pi-star-fill status-icon review"></i>
-                      <i v-else class="pi pi-circle status-icon todo"></i>
-                    </button>
-
-                    <!-- Topic Details -->
-                    <div class="topic-info">
-                      <div class="topic-title-row">
-                        <span class="topic-tag" :class="topic.tagClass">{{ topic.tag }}</span>
-                        <h5 class="topic-title">{{ topic.title }}</h5>
-                      </div>
-                      <p v-if="topic.detail" class="topic-detail">{{ topic.detail }}</p>
-                      
-                      <!-- Topic Material List -->
-                      <div v-if="topic.materials.length > 0" class="materials-links">
-                        <span class="materials-label">PDFs:</span>
-                        <button 
-                          v-for="m in topic.materials" 
-                          :key="m.materialId"
-                          class="material-link-btn"
-                          @click="openMaterial(topic, m.materialId, m.title)"
-                          :title="`Abrir ${m.title} (Págs ${m.startPage}-${m.endPage})`"
-                        >
-                          <i class="pi pi-file-pdf"></i>
-                          <span>{{ m.title }}</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Topic Actions (Notes button) -->
-                    <div class="topic-actions">
-                      <Button 
-                        icon="pi pi-pencil" 
-                        class="p-button-rounded p-button-text" 
-                        :class="{ 'note-active': planStore.notes[topic.id] }"
-                        @click="editNote(topic)"
-                        title="Escrever Anotações"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PhaseCard
+              v-for="(phase, index) in filteredPhases" 
+              :key="phase.id"
+              :phase="phase"
+              :initiallyExpanded="index === 0"
+              @cycleStatus="cycleTopicStatus"
+              @openMaterial="openMaterial"
+              @editNote="editNote"
+            />
         </div>
       </SplitterPanel>
 
       <!-- Right Panel: Side Panel Workspace -->
       <SplitterPanel :size="40" :minSize="30" class="workspace-panel">
-        <!-- PDF Viewer Panel -->
-        <PdfReaderPanel v-if="pdfStore.pdfViewerOpen" />
-
         <!-- Study Note Editor Panel -->
-        <div v-else-if="activeTopicForNote" class="note-editor-panel">
-          <div class="note-header">
-            <h3>Anotações: {{ activeTopicForNote.title }}</h3>
-            <Button 
-              icon="pi pi-times" 
-              class="p-button-rounded p-button-text p-button-secondary" 
-              @click="activeTopicForNote = null"
-            />
-          </div>
-          <div class="note-body">
-            <Textarea 
-              v-model="noteContent" 
-              rows="12" 
-              class="note-textarea"
-              placeholder="Digite suas notas de estudo para este tópico aqui..."
-            />
-            <div class="note-footer">
-              <span v-if="noteSaved" class="saved-message">
-                <i class="pi pi-check"></i> Anotações salvas!
-              </span>
-              <Button label="Salvar" icon="pi pi-save" @click="saveNote" />
-            </div>
-          </div>
-        </div>
+        <NoteEditorPanel 
+          v-if="activeTopicForNote" 
+          :topic="activeTopicForNote"
+          :initialContent="noteContent"
+          @close="activeTopicForNote = null"
+          @save="saveNote"
+        />
 
         <!-- Default Right Panel State: Pomodoro & Info -->
         <div v-else class="default-side-workspace">
@@ -273,6 +180,8 @@ const filteredPhases = computed(() => {
         </div>
       </SplitterPanel>
     </Splitter>
+
+    <PdfViewerModal />
   </div>
 </template>
 
@@ -373,262 +282,6 @@ const filteredPhases = computed(() => {
   font-size: 32px;
 }
 
-.phase-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  margin-bottom: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.phase-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background-color: rgba(26, 34, 54, 0.4);
-  border-bottom: 1px solid var(--border-color);
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.phase-header:hover {
-  background-color: rgba(26, 34, 54, 0.8);
-}
-
-.phase-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--text-primary);
-}
-
-.phase-title h3 {
-  font-size: 16px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.phase-subtitle {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.phase-content {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.week-card {
-  border-left: 2px solid var(--border-color);
-  padding-left: 16px;
-}
-
-.week-header {
-  margin-bottom: 12px;
-}
-
-.week-header h4 {
-  font-size: 14px;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text-primary);
-}
-
-.week-subtitle {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.topics-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.topic-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  transition: all 0.2s;
-}
-
-.topic-item:hover {
-  border-color: var(--text-muted);
-}
-
-.topic-item.studying {
-  border-left: 4px solid var(--accent-blue);
-  background-color: rgba(99, 138, 255, 0.03);
-}
-
-.topic-item.done {
-  border-left: 4px solid var(--accent-green);
-  background-color: rgba(52, 211, 153, 0.03);
-}
-
-.topic-item.review {
-  border-left: 4px solid var(--accent-purple);
-  background-color: rgba(167, 139, 250, 0.03);
-}
-
-.status-indicator {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2px;
-}
-
-.status-icon {
-  font-size: 18px;
-  transition: transform 0.2s;
-}
-
-.status-icon:hover {
-  transform: scale(1.15);
-}
-
-.status-icon.todo {
-  color: var(--text-muted);
-}
-
-.status-icon.studying {
-  color: var(--accent-blue);
-}
-
-.status-icon.done {
-  color: var(--accent-green);
-}
-
-.status-icon.review {
-  color: var(--accent-purple);
-}
-
-.topic-info {
-  flex-grow: 1;
-}
-
-.topic-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
-}
-
-.topic-tag {
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.topic-tag.tag-basic {
-  background-color: var(--accent-yellow-dim);
-  color: var(--accent-yellow);
-}
-
-.topic-tag.tag-es {
-  background-color: var(--accent-blue-dim);
-  color: var(--accent-blue);
-}
-
-.topic-title {
-  font-size: 13.5px;
-  font-weight: 600;
-  margin: 0;
-  color: var(--text-primary);
-  line-height: 1.4;
-}
-
-.topic-detail {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.materials-links {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-
-.materials-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
-.material-link-btn {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  color: var(--accent-blue);
-  padding: 4px 8px;
-  border-radius: var(--radius-xs);
-  font-size: 11px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.material-link-btn:hover {
-  background-color: var(--bg-card-hover);
-  color: var(--text-primary);
-}
-
-.note-active {
-  color: var(--accent-yellow) !important;
-}
-
-.workspace-panel {
-  background-color: var(--bg-primary);
-}
-
-.default-side-workspace {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: stretch;
-}
-
-.pomodoro-tip-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  padding: 16px;
-}
-
-.pomodoro-tip-card h4 {
-  font-size: 13px;
-  color: var(--text-primary);
-  margin: 0 0 6px 0;
-}
-
-.pomodoro-tip-card p {
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-/* Note Editor styling */
 .note-editor-panel {
   display: flex;
   flex-direction: column;

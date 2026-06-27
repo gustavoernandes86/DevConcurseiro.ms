@@ -63,22 +63,12 @@ watch(
         <nav class="nav-menu">
           <router-link
             v-if="programStore.activeProgramId"
-            :to="`/programs/${programStore.activeProgramId}/dashboard`"
-            class="nav-item"
-            active-class="active"
-          >
-            <i class="pi pi-home"></i>
-            <span>Dashboard</span>
-          </router-link>
-
-          <router-link
-            v-if="programStore.activeProgramId"
             :to="`/programs/${programStore.activeProgramId}/plan`"
             class="nav-item"
             active-class="active"
           >
-            <i class="pi pi-list"></i>
-            <span>Plano</span>
+            <i class="pi pi-home"></i>
+            <span>Início</span>
           </router-link>
 
           <router-link

@@ -4,6 +4,13 @@ import { usePdfStore } from '../../stores/pdf'
 import { useProgramStore } from '../../stores/program'
 import Button from 'primevue/button'
 
+defineProps({
+  hideHeader: {
+    type: Boolean,
+    default: false
+  }
+})
+
 const pdfStore = usePdfStore()
 const programStore = useProgramStore()
 const iframeRef = ref<HTMLIFrameElement | null>(null)
@@ -82,7 +89,7 @@ onUnmounted(() => {
 
 <template>
   <div class="pdf-panel">
-    <div class="pdf-header">
+    <div v-if="!hideHeader" class="pdf-header">
       <div class="pdf-title-container">
         <i class="pi pi-file-pdf pdf-icon"></i>
         <h3 class="pdf-title" :title="pdfStore.activeMaterialTitle">{{ pdfStore.activeMaterialTitle }}</h3>

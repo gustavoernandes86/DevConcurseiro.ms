@@ -152,14 +152,16 @@ async function loadAllContests() {
 
                         // Insert study week
                         db.prepare(`
-                            INSERT INTO study_weeks (id, contest_id, week_number, title, sort_order)
-                            VALUES (?, ?, ?, ?, ?)
+                            INSERT INTO study_weeks (id, contest_id, phase_id, week_number, title, subtitle, sort_order)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)
                             ON CONFLICT(id) DO UPDATE SET
                                 contest_id = excluded.contest_id,
+                                phase_id = excluded.phase_id,
                                 week_number = excluded.week_number,
                                 title = excluded.title,
+                                subtitle = excluded.subtitle,
                                 sort_order = excluded.sort_order
-                        `).run(weekId, contest.id, week.number, week.title, weekIndex);
+                        `).run(weekId, contest.id, sectionId, week.number, week.title, week.subtitle || null, weekIndex);
 
                         let topicIndex = 0;
                         for (const topic of week.topics) {

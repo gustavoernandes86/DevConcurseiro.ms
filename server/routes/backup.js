@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const asyncRoute = require('../middleware/asyncRoute');
+const AppError = require('../utils/AppError');
 
 // GET /api/backup/export - Export full database tables as JSON
 router.get('/export', asyncRoute(async (req, res) => {
@@ -44,9 +45,7 @@ router.get('/export', asyncRoute(async (req, res) => {
 router.post('/import', asyncRoute(async (req, res) => {
     const data = req.body;
     if (!data || typeof data !== 'object') {
-        const err = new Error('O payload de backup é obrigatório.');
-        err.statusCode = 400;
-        throw err;
+        throw AppError.badRequest('');
     }
 
     const importTransaction = db.transaction(() => {

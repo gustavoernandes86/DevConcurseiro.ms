@@ -37,8 +37,8 @@ export const useProgramStore = defineStore('program', {
           this.activeProgramId = data[0].id
           localStorage.setItem('activeProgramId', this.activeProgramId)
         }
-      } catch (err: any) {
-        this.error = err.message || 'Erro ao carregar programas'
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Erro ao carregar programas'
         console.error(err)
       } finally {
         this.loading = false

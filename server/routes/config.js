@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const asyncRoute = require('../middleware/asyncRoute');
+const AppError = require('../utils/AppError');
 
 // GET /api/config - Get all configuration keys
 router.get('/', asyncRoute(async (req, res) => {
@@ -20,14 +21,10 @@ router.put('/:key', asyncRoute(async (req, res) => {
     const { value } = req.body;
 
     if (!key || typeof key !== 'string' || !key.trim()) {
-        const err = new Error('A chave de configuração é obrigatória.');
-        err.statusCode = 400;
-        throw err;
+        throw AppError.badRequest('');
     }
     if (value === undefined) {
-        const err = new Error('O valor de configuração é obrigatório.');
-        err.statusCode = 400;
-        throw err;
+        throw AppError.badRequest('');
     }
 
     const valueStr = JSON.stringify(value);

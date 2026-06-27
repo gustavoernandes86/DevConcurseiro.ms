@@ -2,14 +2,13 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const asyncRoute = require('../middleware/asyncRoute');
+const AppError = require('../utils/AppError');
 
 // DELETE /api/sessions/:sessionId - Delete a study session
 router.delete('/:sessionId', asyncRoute(async (req, res) => {
     const { sessionId } = req.params;
     if (!sessionId || isNaN(parseInt(sessionId, 10))) {
-        const err = new Error('O ID da sessão é inválido.');
-        err.statusCode = 400;
-        throw err;
+        throw AppError.badRequest('');
     }
     
     const result = db.prepare('DELETE FROM study_sessions WHERE id = ?').run(sessionId);
