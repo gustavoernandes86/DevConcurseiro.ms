@@ -52,7 +52,7 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
           @click="emit('openMaterial', topic, m.materialId, m.title)"
           :title="`Abrir ${m.title} (Págs ${m.startPage}-${m.endPage})`"
         >
-          <i class="pi pi-file-pdf"></i>
+          <i class="pi pi-file-pdf"  aria-hidden="true"></i>
           <span>{{ m.title }}</span>
         </button>
       </div>

@@ -24,7 +24,7 @@ const pdfModalMaximized = ref(true)
   >
     <template #header>
       <div class="pdf-modal-header">
-        <i class="pi pi-file-pdf pdf-icon"></i>
+        <i class="pi pi-file-pdf pdf-icon"  aria-hidden="true"></i>
         <h3 class="pdf-title" :title="pdfStore.activeMaterialTitle">{{ pdfStore.activeMaterialTitle }}</h3>
         <span class="page-badge">
           Pág. {{ pdfStore.currentPage }} de {{ pdfStore.totalPages }}
@@ -52,14 +52,14 @@ const pdfModalMaximized = ref(true)
                 icon="pi pi-play" 
                 class="p-button-rounded p-button-success p-button-sm mini-btn" 
                 @click="pomodoroStore.startTimer()"
-                title="Continuar"
+                title="Continuar" aria-label="Continuar Timer Pomodoro"
               />
               <Button 
                 v-else
                 icon="pi pi-pause" 
                 class="p-button-rounded p-button-warn p-button-sm mini-btn" 
                 @click="pomodoroStore.pauseTimer()"
-                title="Pausar"
+                title="Pausar" aria-label="Pausar Timer Pomodoro"
               />
             </div>
           </div>

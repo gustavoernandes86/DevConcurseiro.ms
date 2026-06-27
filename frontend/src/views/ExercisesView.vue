@@ -153,16 +153,7 @@ const showHistoryDetail = (session: any) => {
   viewHistoryDialog.value = true
 }
 
-const formatDate = (timestamp?: number) => {
-  if (!timestamp) return '-'
-  return new Date(timestamp).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+
 </script>
 
 <template>
@@ -179,7 +170,7 @@ const formatDate = (timestamp?: number) => {
         <Card v-if="!activeQuizMode && !quizCompleted" class="generator-card">
           <template #title>
             <div class="card-title">
-              <i class="pi pi-sparkles spark-icon"></i>
+              <i class="pi pi-sparkles spark-icon"  aria-hidden="true"></i>
               <span>Novo Simulado Cesgranrio</span>
             </div>
           </template>
@@ -196,7 +187,7 @@ const formatDate = (timestamp?: number) => {
                     @click="selectedSourceType = 'pdf_reading'"
                     type="button"
                   >
-                    <i class="pi pi-calendar"></i>
+                    <i class="pi pi-calendar"  aria-hidden="true"></i>
                     <span>Leitura de Hoje</span>
                   </button>
                   <button 
@@ -205,7 +196,7 @@ const formatDate = (timestamp?: number) => {
                     @click="selectedSourceType = 'manual_topic'"
                     type="button"
                   >
-                    <i class="pi pi-book"></i>
+                    <i class="pi pi-book"  aria-hidden="true"></i>
                     <span>Tópicos de Estudo</span>
                   </button>
                 </div>
@@ -224,7 +215,7 @@ const formatDate = (timestamp?: number) => {
                     Será compilado um simulado com base nas <strong>{{ exerciseStore.todayPagesReadCount }}</strong> páginas que você leu hoje nos PDFs do plano de estudos.
                   </p>
                   <p v-else class="warning-text">
-                    <i class="pi pi-exclamation-triangle"></i>
+                    <i class="pi pi-exclamation-triangle"  aria-hidden="true"></i>
                     Nenhuma página lida hoje. Registre progresso nos PDFs na aba <strong>Plano</strong> para habilitar, ou selecione <strong>Tópicos de Estudo</strong> acima.
                   </p>
                 </div>
@@ -347,7 +338,7 @@ const formatDate = (timestamp?: number) => {
         <Card v-else-if="quizCompleted" class="results-card">
           <template #title>
             <div class="card-title text-success">
-              <i class="pi pi-check-circle"></i>
+              <i class="pi pi-check-circle"  aria-hidden="true"></i>
               <span>Simulado Concluído</span>
             </div>
           </template>

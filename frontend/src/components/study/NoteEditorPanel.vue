@@ -37,8 +37,7 @@ const save = () => {
       <h3>Anotações: {{ topic.title }}</h3>
       <Button 
         icon="pi pi-times" 
-        class="p-button-rounded p-button-text p-button-secondary" 
-        @click="emit('close')"
+        class="p-button-rounded p-button-text p-button-secondary" @click="emit('close')" title="Fechar" aria-label="Fechar painel de anota��es"
       />
     </div>
     <div class="note-body">
@@ -50,7 +49,7 @@ const save = () => {
       />
       <div class="note-footer">
         <span v-if="noteSaved" class="saved-message">
-          <i class="pi pi-check"></i> Anotações salvas!
+          <i class="pi pi-check"  aria-hidden="true"></i> Anotações salvas!
         </span>
         <Button label="Salvar" icon="pi pi-save" @click="save" />
       </div>

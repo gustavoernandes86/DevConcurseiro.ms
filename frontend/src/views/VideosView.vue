@@ -96,12 +96,12 @@ const formatDuration = (seconds?: number | null) => {
     </Card>
 
     <div v-if="videoStore.loading" class="loading-state">
-      <i class="pi pi-spin pi-spinner spinner-icon"></i>
+      <i class="pi pi-spin pi-spinner spinner-icon"  aria-hidden="true"></i>
       <p>Carregando grade curricular e progresso...</p>
     </div>
 
     <div v-else-if="videoStore.modules.length === 0" class="no-modules-state">
-      <i class="pi pi-video no-video-icon"></i>
+      <i class="pi pi-video no-video-icon"  aria-hidden="true"></i>
       <p>Este programa de estudos não possui grade de vídeos cadastrada.</p>
     </div>
 

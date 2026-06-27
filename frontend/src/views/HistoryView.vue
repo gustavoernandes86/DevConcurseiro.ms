@@ -138,7 +138,7 @@ const deleteSession = async (sessionId: string) => {
         :class="{ active: activeTab === 'sessions' }"
         @click="activeTab = 'sessions'"
       >
-        <i class="pi pi-clock"></i>
+        <i class="pi pi-clock"  aria-hidden="true"></i>
         <span>Sessões de Estudo</span>
       </button>
 
@@ -147,7 +147,7 @@ const deleteSession = async (sessionId: string) => {
         :class="{ active: activeTab === 'notes' }"
         @click="activeTab = 'notes'"
       >
-        <i class="pi pi-pencil"></i>
+        <i class="pi pi-pencil"  aria-hidden="true"></i>
         <span>Notas de Estudo</span>
       </button>
     </div>
@@ -196,13 +196,13 @@ const deleteSession = async (sessionId: string) => {
                   text 
                   rounded
                   @click="deleteSession(slotProps.data.id)"
-                  title="Excluir Registro"
+                  title="Excluir Registro" aria-label="Excluir Registro"
                 />
               </template>
             </Column>
           </DataTable>
           <div v-else class="no-data-display">
-            <i class="pi pi-calendar-minus"></i>
+            <i class="pi pi-calendar-minus"  aria-hidden="true"></i>
             <p>Nenhuma sessão de estudo gravada no banco de dados.</p>
           </div>
         </template>
@@ -231,7 +231,7 @@ const deleteSession = async (sessionId: string) => {
             </Column>
           </DataTable>
           <div v-else class="no-data-display">
-            <i class="pi pi-pencil"></i>
+            <i class="pi pi-pencil"  aria-hidden="true"></i>
             <p>Nenhuma nota ou resumo de estudo escrita até o momento.</p>
           </div>
         </template>

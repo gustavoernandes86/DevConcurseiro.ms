@@ -9,6 +9,7 @@ import App from './App.vue'
 
 import 'primeicons/primeicons.css'
 import './assets/theme.css'
+import './assets/global.css'
 
 const app = createApp(App)
 const pinia = createPinia()

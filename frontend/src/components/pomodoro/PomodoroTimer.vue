@@ -149,7 +149,7 @@ const changeMode = (newMode: TimerMode) => {
         severity="secondary" 
         outlined
         @click="pomodoroStore.resetTimer()"
-        title="Reiniciar"
+        title="Reiniciar" aria-label="Reiniciar o timer"
       />
       
       <Button 

@@ -114,7 +114,7 @@ const handleExport = async () => {
       <Card class="settings-card">
         <template #title>
           <div class="card-title">
-            <i class="pi pi-database db-icon"></i>
+            <i class="pi pi-database db-icon"  aria-hidden="true"></i>
             <span>Backup e Restauração de Progresso</span>
           </div>
         </template>
@@ -149,6 +149,7 @@ const handleExport = async () => {
                 type="file" 
                 accept=".json" 
                 style="display: none" 
+                aria-label="Importar arquivo de backup"
                 @change="handleImport" 
               />
               <Button 
@@ -168,7 +169,7 @@ const handleExport = async () => {
       <Card class="settings-card">
         <template #title>
           <div class="card-title">
-            <i class="pi pi-info-circle info-icon"></i>
+            <i class="pi pi-info-circle info-icon"  aria-hidden="true"></i>
             <span>Sobre o DevConcurseiro</span>
           </div>
         </template>

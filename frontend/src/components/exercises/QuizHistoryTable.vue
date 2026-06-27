@@ -23,7 +23,7 @@ const formatDate = (dateNum?: number | null) => {
   <Card class="history-card">
     <template #title>
       <div class="card-title">
-        <i class="pi pi-history"></i>
+        <i class="pi pi-history"  aria-hidden="true"></i>
         <span>Histórico de Simulados</span>
       </div>
     </template>
@@ -60,7 +60,7 @@ const formatDate = (dateNum?: number | null) => {
               icon="pi pi-eye" 
               class="p-button-text p-button-rounded p-button-sm" 
               @click="emit('showDetail', slotProps.data)"
-              title="Visualizar respostas e gabarito"
+              title="Visualizar respostas e gabarito" aria-label="Visualizar respostas e gabarito"
             />
           </template>
         </Column>

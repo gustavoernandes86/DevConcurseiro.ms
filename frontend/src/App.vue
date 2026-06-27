@@ -38,7 +38,7 @@ watch(
       <div class="header-content">
         <!-- Logo -->
         <router-link to="/" class="logo">
-          <div class="logo-icon">🚀</div>
+          <div class="logo-icon" role="img" aria-label="Foguete">🚀</div>
           <div class="logo-text">
             <h1>DevConcurseiro</h1>
             <span>Estudos Inteligentes local-first</span>
@@ -67,7 +67,7 @@ watch(
             class="nav-item"
             active-class="active"
           >
-            <i class="pi pi-home"></i>
+            <i class="pi pi-home"  aria-hidden="true"></i>
             <span>Início</span>
           </router-link>
 
@@ -77,7 +77,7 @@ watch(
             class="nav-item"
             active-class="active"
           >
-            <i class="pi pi-book"></i>
+            <i class="pi pi-book"  aria-hidden="true"></i>
             <span>Exercícios IA</span>
           </router-link>
 
@@ -87,7 +87,7 @@ watch(
             class="nav-item"
             active-class="active"
           >
-            <i class="pi pi-video"></i>
+            <i class="pi pi-video"  aria-hidden="true"></i>
             <span>Vídeos</span>
           </router-link>
 
@@ -97,12 +97,12 @@ watch(
             class="nav-item"
             active-class="active"
           >
-            <i class="pi pi-history"></i>
+            <i class="pi pi-history"  aria-hidden="true"></i>
             <span>Histórico</span>
           </router-link>
 
           <router-link to="/settings" class="nav-item" active-class="active">
-            <i class="pi pi-cog"></i>
+            <i class="pi pi-cog"  aria-hidden="true"></i>
             <span>Configurações</span>
           </router-link>
         </nav>

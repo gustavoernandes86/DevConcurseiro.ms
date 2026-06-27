@@ -111,7 +111,7 @@ export const useStudyPlanStore = defineStore('studyPlan', {
         if (notesResponse.ok) {
           const notesList = await notesResponse.json()
           const notesMap: Record<string, string> = {}
-          notesList.forEach((n: { topic_id: string, content: string }) => {
+          notesList.forEach((n: { target_type: string, target_id: string, note: string }) => {
             if (n.target_type === 'topic') {
               notesMap[n.target_id] = n.note
             }

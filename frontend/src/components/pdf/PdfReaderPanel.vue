@@ -91,7 +91,7 @@ onUnmounted(() => {
   <div class="pdf-panel">
     <div v-if="!hideHeader" class="pdf-header">
       <div class="pdf-title-container">
-        <i class="pi pi-file-pdf pdf-icon"></i>
+        <i class="pi pi-file-pdf pdf-icon"  aria-hidden="true"></i>
         <h3 class="pdf-title" :title="pdfStore.activeMaterialTitle">{{ pdfStore.activeMaterialTitle }}</h3>
       </div>
       
@@ -103,7 +103,7 @@ onUnmounted(() => {
           icon="pi pi-times" 
           class="p-button-rounded p-button-text p-button-secondary" 
           @click="pdfStore.closePdf()"
-          title="Fechar PDF"
+          title="Fechar PDF" aria-label="Fechar PDF"
         />
       </div>
     </div>
@@ -112,12 +112,12 @@ onUnmounted(() => {
       <iframe
         v-if="iframeUrl"
         ref="iframeRef"
-        :src="iframeUrl"
+        :src="iframeUrl" title="Visualizador de PDF"
         class="pdf-iframe"
         @load="onIframeLoad"
       ></iframe>
       <div v-else class="no-pdf">
-        <i class="pi pi-file pdf-placeholder-icon"></i>
+        <i class="pi pi-file pdf-placeholder-icon"  aria-hidden="true"></i>
         <p>Nenhum PDF carregado.</p>
       </div>
     </div>

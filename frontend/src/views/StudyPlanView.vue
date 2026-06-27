@@ -6,29 +6,21 @@ import { useProgramStore } from '../stores/program'
 import { usePdfStore } from '../stores/pdf'
 import Splitter from 'primevue/splitter'
 import SplitterPanel from 'primevue/splitterpanel'
-import Button from 'primevue/button'
-import Textarea from 'primevue/textarea'
 import InputText from 'primevue/inputtext'
 import PomodoroTimer from '../components/pomodoro/PomodoroTimer.vue'
 import PhaseCard from '../components/study/PhaseCard.vue'
-import TopicItem from '../components/study/TopicItem.vue'
 import NoteEditorPanel from '../components/study/NoteEditorPanel.vue'
 import PdfViewerModal from '../components/study/PdfViewerModal.vue'
-import { usePomodoroStore } from '../stores/pomodoro'
 
 const planStore = useStudyPlanStore()
 const programStore = useProgramStore()
 const pdfStore = usePdfStore()
-const pomodoroStore = usePomodoroStore()
 
 const searchQuery = ref('')
 const statusFilter = ref<string>('all')
 const activeTopicForNote = ref<Topic | null>(null)
 const noteContent = ref('')
 const noteSaved = ref(false)
-
-// Controla se o modal do PDF está maximizado (fullscreen) ou no tamanho normal
-const pdfModalMaximized = ref(true)
 
 
 onMounted(async () => {
@@ -110,7 +102,7 @@ const filteredPhases = computed(() => {
     <!-- Header Controls -->
     <div class="filters-bar">
       <div class="search-box">
-        <i class="pi pi-search search-icon"></i>
+        <i class="pi pi-search search-icon"  aria-hidden="true"></i>
         <InputText 
           v-model="searchQuery" 
           placeholder="Buscar tópicos ou palavras-chave..." 
@@ -143,7 +135,7 @@ const filteredPhases = computed(() => {
       <SplitterPanel :size="60" :minSize="30" class="plan-panel">
         <div class="plan-scrollable">
           <div v-if="filteredPhases.length === 0" class="no-results">
-            <i class="pi pi-info-circle"></i>
+            <i class="pi pi-info-circle"  aria-hidden="true"></i>
             <p>Nenhum tópico encontrado com os filtros selecionados.</p>
           </div>
 

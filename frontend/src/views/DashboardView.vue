@@ -212,7 +212,7 @@ const getSessionTypeLabel = (type: string) => {
       <Card class="panel-card minima-card" v-if="stats && stats.sectionBreakdown">
         <template #title>
           <div class="panel-title">
-            <i class="pi pi-shield shield-icon"></i>
+            <i class="pi pi-shield shield-icon"  aria-hidden="true"></i>
             <span>Requisitos Mínimos (Cesgranrio)</span>
           </div>
         </template>
@@ -236,7 +236,7 @@ const getSessionTypeLabel = (type: string) => {
       <Card class="panel-card activity-card">
         <template #title>
           <div class="panel-title">
-            <i class="pi pi-calendar-times"></i>
+            <i class="pi pi-calendar-times"  aria-hidden="true"></i>
             <span>Atividades Recentes</span>
           </div>
         </template>
@@ -268,7 +268,7 @@ const getSessionTypeLabel = (type: string) => {
             </Column>
           </DataTable>
           <div v-else class="no-activity">
-            <i class="pi pi-inbox"></i>
+            <i class="pi pi-inbox"  aria-hidden="true"></i>
             <p>Nenhuma atividade registrada nos últimos dias.</p>
           </div>
         </template>
