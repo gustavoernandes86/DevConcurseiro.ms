@@ -10,6 +10,7 @@ function assertProgramExists(programId) {
 }
 
 const { generateExercisesForContent } = require('../services/exerciseGenerator');
+const { getTextForMaterialPages } = require('../services/pdfTextExtractor');
 
 // GET /api/programs/:programId/exercises/today - Check exercises status for today
 router.get('/:programId/exercises/today', asyncRoute(async (req, res) => {
