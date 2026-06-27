@@ -72,11 +72,11 @@ const pdfModalMaximized = ref(true)
   </Dialog>
 </template>
 
-<style scoped>
-/* PDF Dialog Modal Styling */
+<style>
+/* Global styles for teleported PDF Dialog to bypass scoped styling hash issues */
 
 /* Estilo base do modal (estado restaurado/normal, não maximizado) */
-:deep(.pdf-viewer-dialog) {
+.pdf-viewer-dialog {
   background-color: var(--bg-secondary) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: var(--radius) !important;
@@ -90,7 +90,7 @@ const pdfModalMaximized = ref(true)
 }
 
 /* Estilo aplicado SOMENTE quando o PrimeVue maximiza o dialog */
-:deep(.pdf-viewer-dialog.p-dialog-maximized) {
+.pdf-viewer-dialog.p-dialog-maximized {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -103,10 +103,10 @@ const pdfModalMaximized = ref(true)
   border-radius: 0 !important;
 }
 
-:deep(.pdf-viewer-dialog .p-dialog-header) {
+.pdf-viewer-dialog .p-dialog-header {
   background-color: var(--bg-card) !important;
   border-bottom: 1px solid var(--border-color) !important;
-  padding: 12px 24px !important;
+  padding: 8px 20px !important; /* Thinner header height */
   color: var(--text-primary) !important;
   display: flex !important;
   align-items: center !important;
@@ -114,7 +114,7 @@ const pdfModalMaximized = ref(true)
   flex-shrink: 0 !important;
 }
 
-:deep(.pdf-viewer-dialog .p-dialog-content) {
+.pdf-viewer-dialog .p-dialog-content {
   padding: 0 !important;
   background-color: #525659 !important; /* PDF.js default dark viewer background */
   flex: 1 1 0% !important;
@@ -123,7 +123,7 @@ const pdfModalMaximized = ref(true)
   flex-direction: column !important;
 }
 
-:deep(.pdf-viewer-dialog .p-dialog-header-actions) {
+.pdf-viewer-dialog .p-dialog-header-actions {
   margin-left: auto !important;
   display: flex !important;
   align-items: center !important;
@@ -131,12 +131,12 @@ const pdfModalMaximized = ref(true)
 }
 
 /* Botão de maximizar/restaurar */
-:deep(.pdf-viewer-dialog .p-dialog-header-icon) {
+.pdf-viewer-dialog .p-dialog-header-icon {
   color: var(--text-secondary) !important;
   background: transparent !important;
   border: none !important;
-  width: 32px !important;
-  height: 32px !important;
+  width: 28px !important;
+  height: 28px !important;
   border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
@@ -145,11 +145,13 @@ const pdfModalMaximized = ref(true)
   cursor: pointer !important;
 }
 
-:deep(.pdf-viewer-dialog .p-dialog-header-icon:hover) {
+.pdf-viewer-dialog .p-dialog-header-icon:hover {
   background-color: var(--bg-card-hover) !important;
   color: var(--text-primary) !important;
 }
+</style>
 
+<style scoped>
 .pdf-modal-header {
   display: flex;
   align-items: center;
@@ -163,14 +165,14 @@ const pdfModalMaximized = ref(true)
 }
 
 .pdf-modal-header .pdf-title {
-  font-size: 15px;
+  font-size: 16px; /* Prominent size */
   font-weight: 700;
   margin: 0;
-  color: var(--text-primary);
+  color: #ffffff !important; /* Enforce high contrast white text */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 60%;
+  max-width: 65%;
 }
 
 .pdf-modal-header .page-badge {
