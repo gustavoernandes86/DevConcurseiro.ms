@@ -77,6 +77,24 @@ router.get('/:programId/exercises/history', asyncRoute(async (req, res) => {
     res.json(result);
 }));
 
+// DELETE /api/programs/:programId/exercises/sessions/:sessionId - Delete an exercise session
+router.delete('/:programId/exercises/sessions/:sessionId', asyncRoute(async (req, res) => {
+    const { programId, sessionId } = req.params;
+    assertProgramExists(programId);
+
+    // Verify session exists and belongs to this program
+    const session = db.prepare('SELECT id FROM exercise_sessions WHERE id = ? AND program_id = ?').get(sessionId, programId);
+    if (!session) {
+        throw AppError.notFound('Simulado não encontrado.');
+    }
+
+    // Delete associated sources first
+    db.prepare('DELETE FROM exercise_sources WHERE exercise_session_id = ?').run(sessionId);
+    db.prepare('DELETE FROM exercise_sessions WHERE id = ?').run(sessionId);
+
+    res.json({ success: true, message: 'Simulado removido com sucesso.' });
+}));
+
 // POST /api/programs/:programId/exercises/generate - Generate exercise session
 router.post('/:programId/exercises/generate', asyncRoute(async (req, res) => {
     const { programId } = req.params;

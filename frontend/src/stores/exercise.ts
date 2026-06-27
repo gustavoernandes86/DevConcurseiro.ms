@@ -157,6 +157,32 @@ export const useExerciseStore = defineStore('exercise', {
       } catch (err) {
         console.error('Erro ao salvar respostas:', err)
       }
+    },
+
+    async deleteSession(programId: string, sessionId: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await fetch(`/api/programs/${programId}/exercises/sessions/${sessionId}`, {
+          method: 'DELETE'
+        })
+        if (!response.ok) {
+          const errData = await response.json()
+          throw new Error(errData.error || 'Falha ao remover o simulado')
+        }
+        
+        this.history = this.history.filter(s => s.id !== sessionId)
+        
+        if (this.todaySession && this.todaySession.id === sessionId) {
+          this.todaySession = null
+        }
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Erro ao remover simulado'
+        console.error(err)
+        throw err
+      } finally {
+        this.loading = false
+      }
     }
   }
 })

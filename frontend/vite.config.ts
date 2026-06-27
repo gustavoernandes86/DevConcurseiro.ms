@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -11,6 +10,7 @@ export default defineConfig({
       '/pdfjs': 'http://localhost:3000'
     }
   },
+  // @ts-ignore
   test: {
     environment: 'jsdom',
     globals: true
