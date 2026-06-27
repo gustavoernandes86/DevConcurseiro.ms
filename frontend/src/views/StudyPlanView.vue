@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useStudyPlanStore } from '../stores/studyPlan'
 import type { Topic } from '../stores/studyPlan'
 import { useProgramStore } from '../stores/program'
@@ -7,14 +7,17 @@ import { usePdfStore } from '../stores/pdf'
 import Splitter from 'primevue/splitter'
 import SplitterPanel from 'primevue/splitterpanel'
 import InputText from 'primevue/inputtext'
+import Skeleton from 'primevue/skeleton'
 import PomodoroTimer from '../components/pomodoro/PomodoroTimer.vue'
 import PhaseCard from '../components/study/PhaseCard.vue'
 import NoteEditorPanel from '../components/study/NoteEditorPanel.vue'
 import PdfViewerModal from '../components/study/PdfViewerModal.vue'
+import { useNotification } from '../composables/useNotification'
 
 const planStore = useStudyPlanStore()
 const programStore = useProgramStore()
 const pdfStore = usePdfStore()
+const notification = useNotification()
 
 const searchQuery = ref('')
 const statusFilter = ref<string>('all')
@@ -22,11 +25,22 @@ const activeTopicForNote = ref<Topic | null>(null)
 const noteContent = ref('')
 const noteSaved = ref(false)
 
+const isMobile = ref(false)
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 992
+}
 
 onMounted(async () => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
   if (programStore.activeProgramId) {
     await planStore.fetchPlan(programStore.activeProgramId)
   }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkMobile)
 })
 
 
@@ -41,11 +55,16 @@ const editNote = (topic: Topic) => {
 // Save note
 const saveNote = async (content: string) => {
   if (!activeTopicForNote.value) return
-  await planStore.saveTopicNote(
-    programStore.activeProgramId,
-    activeTopicForNote.value.id,
-    content
-  )
+  try {
+    await planStore.saveTopicNote(
+      programStore.activeProgramId,
+      activeTopicForNote.value.id,
+      content
+    )
+    notification.showSuccess('Anotações Salvas', 'Suas anotações foram gravadas com sucesso!')
+  } catch (err: any) {
+    notification.showError('Erro ao Salvar', err.message || 'Não foi possível salvar as anotações.')
+  }
 }
 
 // Open PDF file in viewer
@@ -134,12 +153,37 @@ const filteredPhases = computed(() => {
       <!-- Left Panel: Study Plan Tree -->
       <SplitterPanel :size="60" :minSize="30" class="plan-panel">
         <div class="plan-scrollable">
-          <div v-if="filteredPhases.length === 0" class="no-results">
-            <i class="pi pi-info-circle"  aria-hidden="true"></i>
+          <!-- Loading State with Skeletons -->
+          <div v-if="planStore.loading" class="skeleton-plan p-md">
+            <div v-for="i in 2" :key="i" class="skeleton-phase-card mb-lg p-md bg-card radius">
+              <Skeleton width="40%" height="24px" class="mb-sm" />
+              <Skeleton width="60%" height="16px" class="mb-md" />
+              <div class="skeleton-weeks mt-md ml-sm">
+                <div v-for="j in 2" :key="j" class="skeleton-week-item mb-md">
+                  <Skeleton width="30%" height="20px" class="mb-sm" />
+                  <div class="skeleton-topics ml-md">
+                    <div v-for="k in 3" :key="k" class="skeleton-topic-row mb-sm d-flex items-center gap-sm">
+                      <Skeleton shape="circle" size="20px" />
+                      <div style="flex-grow: 1;">
+                        <Skeleton width="80%" height="14px" class="mb-xs" />
+                        <Skeleton width="40%" height="10px" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else-if="filteredPhases.length === 0" class="no-results">
+            <i class="pi pi-info-circle" aria-hidden="true"></i>
             <p>Nenhum tópico encontrado com os filtros selecionados.</p>
           </div>
 
-          <PhaseCard
+          <!-- Loaded State -->
+          <template v-else>
+            <PhaseCard
               v-for="(phase, index) in filteredPhases" 
               :key="phase.id"
               :phase="phase"
@@ -148,6 +192,7 @@ const filteredPhases = computed(() => {
               @openMaterial="openMaterial"
               @editNote="editNote"
             />
+          </template>
         </div>
       </SplitterPanel>
 
@@ -342,5 +387,26 @@ const filteredPhases = computed(() => {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+@media (max-width: 992px) {
+  :deep(.workspace-splitter) {
+    flex-direction: column !important;
+    height: auto !important;
+  }
+  
+  :deep(.workspace-splitter > .p-splitterpanel) {
+    width: 100% !important;
+    flex-basis: auto !important;
+  }
+  
+  :deep(.workspace-splitter > .p-splitter-gutter) {
+    display: none !important;
+  }
+  
+  .plan-scrollable {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
 }
 </style>

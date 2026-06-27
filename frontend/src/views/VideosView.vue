@@ -5,6 +5,7 @@ import { useProgramStore } from '../stores/program'
 import Card from 'primevue/card'
 import ProgressBar from 'primevue/progressbar'
 import Button from 'primevue/button'
+import Skeleton from 'primevue/skeleton'
 
 const videoStore = useVideoStore()
 const programStore = useProgramStore()
@@ -95,9 +96,25 @@ const formatDuration = (seconds?: number | null) => {
       </template>
     </Card>
 
-    <div v-if="videoStore.loading" class="loading-state">
-      <i class="pi pi-spin pi-spinner spinner-icon"  aria-hidden="true"></i>
-      <p>Carregando grade curricular e progresso...</p>
+    <!-- Skeleton Loader State -->
+    <div v-if="videoStore.loading" class="skeleton-videos-container">
+      <div v-for="i in 3" :key="i" class="skeleton-module-card mb-md p-md bg-card radius">
+        <div class="d-flex justify-between items-center mb-sm">
+          <Skeleton width="60%" height="20px" />
+          <Skeleton width="10%" height="16px" />
+        </div>
+        <div class="skeleton-subjects ml-md mt-md">
+          <div v-for="j in 2" :key="j" class="skeleton-subject-item mb-sm">
+            <Skeleton width="40%" height="16px" class="mb-xs" />
+            <div class="skeleton-video-list ml-md mt-xs">
+              <div v-for="k in 3" :key="k" class="d-flex justify-between items-center mb-xs gap-md">
+                <Skeleton width="70%" height="14px" />
+                <Skeleton width="15%" height="24px" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div v-else-if="videoStore.modules.length === 0" class="no-modules-state">

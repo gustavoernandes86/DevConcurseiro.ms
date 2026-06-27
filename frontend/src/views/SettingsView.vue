@@ -3,9 +3,9 @@ import { ref } from 'vue'
 import Card from 'primevue/card'
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
-import { useToast } from 'primevue/usetoast'
+import { useNotification } from '../composables/useNotification'
 
-const toast = useToast()
+const notification = useNotification()
 const fileInput = ref<HTMLInputElement | null>(null)
 const importing = ref(false)
 const exporting = ref(false)
@@ -34,12 +34,10 @@ const handleImport = (event: Event) => {
       })
 
       if (response.ok) {
-        toast.add({
-          severity: 'success',
-          summary: 'Importação Concluída',
-          detail: 'Seu progresso e configurações foram restaurados. Recarregando...',
-          life: 3000
-        })
+        notification.showSuccess(
+          'Importação Concluída',
+          'Seu progresso e configurações foram restaurados. Recarregando...'
+        )
         setTimeout(() => {
           window.location.reload()
         }, 1500)
@@ -48,12 +46,10 @@ const handleImport = (event: Event) => {
         throw new Error(errorData.error || 'Erro na resposta do servidor')
       }
     } catch (err: any) {
-      toast.add({
-        severity: 'error',
-        summary: 'Falha na Importação',
-        detail: err.message || 'Arquivo de backup inválido.',
-        life: 5000
-      })
+      notification.showError(
+        'Falha na Importação',
+        err.message || 'Arquivo de backup inválido.'
+      )
     } finally {
       importing.value = false
       if (target) target.value = '' // clear input
@@ -81,19 +77,15 @@ const handleExport = async () => {
     
     URL.revokeObjectURL(url)
     
-    toast.add({
-      severity: 'success',
-      summary: 'Exportação Concluída',
-      detail: 'Arquivo de backup baixado com sucesso.',
-      life: 3000
-    })
+    notification.showSuccess(
+      'Exportação Concluída',
+      'Arquivo de backup baixado com sucesso.'
+    )
   } catch (err: any) {
-    toast.add({
-      severity: 'error',
-      summary: 'Erro na Exportação',
-      detail: err.message || 'Não foi possível baixar o backup.',
-      life: 4000
-    })
+    notification.showError(
+      'Erro na Exportação',
+      err.message || 'Não foi possível baixar o backup.'
+    )
   } finally {
     exporting.value = false
   }
