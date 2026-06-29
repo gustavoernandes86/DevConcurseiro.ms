@@ -4,10 +4,6 @@ import { useStudyPlanStore } from '../stores/studyPlan'
 import type { Topic } from '../stores/studyPlan'
 import { useProgramStore } from '../stores/program'
 import { usePdfStore } from '../stores/pdf'
-import { useSummaryStore } from '../stores/summary'
-import { useFlashcardStore } from '../stores/flashcard'
-import FlashcardsViewer from '../components/study/FlashcardsViewer.vue'
-import { marked } from 'marked'
 import Splitter from 'primevue/splitter'
 import SplitterPanel from 'primevue/splitterpanel'
 import InputText from 'primevue/inputtext'
@@ -16,13 +12,12 @@ import PomodoroTimer from '../components/pomodoro/PomodoroTimer.vue'
 import PhaseCard from '../components/study/PhaseCard.vue'
 import NoteEditorPanel from '../components/study/NoteEditorPanel.vue'
 import PdfViewerModal from '../components/study/PdfViewerModal.vue'
+import StudyModal from '../components/study/StudyModal.vue'
 import { useNotification } from '../composables/useNotification'
 
 const planStore = useStudyPlanStore()
 const programStore = useProgramStore()
 const pdfStore = usePdfStore()
-const summaryStore = useSummaryStore()
-const flashcardStore = useFlashcardStore()
 const notification = useNotification()
 
 const searchQuery = ref('')
@@ -50,71 +45,19 @@ onBeforeUnmount(() => {
 })
 
 
-// Open study panel (Summary or Anki) for a topic
-const activeTopicForSummary = ref<Topic | null>(null)
-const activeTab = ref<'summary' | 'anki'>('summary')
+// Study modal state (summary + anki)
+const studyModalTopic = ref<Topic | null>(null)
+const studyModalTab = ref<'summary' | 'anki'>('summary')
 
-const openSummary = async (topic: Topic) => {
-  activeTopicForNote.value = null
-  pdfStore.pdfViewerOpen = false
-  activeTopicForSummary.value = topic
-  activeTab.value = 'summary'
-  // Fetch existing summary if not already loaded
-  if (summaryStore.summaries[topic.id] === undefined) {
-    await summaryStore.fetchSummary(programStore.activeProgramId, topic.id)
-  }
+const openSummary = (topic: Topic) => {
+  studyModalTopic.value = topic
+  studyModalTab.value = 'summary'
 }
 
-const openFlashcards = async (topic: Topic) => {
-  activeTopicForNote.value = null
-  pdfStore.pdfViewerOpen = false
-  activeTopicForSummary.value = topic
-  activeTab.value = 'anki'
-  // Fetch existing flashcards if not already loaded
-  if (flashcardStore.cards[topic.id] === undefined) {
-    await flashcardStore.fetchFlashcards(programStore.activeProgramId, topic.id)
-  }
+const openFlashcards = (topic: Topic) => {
+  studyModalTopic.value = topic
+  studyModalTab.value = 'anki'
 }
-
-const switchTab = async (tab: 'summary' | 'anki') => {
-  activeTab.value = tab
-  if (!activeTopicForSummary.value) return
-  if (tab === 'summary' && summaryStore.summaries[activeTopicForSummary.value.id] === undefined) {
-    await summaryStore.fetchSummary(programStore.activeProgramId, activeTopicForSummary.value.id)
-  } else if (tab === 'anki' && flashcardStore.cards[activeTopicForSummary.value.id] === undefined) {
-    await flashcardStore.fetchFlashcards(programStore.activeProgramId, activeTopicForSummary.value.id)
-  }
-}
-
-// Generate summary
-const generateSummary = async () => {
-  if (!activeTopicForSummary.value) return
-  try {
-    await summaryStore.generateSummary(programStore.activeProgramId, activeTopicForSummary.value.id)
-    notification.showSuccess('Resumo gerado!', 'O resumo do tópico foi gerado com sucesso.')
-  } catch (err: any) {
-    notification.showError('Erro ao gerar resumo', err.message || 'Tente novamente.')
-  }
-}
-
-// Generate flashcards
-const generateFlashcards = async () => {
-  if (!activeTopicForSummary.value) return
-  try {
-    await flashcardStore.generateFlashcards(programStore.activeProgramId, activeTopicForSummary.value.id)
-    notification.showSuccess('Flashcards gerados!', 'Os cartões de revisão foram gerados com sucesso.')
-  } catch (err: any) {
-    notification.showError('Erro ao gerar flashcards', err.message || 'Tente novamente.')
-  }
-}
-
-// Computed property for parsing Markdown to HTML
-const parsedSummaryHtml = computed(() => {
-  if (!activeTopicForSummary.value) return ''
-  const summary = summaryStore.summaries[activeTopicForSummary.value.id]
-  if (!summary || !summary.content) return ''
-  return marked.parse(summary.content) as string
-})
 
 // Open note editor
 const editNote = (topic: Topic) => {
@@ -270,9 +213,8 @@ const filteredPhases = computed(() => {
         </div>
       </SplitterPanel>
 
-      <!-- Right Panel: Side Panel Workspace -->
-      <SplitterPanel :size="40" :minSize="30" class="workspace-panel">
-        <!-- Note Editor Panel -->
+      <!-- Right Panel: Pomodoro + Info -->
+      <SplitterPanel :size="30" :minSize="22" class="workspace-panel">
         <NoteEditorPanel 
           v-if="activeTopicForNote" 
           :topic="activeTopicForNote"
@@ -280,138 +222,6 @@ const filteredPhases = computed(() => {
           @close="activeTopicForNote = null"
           @save="saveNote"
         />
-
-        <!-- Summary / Review Panel -->
-        <div v-else-if="activeTopicForSummary" class="summary-panel">
-          <div class="summary-panel-header-tabs">
-            <button 
-              class="panel-tab-btn" 
-              :class="{ active: activeTab === 'summary' }"
-              @click="switchTab('summary')"
-            >
-              <i class="pi pi-align-left" aria-hidden="true"></i>
-              <span>Resumo</span>
-            </button>
-            <button 
-              class="panel-tab-btn" 
-              :class="{ active: activeTab === 'anki' }"
-              @click="switchTab('anki')"
-            >
-              <i class="pi pi-clone" aria-hidden="true"></i>
-              <span>Revisão Anki</span>
-            </button>
-            
-            <button class="btn-close-panel" @click="activeTopicForSummary = null" aria-label="Fechar painel">
-              <i class="pi pi-times" aria-hidden="true"></i>
-            </button>
-          </div>
-
-          <p class="summary-topic-name">{{ activeTopicForSummary.title }}</p>
-
-          <!-- TAB 1: SUMMARY -->
-          <template v-if="activeTab === 'summary'">
-            <!-- Loading state -->
-            <div v-if="summaryStore.isGenerating(activeTopicForSummary.id)" class="summary-loading">
-              <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
-              <span>Gerando resumo com IA... pode levar alguns segundos.</span>
-            </div>
-
-            <!-- Error state -->
-            <div v-else-if="summaryStore.getError(activeTopicForSummary.id)" class="summary-error">
-              <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
-              <span>{{ summaryStore.getError(activeTopicForSummary.id) }}</span>
-            </div>
-
-            <!-- Summary content -->
-            <div
-              v-else-if="summaryStore.summaries[activeTopicForSummary.id]"
-              class="summary-content"
-            >
-              <div class="summary-text markdown-body" v-html="parsedSummaryHtml"></div>
-              <div class="summary-footer">
-                <span class="summary-date">
-                  Gerado em {{ new Date(summaryStore.summaries[activeTopicForSummary.id]!.generatedAt).toLocaleDateString('pt-BR') }}
-                </span>
-                <button
-                  class="btn-regenerate"
-                  :disabled="summaryStore.isGenerating(activeTopicForSummary.id)"
-                  @click="generateSummary"
-                >
-                  <i class="pi pi-refresh" aria-hidden="true"></i>
-                  Regenerar
-                </button>
-              </div>
-            </div>
-
-            <!-- Empty state -->
-            <div v-else class="summary-empty">
-              <div class="summary-empty-icon" aria-hidden="true">🤖</div>
-              <p>Nenhum resumo gerado ainda para este tópico.</p>
-              <button
-                class="btn-generate-summary"
-                :disabled="summaryStore.isGenerating(activeTopicForSummary.id)"
-                @click="generateSummary"
-              >
-                <i class="pi pi-sparkles" aria-hidden="true"></i>
-                Gerar Resumo com IA
-              </button>
-            </div>
-          </template>
-
-          <!-- TAB 2: ANKI / FLASHCARDS -->
-          <template v-else-if="activeTab === 'anki'">
-            <!-- Loading state -->
-            <div v-if="flashcardStore.isGenerating(activeTopicForSummary.id)" class="summary-loading">
-              <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
-              <span>Gerando flashcards com IA... pode levar alguns segundos.</span>
-            </div>
-
-            <!-- Error state -->
-            <div v-else-if="flashcardStore.getError(activeTopicForSummary.id)" class="summary-error">
-              <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
-              <span>{{ flashcardStore.getError(activeTopicForSummary.id) }}</span>
-            </div>
-
-            <!-- Flashcards viewer content -->
-            <div
-              v-else-if="flashcardStore.cards[activeTopicForSummary.id] && flashcardStore.cards[activeTopicForSummary.id]!.length > 0"
-              class="summary-content"
-            >
-              <div class="summary-text">
-                <FlashcardsViewer :cards="flashcardStore.cards[activeTopicForSummary.id] || []" />
-              </div>
-              <div class="summary-footer">
-                <span class="summary-date">
-                  Gerado em {{ new Date(flashcardStore.cards[activeTopicForSummary.id]![0].createdAt).toLocaleDateString('pt-BR') }}
-                </span>
-                <button
-                  class="btn-regenerate"
-                  :disabled="flashcardStore.isGenerating(activeTopicForSummary.id)"
-                  @click="generateFlashcards"
-                >
-                  <i class="pi pi-refresh" aria-hidden="true"></i>
-                  Regenerar
-                </button>
-              </div>
-            </div>
-
-            <!-- Empty state -->
-            <div v-else class="summary-empty">
-              <div class="summary-empty-icon" aria-hidden="true">🗂️</div>
-              <p>Nenhum cartão de revisão gerado ainda para este tópico.</p>
-              <button
-                class="btn-generate-summary"
-                :disabled="flashcardStore.isGenerating(activeTopicForSummary.id)"
-                @click="generateFlashcards"
-              >
-                <i class="pi pi-sparkles" aria-hidden="true"></i>
-                Gerar Anki com IA
-              </button>
-            </div>
-          </template>
-        </div>
-
-        <!-- Default Right Panel: Pomodoro & Info -->
         <div v-else class="default-side-workspace">
           <PomodoroTimer />
           <div class="pomodoro-tip-card">
@@ -422,7 +232,14 @@ const filteredPhases = computed(() => {
       </SplitterPanel>
     </Splitter>
 
+    <!-- Modals -->
     <PdfViewerModal />
+    <StudyModal
+      :topic="studyModalTopic"
+      :programId="programStore.activeProgramId"
+      :initialTab="studyModalTab"
+      @close="studyModalTopic = null"
+    />
   </div>
 </template>
 

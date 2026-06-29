@@ -86,10 +86,10 @@
               "title": "Integração e Implantação Contínua (CI/CD)",
               "tag": "Bloco I",
               "tagClass": "tag-red",
-              "detail": "metodologias-e-praticas-ageis.pdf",
+              "detail": "versionamento-e-integracao-continua.pdf",
               "materials": [
                 {
-                  "materialId": "metodologias-e-praticas-ageis",
+                  "materialId": "versionamento-e-integracao-continua",
                   "startPage": 1,
                   "endPage": null
                 }

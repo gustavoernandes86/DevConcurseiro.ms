@@ -38,9 +38,37 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
 
     <!-- Topic Details -->
     <div class="topic-info">
+      <!-- Title Row: tag + truncated title + action buttons (always same line) -->
       <div class="topic-title-row">
         <span class="topic-tag" :class="topic.tagClass">{{ topic.tag }}</span>
-        <h5 class="topic-title">{{ topic.title }}</h5>
+        <h5 class="topic-title" :title="topic.title">{{ topic.title }}</h5>
+        <!-- Topic Actions always inline -->
+        <div class="topic-actions">
+          <Button 
+            icon="pi pi-clone" 
+            class="p-button-rounded p-button-text"
+            @click="emit('openFlashcards', topic)"
+            title="Ver/Gerar Revisão Anki"
+            v-if="topic.materials.length > 0"
+            aria-label="Revisão Anki"
+          />
+          <Button 
+            icon="pi pi-align-left" 
+            class="p-button-rounded p-button-text"
+            @click="emit('openSummary', topic)"
+            title="Ver/Gerar Resumo IA"
+            v-if="topic.materials.length > 0"
+            aria-label="Resumo IA"
+          />
+          <Button 
+            icon="pi pi-pencil" 
+            class="p-button-rounded p-button-text" 
+            :class="{ 'note-active': hasNote }"
+            @click="emit('editNote', topic)"
+            title="Escrever Anotações"
+            aria-label="Anotações"
+          />
+        </div>
       </div>
       <p v-if="topic.detail" class="topic-detail">{{ topic.detail }}</p>
       
@@ -54,38 +82,10 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
           @click="emit('openMaterial', topic, m.materialId, m.title)"
           :title="`Abrir ${m.title} (Págs ${m.startPage}-${m.endPage})`"
         >
-          <i class="pi pi-file-pdf"  aria-hidden="true"></i>
+          <i class="pi pi-file-pdf" aria-hidden="true"></i>
           <span>{{ m.title }}</span>
         </button>
       </div>
-    </div>
-
-    <!-- Topic Actions (Notes + Summary + Anki buttons) -->
-    <div class="topic-actions">
-      <Button 
-        icon="pi pi-clone" 
-        class="p-button-rounded p-button-text"
-        @click="emit('openFlashcards', topic)"
-        title="Ver/Gerar Revisão Anki"
-        v-if="topic.materials.length > 0"
-        aria-label="Revisão Anki"
-      />
-      <Button 
-        icon="pi pi-align-left" 
-        class="p-button-rounded p-button-text"
-        @click="emit('openSummary', topic)"
-        title="Ver/Gerar Resumo IA"
-        v-if="topic.materials.length > 0"
-        aria-label="Resumo IA"
-      />
-      <Button 
-        icon="pi pi-pencil" 
-        class="p-button-rounded p-button-text" 
-        :class="{ 'note-active': hasNote }"
-        @click="emit('editNote', topic)"
-        title="Escrever Anotações"
-        aria-label="Anotações"
-      />
     </div>
   </div>
 </template>
@@ -95,7 +95,7 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px;
+  padding: 10px 12px;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -129,6 +129,7 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   margin-top: 2px;
 }
 
@@ -137,36 +138,24 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
   transition: transform 0.2s;
 }
 
-.status-icon:hover {
-  transform: scale(1.15);
-}
+.status-icon:hover { transform: scale(1.15); }
+.status-icon.todo { color: var(--text-muted); }
+.status-icon.studying { color: var(--accent-blue); }
+.status-icon.done { color: var(--accent-green); }
+.status-icon.review { color: var(--accent-purple); }
 
-.status-icon.todo {
-  color: var(--text-muted);
-}
-
-.status-icon.studying {
-  color: var(--accent-blue);
-}
-
-.status-icon.done {
-  color: var(--accent-green);
-}
-
-.status-icon.review {
-  color: var(--accent-purple);
-}
-
+/* Topic info takes all remaining space */
 .topic-info {
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0; /* critical for truncation to work */
 }
 
+/* Title row — tag + truncated title + inline actions */
 .topic-title-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
+  /* no flex-wrap: keeps everything on ONE line */
 }
 
 .topic-tag {
@@ -175,6 +164,7 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
   border-radius: 4px;
   font-weight: 700;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .topic-tag.tag-basic {
@@ -187,18 +177,37 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
   color: var(--accent-blue);
 }
 
+/* Truncated title — overflow hidden forces single line */
 .topic-title {
   font-size: 13.5px;
   font-weight: 600;
   margin: 0;
   color: var(--text-primary);
   line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+  cursor: default;
+}
+
+/* Action buttons — always pushed to the right, never wrap */
+.topic-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .topic-detail {
   font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: 8px;
+  margin: 2px 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .materials-links {
@@ -206,7 +215,7 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .materials-label {
@@ -238,38 +247,4 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
 .note-active {
   color: var(--accent-yellow) !important;
 }
-
-.workspace-panel {
-  background-color: var(--bg-primary);
-  overflow-y: auto;
-}
-
-.default-side-workspace {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: stretch;
-}
-
-.pomodoro-tip-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  padding: 16px;
-}
-
-.pomodoro-tip-card h4 {
-  font-size: 13px;
-  color: var(--text-primary);
-  margin: 0 0 6px 0;
-}
-
-.pomodoro-tip-card p {
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-/* Note Editor styling */
 </style>
