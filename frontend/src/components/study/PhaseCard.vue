@@ -12,7 +12,9 @@ const emit = defineEmits<{
   (e: 'cycleStatus', id: string): void
   (e: 'openMaterial', topic: Topic, materialId: string, title: string): void
   (e: 'editNote', topic: Topic): void
-}>()
+  (e: 'openSummary', topic: Topic): void
+  (e: 'openFlashcards', topic: Topic): void
+}>()  
 
 const isExpanded = ref(props.initiallyExpanded || false)
 </script>
@@ -42,6 +44,8 @@ const isExpanded = ref(props.initiallyExpanded || false)
             @cycleStatus="(id) => emit('cycleStatus', id)"
             @openMaterial="(t, mId, tTitle) => emit('openMaterial', t, mId, tTitle)"
             @editNote="(t) => emit('editNote', t)"
+            @openSummary="(t) => emit('openSummary', t)"
+            @openFlashcards="(t) => emit('openFlashcards', t)"
           />
         </div>
       </div>

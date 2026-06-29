@@ -4,6 +4,10 @@ import { useStudyPlanStore } from '../stores/studyPlan'
 import type { Topic } from '../stores/studyPlan'
 import { useProgramStore } from '../stores/program'
 import { usePdfStore } from '../stores/pdf'
+import { useSummaryStore } from '../stores/summary'
+import { useFlashcardStore } from '../stores/flashcard'
+import FlashcardsViewer from '../components/study/FlashcardsViewer.vue'
+import { marked } from 'marked'
 import Splitter from 'primevue/splitter'
 import SplitterPanel from 'primevue/splitterpanel'
 import InputText from 'primevue/inputtext'
@@ -17,6 +21,8 @@ import { useNotification } from '../composables/useNotification'
 const planStore = useStudyPlanStore()
 const programStore = useProgramStore()
 const pdfStore = usePdfStore()
+const summaryStore = useSummaryStore()
+const flashcardStore = useFlashcardStore()
 const notification = useNotification()
 
 const searchQuery = ref('')
@@ -43,6 +49,72 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', checkMobile)
 })
 
+
+// Open study panel (Summary or Anki) for a topic
+const activeTopicForSummary = ref<Topic | null>(null)
+const activeTab = ref<'summary' | 'anki'>('summary')
+
+const openSummary = async (topic: Topic) => {
+  activeTopicForNote.value = null
+  pdfStore.pdfViewerOpen = false
+  activeTopicForSummary.value = topic
+  activeTab.value = 'summary'
+  // Fetch existing summary if not already loaded
+  if (summaryStore.summaries[topic.id] === undefined) {
+    await summaryStore.fetchSummary(programStore.activeProgramId, topic.id)
+  }
+}
+
+const openFlashcards = async (topic: Topic) => {
+  activeTopicForNote.value = null
+  pdfStore.pdfViewerOpen = false
+  activeTopicForSummary.value = topic
+  activeTab.value = 'anki'
+  // Fetch existing flashcards if not already loaded
+  if (flashcardStore.cards[topic.id] === undefined) {
+    await flashcardStore.fetchFlashcards(programStore.activeProgramId, topic.id)
+  }
+}
+
+const switchTab = async (tab: 'summary' | 'anki') => {
+  activeTab.value = tab
+  if (!activeTopicForSummary.value) return
+  if (tab === 'summary' && summaryStore.summaries[activeTopicForSummary.value.id] === undefined) {
+    await summaryStore.fetchSummary(programStore.activeProgramId, activeTopicForSummary.value.id)
+  } else if (tab === 'anki' && flashcardStore.cards[activeTopicForSummary.value.id] === undefined) {
+    await flashcardStore.fetchFlashcards(programStore.activeProgramId, activeTopicForSummary.value.id)
+  }
+}
+
+// Generate summary
+const generateSummary = async () => {
+  if (!activeTopicForSummary.value) return
+  try {
+    await summaryStore.generateSummary(programStore.activeProgramId, activeTopicForSummary.value.id)
+    notification.showSuccess('Resumo gerado!', 'O resumo do tópico foi gerado com sucesso.')
+  } catch (err: any) {
+    notification.showError('Erro ao gerar resumo', err.message || 'Tente novamente.')
+  }
+}
+
+// Generate flashcards
+const generateFlashcards = async () => {
+  if (!activeTopicForSummary.value) return
+  try {
+    await flashcardStore.generateFlashcards(programStore.activeProgramId, activeTopicForSummary.value.id)
+    notification.showSuccess('Flashcards gerados!', 'Os cartões de revisão foram gerados com sucesso.')
+  } catch (err: any) {
+    notification.showError('Erro ao gerar flashcards', err.message || 'Tente novamente.')
+  }
+}
+
+// Computed property for parsing Markdown to HTML
+const parsedSummaryHtml = computed(() => {
+  if (!activeTopicForSummary.value) return ''
+  const summary = summaryStore.summaries[activeTopicForSummary.value.id]
+  if (!summary || !summary.content) return ''
+  return marked.parse(summary.content) as string
+})
 
 // Open note editor
 const editNote = (topic: Topic) => {
@@ -191,6 +263,8 @@ const filteredPhases = computed(() => {
               @cycleStatus="cycleTopicStatus"
               @openMaterial="openMaterial"
               @editNote="editNote"
+              @openSummary="openSummary"
+              @openFlashcards="openFlashcards"
             />
           </template>
         </div>
@@ -198,7 +272,7 @@ const filteredPhases = computed(() => {
 
       <!-- Right Panel: Side Panel Workspace -->
       <SplitterPanel :size="40" :minSize="30" class="workspace-panel">
-        <!-- Study Note Editor Panel -->
+        <!-- Note Editor Panel -->
         <NoteEditorPanel 
           v-if="activeTopicForNote" 
           :topic="activeTopicForNote"
@@ -207,7 +281,137 @@ const filteredPhases = computed(() => {
           @save="saveNote"
         />
 
-        <!-- Default Right Panel State: Pomodoro & Info -->
+        <!-- Summary / Review Panel -->
+        <div v-else-if="activeTopicForSummary" class="summary-panel">
+          <div class="summary-panel-header-tabs">
+            <button 
+              class="panel-tab-btn" 
+              :class="{ active: activeTab === 'summary' }"
+              @click="switchTab('summary')"
+            >
+              <i class="pi pi-align-left" aria-hidden="true"></i>
+              <span>Resumo</span>
+            </button>
+            <button 
+              class="panel-tab-btn" 
+              :class="{ active: activeTab === 'anki' }"
+              @click="switchTab('anki')"
+            >
+              <i class="pi pi-clone" aria-hidden="true"></i>
+              <span>Revisão Anki</span>
+            </button>
+            
+            <button class="btn-close-panel" @click="activeTopicForSummary = null" aria-label="Fechar painel">
+              <i class="pi pi-times" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <p class="summary-topic-name">{{ activeTopicForSummary.title }}</p>
+
+          <!-- TAB 1: SUMMARY -->
+          <template v-if="activeTab === 'summary'">
+            <!-- Loading state -->
+            <div v-if="summaryStore.isGenerating(activeTopicForSummary.id)" class="summary-loading">
+              <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+              <span>Gerando resumo com IA... pode levar alguns segundos.</span>
+            </div>
+
+            <!-- Error state -->
+            <div v-else-if="summaryStore.getError(activeTopicForSummary.id)" class="summary-error">
+              <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+              <span>{{ summaryStore.getError(activeTopicForSummary.id) }}</span>
+            </div>
+
+            <!-- Summary content -->
+            <div
+              v-else-if="summaryStore.summaries[activeTopicForSummary.id]"
+              class="summary-content"
+            >
+              <div class="summary-text markdown-body" v-html="parsedSummaryHtml"></div>
+              <div class="summary-footer">
+                <span class="summary-date">
+                  Gerado em {{ new Date(summaryStore.summaries[activeTopicForSummary.id]!.generatedAt).toLocaleDateString('pt-BR') }}
+                </span>
+                <button
+                  class="btn-regenerate"
+                  :disabled="summaryStore.isGenerating(activeTopicForSummary.id)"
+                  @click="generateSummary"
+                >
+                  <i class="pi pi-refresh" aria-hidden="true"></i>
+                  Regenerar
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div v-else class="summary-empty">
+              <div class="summary-empty-icon" aria-hidden="true">🤖</div>
+              <p>Nenhum resumo gerado ainda para este tópico.</p>
+              <button
+                class="btn-generate-summary"
+                :disabled="summaryStore.isGenerating(activeTopicForSummary.id)"
+                @click="generateSummary"
+              >
+                <i class="pi pi-sparkles" aria-hidden="true"></i>
+                Gerar Resumo com IA
+              </button>
+            </div>
+          </template>
+
+          <!-- TAB 2: ANKI / FLASHCARDS -->
+          <template v-else-if="activeTab === 'anki'">
+            <!-- Loading state -->
+            <div v-if="flashcardStore.isGenerating(activeTopicForSummary.id)" class="summary-loading">
+              <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+              <span>Gerando flashcards com IA... pode levar alguns segundos.</span>
+            </div>
+
+            <!-- Error state -->
+            <div v-else-if="flashcardStore.getError(activeTopicForSummary.id)" class="summary-error">
+              <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+              <span>{{ flashcardStore.getError(activeTopicForSummary.id) }}</span>
+            </div>
+
+            <!-- Flashcards viewer content -->
+            <div
+              v-else-if="flashcardStore.cards[activeTopicForSummary.id] && flashcardStore.cards[activeTopicForSummary.id]!.length > 0"
+              class="summary-content"
+            >
+              <div class="summary-text">
+                <FlashcardsViewer :cards="flashcardStore.cards[activeTopicForSummary.id] || []" />
+              </div>
+              <div class="summary-footer">
+                <span class="summary-date">
+                  Gerado em {{ new Date(flashcardStore.cards[activeTopicForSummary.id]![0].createdAt).toLocaleDateString('pt-BR') }}
+                </span>
+                <button
+                  class="btn-regenerate"
+                  :disabled="flashcardStore.isGenerating(activeTopicForSummary.id)"
+                  @click="generateFlashcards"
+                >
+                  <i class="pi pi-refresh" aria-hidden="true"></i>
+                  Regenerar
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div v-else class="summary-empty">
+              <div class="summary-empty-icon" aria-hidden="true">🗂️</div>
+              <p>Nenhum cartão de revisão gerado ainda para este tópico.</p>
+              <button
+                class="btn-generate-summary"
+                :disabled="flashcardStore.isGenerating(activeTopicForSummary.id)"
+                @click="generateFlashcards"
+              >
+                <i class="pi pi-sparkles" aria-hidden="true"></i>
+                Gerar Anki com IA
+              </button>
+            </div>
+          </template>
+        </div>
+
+        <!-- Default Right Panel: Pomodoro & Info -->
         <div v-else class="default-side-workspace">
           <PomodoroTimer />
           <div class="pomodoro-tip-card">
@@ -409,4 +613,247 @@ const filteredPhases = computed(() => {
     overflow-y: auto;
   }
 }
+
+/* ─── Summary Panel ─── */
+.summary-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border-color);
+}
+
+.summary-panel-header-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-glass);
+}
+
+.panel-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid transparent;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.panel-tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.panel-tab-btn.active {
+  color: var(--text-primary);
+  background: var(--accent-blue-dim);
+  border-color: var(--border-color);
+}
+
+.btn-close-panel {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  margin-left: auto;
+}
+.btn-close-panel:hover { color: var(--text-primary); background: var(--bg-card-hover); }
+
+.summary-topic-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-blue, #638aff);
+  padding: 12px 20px 0;
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.summary-loading, .summary-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.summary-error { color: #e05252; }
+.summary-loading i, .summary-error i { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+
+.summary-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-text {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  word-break: break-word;
+  font-family: inherit;
+  margin: 0;
+  background: transparent;
+}
+
+.summary-text :deep(h1) {
+  font-size: 1.5em;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  font-weight: 700;
+}
+
+.summary-text :deep(h2) {
+  font-size: 1.3em;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.summary-text :deep(h3) {
+  font-size: 1.1em;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.summary-text :deep(p) {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.summary-text :deep(ul), .summary-text :deep(ol) {
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.summary-text :deep(li) {
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+.summary-text :deep(code) {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--accent-blue, #638aff);
+}
+
+.summary-text :deep(pre) {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 14px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.summary-text :deep(pre code) {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.summary-text :deep(hr) {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 24px 0;
+}
+
+.summary-text :deep(blockquote) {
+  border-left: 4px solid var(--accent-blue, #638aff);
+  padding-left: 16px;
+  margin: 0 0 16px;
+  color: var(--text-secondary);
+  opacity: 0.8;
+  font-style: italic;
+}
+
+
+.summary-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-glass);
+}
+
+.summary-date {
+  font-size: 11px;
+  color: var(--text-muted, #6e7681);
+}
+
+.btn-regenerate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+.btn-regenerate:hover:not(:disabled) { border-color: var(--accent-blue, #638aff); color: var(--accent-blue, #638aff); }
+.btn-regenerate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.summary-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.summary-empty-icon { font-size: 40px; }
+.summary-empty p { margin: 0; }
+
+.btn-generate-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #638aff, #a855f7);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(99,138,255,0.3);
+}
+.btn-generate-summary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,138,255,0.4); }
+.btn-generate-summary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 </style>

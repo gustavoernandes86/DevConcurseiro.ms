@@ -2,11 +2,13 @@
 import { onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useProgramStore } from './stores/program'
+import { useAuthStore } from './stores/auth'
 import Select from 'primevue/select'
 import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
 
 const programStore = useProgramStore()
+const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -101,11 +103,30 @@ watch(
             <span>Histórico</span>
           </router-link>
 
+          <router-link to="/contests" class="nav-item" active-class="active">
+            <i class="pi pi-list" aria-hidden="true"></i>
+            <span>Concursos</span>
+          </router-link>
+
           <router-link to="/settings" class="nav-item" active-class="active">
             <i class="pi pi-cog"  aria-hidden="true"></i>
             <span>Configurações</span>
           </router-link>
         </nav>
+        <!-- User Avatar + Logout -->
+        <div v-if="authStore.user" class="user-area">
+          <img
+            v-if="authStore.user.picture"
+            :src="authStore.user.picture"
+            :alt="authStore.user.name"
+            class="user-avatar"
+            :title="authStore.user.name + ' (' + authStore.user.email + ')'"
+          />
+          <span class="user-name">{{ authStore.user.name?.split(' ')[0] }}</span>
+          <button class="btn-logout" @click="authStore.logout" title="Sair" aria-label="Sair da conta">
+            <i class="pi pi-sign-out" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -270,5 +291,47 @@ watch(
   .program-selector-container {
     justify-content: space-between;
   }
+}
+
+/* User area */
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  padding-left: 12px;
+  border-left: 1px solid var(--border-color);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.btn-logout {
+  background: none;
+  border: none;
+  color: var(--text-muted, #6e7681);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.btn-logout:hover {
+  color: #e05252;
+  background: rgba(224, 82, 82, 0.1);
 }
 </style>

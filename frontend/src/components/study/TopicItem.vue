@@ -12,7 +12,9 @@ const emit = defineEmits<{
   (e: 'cycleStatus', id: string): void
   (e: 'openMaterial', topic: Topic, materialId: string, title: string): void
   (e: 'editNote', topic: Topic): void
-}>()
+  (e: 'openSummary', topic: Topic): void
+  (e: 'openFlashcards', topic: Topic): void
+}>()  
 
 const planStore = useStudyPlanStore()
 
@@ -58,14 +60,31 @@ const hasNote = computed(() => !!planStore.notes[props.topic.id])
       </div>
     </div>
 
-    <!-- Topic Actions (Notes button) -->
+    <!-- Topic Actions (Notes + Summary + Anki buttons) -->
     <div class="topic-actions">
+      <Button 
+        icon="pi pi-clone" 
+        class="p-button-rounded p-button-text"
+        @click="emit('openFlashcards', topic)"
+        title="Ver/Gerar Revisão Anki"
+        v-if="topic.materials.length > 0"
+        aria-label="Revisão Anki"
+      />
+      <Button 
+        icon="pi pi-align-left" 
+        class="p-button-rounded p-button-text"
+        @click="emit('openSummary', topic)"
+        title="Ver/Gerar Resumo IA"
+        v-if="topic.materials.length > 0"
+        aria-label="Resumo IA"
+      />
       <Button 
         icon="pi pi-pencil" 
         class="p-button-rounded p-button-text" 
         :class="{ 'note-active': hasNote }"
         @click="emit('editNote', topic)"
         title="Escrever Anotações"
+        aria-label="Anotações"
       />
     </div>
   </div>

@@ -3,11 +3,15 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const db = require('./db/connection');
 const { runMigrations } = require('./db/migrate');
 const asyncRoute = require('./middleware/asyncRoute');
 const errorHandler = require('./middleware/errorHandler');
+const requireAuth = require('./middleware/requireAuth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +19,42 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // ─── Middleware ───
 app.use(express.json({ limit: '10mb' }));
+
+// ─── Session ───
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'dev-secret-please-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    }
+}));
+
+// ─── Passport ───
+app.use(passport.initialize());
+
+// Google OAuth Strategy — configured only if credentials are present
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    const callbackURL = `http://localhost:${PORT}/api/auth/google/callback`;
+
+    passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL
+    }, (accessToken, refreshToken, profile, done) => {
+        const user = {
+            googleId: profile.id,
+            email: profile.emails?.[0]?.value || '',
+            name: profile.displayName || '',
+            picture: profile.photos?.[0]?.value || ''
+        };
+        return done(null, user);
+    }));
+} else {
+    console.warn('[Auth] GOOGLE_CLIENT_ID/SECRET not set. Google OAuth disabled.');
+}
 
 // Security: Prevent path traversal and static access to sensitive files
 app.use((req, res, next) => {
@@ -51,7 +91,13 @@ app.use(express.static(path.join(__dirname, '..'), {
 // Serve PDF.js viewer (pdfjs folder at project root)
 app.use('/pdfjs', express.static(path.join(__dirname, '../pdfjs')));
 
-// ─── Modular API Routes (Phases 3 & 4) ───
+// ─── Auth routes (public — no requireAuth) ───
+app.use('/api/auth', require('./routes/auth'));
+
+// ─── All subsequent API routes require authentication ───
+app.use('/api', requireAuth);
+
+// ─── Modular API Routes ───
 app.use('/api/contests', require('./routes/contests'));
 app.use('/api/programs', require('./routes/programs'));
 app.use('/api/programs', require('./routes/exercises'));
@@ -62,6 +108,9 @@ app.use('/api/config', require('./routes/config'));
 app.use('/api/materials', require('./routes/materials'));
 app.use('/api/backup', require('./routes/backup'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/wizard', require('./routes/contestWizard'));
+app.use('/api/programs', require('./routes/summaries'));
+app.use('/api/programs', require('./routes/flashcards'));
 
 // Error handling middleware
 app.use(errorHandler);
@@ -94,6 +143,15 @@ runMigrations()
                 console.log(`  ⚠️  GEMINI_API_KEY não configurada (edite .env)`);
             } else {
                 console.log(`  🤖 Gemini API: configurada`);
+            }
+            if (!process.env.GOOGLE_CLIENT_ID) {
+                console.log(`  ⚠️  GOOGLE_CLIENT_ID não configurado (Google OAuth desabilitado)`);
+            } else {
+                console.log(`  🔐 Google OAuth: configurado`);
+            }
+            const allowedEmails = process.env.ALLOWED_EMAILS || '';
+            if (allowedEmails) {
+                console.log(`  📧 E-mails permitidos: ${allowedEmails}`);
             }
             console.log(`  ✨ Servidor pronto!\n`);
         });
