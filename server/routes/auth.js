@@ -4,6 +4,9 @@ const passport = require('passport');
 const db = require('../db/connection');
 const asyncRoute = require('../middleware/asyncRoute');
 
+// URL base do frontend (em dev: http://localhost:5173, em produção: mesma origem)
+const FRONTEND_URL = process.env.FRONTEND_URL || '';
+
 // ─── GET /api/auth/me ───
 // Returns the currently logged-in user, or 401 if not authenticated.
 router.get('/me', asyncRoute(async (req, res) => {
@@ -29,7 +32,10 @@ router.get('/google',
 // ─── GET /api/auth/google/callback ───
 // Google OAuth2 callback. Validates allowlist, creates/updates user, sets session.
 router.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login?error=auth_failed', session: false }),
+    passport.authenticate('google', {
+        failureRedirect: `${FRONTEND_URL}/login?error=auth_failed`,
+        session: false
+    }),
     asyncRoute(async (req, res) => {
         const { googleId, email, name, picture } = req.user;
 
@@ -41,7 +47,7 @@ router.get('/google/callback',
 
         if (allowedEmails.length > 0 && !allowedEmails.includes(email.toLowerCase())) {
             console.warn(`[Auth] Login attempt blocked for unlisted email: ${email}`);
-            return res.redirect('/login?error=not_allowed');
+            return res.redirect(`${FRONTEND_URL}/login?error=not_allowed`);
         }
 
         const now = Date.now();
@@ -62,7 +68,8 @@ router.get('/google/callback',
         // ── Set session ──
         req.session.userId = user.id;
         req.session.save(() => {
-            res.redirect('/');
+            // Redireciona para o frontend (não para a API)
+            res.redirect(`${FRONTEND_URL}/`);
         });
     })
 );

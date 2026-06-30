@@ -65,6 +65,16 @@ watch(
         <nav class="nav-menu">
           <router-link
             v-if="programStore.activeProgramId"
+            :to="`/programs/${programStore.activeProgramId}/dashboard`"
+            class="nav-item"
+            active-class="active"
+          >
+            <i class="pi pi-chart-bar" aria-hidden="true"></i>
+            <span>Dashboard</span>
+          </router-link>
+
+          <router-link
+            v-if="programStore.activeProgramId"
             :to="`/programs/${programStore.activeProgramId}/plan`"
             class="nav-item"
             active-class="active"

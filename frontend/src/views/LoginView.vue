@@ -9,6 +9,10 @@ const route = useRoute()
 
 const error = ref(route.query.error as string | null)
 
+// URL da API: em dev aponta para :3000, em produção usa mesma origem
+const API_URL = import.meta.env.VITE_API_URL ?? ''
+const googleLoginUrl = `${API_URL}/api/auth/google`
+
 onMounted(async () => {
   const isAuth = await authStore.checkAuth()
   if (isAuth) {
@@ -53,7 +57,7 @@ onMounted(async () => {
 
         <a
           id="btn-google-login"
-          href="/api/auth/google"
+          :href="googleLoginUrl"
           class="btn-google"
           :class="{ disabled: authStore.loading }"
           aria-label="Entrar com Google"

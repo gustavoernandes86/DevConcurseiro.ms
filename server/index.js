@@ -111,6 +111,7 @@ app.use('/api/admin', require('./routes/admin'));
 app.use('/api/wizard', require('./routes/contestWizard'));
 app.use('/api/programs', require('./routes/summaries'));
 app.use('/api/programs', require('./routes/flashcards'));
+app.use('/api/programs', require('./routes/dashboard'));
 
 // Error handling middleware
 app.use(errorHandler);

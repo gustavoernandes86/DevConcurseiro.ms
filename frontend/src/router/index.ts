@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import StudyPlanView from '../views/StudyPlanView.vue'
+import DashboardView from '../views/DashboardView.vue'
 import HistoryView from '../views/HistoryView.vue'
 import ExercisesView from '../views/ExercisesView.vue'
 import VideosView from '../views/VideosView.vue'
@@ -29,7 +30,9 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/programs/:programId/dashboard',
-    redirect: (to) => `/programs/${to.params.programId}/plan`
+    name: 'Dashboard',
+    component: DashboardView,
+    props: true
   },
   {
     path: '/programs/:programId/plan',
