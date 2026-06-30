@@ -17,7 +17,7 @@ router.get('/:programId/topics/:topicId/flashcards', asyncRoute(async (req, res)
     assertProgramExists(programId);
 
     const cards = db.prepare(`
-        SELECT id, topic_id, front, back, created_at
+        SELECT id, topic_id AS topicId, front, back, created_at AS createdAt
         FROM topic_flashcards
         WHERE topic_id = ?
         ORDER BY id ASC
@@ -68,7 +68,7 @@ router.post('/:programId/topics/:topicId/flashcards/generate', asyncRoute(async 
 
     // Fetch and return the newly inserted cards
     const savedCards = db.prepare(`
-        SELECT id, topic_id, front, back, created_at
+        SELECT id, topic_id AS topicId, front, back, created_at AS createdAt
         FROM topic_flashcards
         WHERE topic_id = ?
         ORDER BY id ASC
