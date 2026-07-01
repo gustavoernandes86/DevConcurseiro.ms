@@ -5,6 +5,7 @@ import Button from 'primevue/button'
 import { marked } from 'marked'
 import { useSummaryStore } from '../../stores/summary'
 import { useFlashcardStore } from '../../stores/flashcard'
+import { usePomodoroStore } from '../../stores/pomodoro'
 import { useNotification } from '../../composables/useNotification'
 import FlashcardsViewer from './FlashcardsViewer.vue'
 import type { Topic } from '../../stores/studyPlan'
@@ -21,6 +22,7 @@ const emit = defineEmits<{
 
 const summaryStore = useSummaryStore()
 const flashcardStore = useFlashcardStore()
+const pomodoroStore = usePomodoroStore()
 const notification = useNotification()
 
 const visible = computed(() => !!props.topic)
@@ -118,6 +120,38 @@ const modalMaximized = ref(false)
 
     <!-- Body -->
     <div class="study-modal-body">
+      <!-- Floating Mini Pomodoro in the Top Left Corner -->
+      <div class="floating-pomodoro-wrapper">
+        <div class="mini-pomodoro-card" :class="pomodoroStore.mode">
+          <div class="mini-pomodoro-header">
+            <span class="mini-mode-tag" :class="pomodoroStore.mode">
+              {{ pomodoroStore.mode === 'focus' ? 'Foco' : 'Pausa' }}
+            </span>
+            <span class="mini-status-dot" :class="{ active: pomodoroStore.isActive }"></span>
+          </div>
+          <div class="mini-pomodoro-body">
+            <div class="mini-timer-time">
+              {{ pomodoroStore.formattedTime }}
+            </div>
+            <div class="mini-controls">
+              <Button 
+                v-if="!pomodoroStore.isActive"
+                icon="pi pi-play" 
+                class="p-button-rounded p-button-success p-button-sm mini-btn" 
+                @click="pomodoroStore.startTimer()"
+                title="Continuar" aria-label="Continuar Timer Pomodoro"
+              />
+              <Button 
+                v-else
+                icon="pi pi-pause" 
+                class="p-button-rounded p-button-warn p-button-sm mini-btn" 
+                @click="pomodoroStore.pauseTimer()"
+                title="Pausar" aria-label="Pausar Timer Pomodoro"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- ──── TAB: RESUMO ──── -->
       <template v-if="activeTab === 'summary'">
@@ -358,6 +392,7 @@ const modalMaximized = ref(false)
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  position: relative; /* Base for floating absolutely positioned elements */
 }
 
 /* ─── Content Area ─── */
@@ -504,5 +539,117 @@ const modalMaximized = ref(false)
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+}
+
+/* ─── Floating Mini Pomodoro ─── */
+.floating-pomodoro-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.mini-pomodoro-card {
+  pointer-events: auto;
+  background: rgba(26, 34, 54, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(99, 138, 255, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+  transition: all 0.3s ease;
+}
+
+.mini-pomodoro-card:hover {
+  background: rgba(26, 34, 54, 0.95);
+  border-color: rgba(99, 138, 255, 0.5);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+.mini-pomodoro-card.focus {
+  border-left: 3px solid var(--accent-red);
+}
+
+.mini-pomodoro-card.short_break,
+.mini-pomodoro-card.long_break {
+  border-left: 3px solid var(--accent-green);
+}
+
+.mini-pomodoro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mini-mode-tag {
+  font-size: 9px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.mini-mode-tag.focus {
+  background-color: var(--accent-red-dim);
+  color: var(--accent-red);
+}
+
+.mini-mode-tag.short_break,
+.mini-mode-tag.long_break {
+  background-color: var(--accent-green-dim);
+  color: var(--accent-green);
+}
+
+.mini-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+}
+
+.mini-status-dot.active {
+  background-color: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+  animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.mini-pomodoro-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mini-timer-time {
+  font-size: 18px;
+  font-weight: 800;
+  font-family: monospace;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.mini-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mini-btn {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  font-size: 10px !important;
 }
 </style>
