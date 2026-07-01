@@ -1,0 +1,1137 @@
+{
+  "phases": [
+    {
+      "id": "fase-1",
+      "title": "FASE 1 — FUNDAÇÃO",
+      "class": "fase1",
+      "subtitle": "Semanas 1-4 · Temas de Alta Prioridade 🔴",
+      "weeks": [
+        {
+          "id": "semana-1",
+          "number": "1",
+          "title": "Engenharia de Software",
+          "topics": [
+            {
+              "id": "s1_1",
+              "title": "Modelos de Ciclo de Vida (Cascata, Espiral, Iterativo, Incremental)",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "engenharia-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "engenharia-de-software",
+                  "startPage": 1,
+                  "endPage": 28
+                }
+              ]
+            },
+            {
+              "id": "s1_2",
+              "title": "RUP (Rational Unified Process)",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "engenharia-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "engenharia-de-software",
+                  "startPage": 28,
+                  "endPage": 36
+                }
+              ]
+            },
+            {
+              "id": "s1_3",
+              "title": "CMMI e MPS.BR",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "conceitos-qualidade-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "conceitos-qualidade-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s1_4",
+              "title": "Metodologias Ágeis — Scrum",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "metodologias-e-praticas-ageis.pdf",
+              "materials": [
+                {
+                  "materialId": "metodologias-e-praticas-ageis",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s1_5",
+              "title": "Metodologias Ágeis — Kanban e XP",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "metodologias-e-praticas-ageis.pdf",
+              "materials": [
+                {
+                  "materialId": "metodologias-e-praticas-ageis",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s1_6",
+              "title": "Integração e Implantação Contínua (CI/CD)",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "versionamento-e-integracao-continua.pdf",
+              "materials": [
+                {
+                  "materialId": "versionamento-e-integracao-continua",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-2",
+          "number": "2",
+          "title": "DevOps + Containers",
+          "topics": [
+            {
+              "id": "s2_1",
+              "title": "DevOps e DevSecOps — Conceitos e Cultura",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "devops-e-devsecops.pdf",
+              "materials": [
+                {
+                  "materialId": "devops-e-devsecops",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s2_2",
+              "title": "Versionamento e Git (GIT Flow, branching)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "versionamento-e-integracao-continua.pdf",
+              "materials": [
+                {
+                  "materialId": "versionamento-e-integracao-continua",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s2_3",
+              "title": "Conteinerização e Docker",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "conteinerizacao-e-docker.pdf",
+              "materials": [
+                {
+                  "materialId": "conteinerizacao-e-docker",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s2_4",
+              "title": "Kubernetes — Orquestração de Containers",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "kubernets.pdf",
+              "materials": [
+                {
+                  "materialId": "kubernets",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s2_5",
+              "title": "Pipelines CI/CD na prática",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "versionamento-e-integracao-continua.pdf",
+              "materials": [
+                {
+                  "materialId": "versionamento-e-integracao-continua",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-3",
+          "number": "3",
+          "title": "Banco de Dados",
+          "topics": [
+            {
+              "id": "s3_1",
+              "title": "Modelagem de Dados (Conceitual, Lógica, Física)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "banco-de-dados-parte-i.pdf",
+              "materials": [
+                {
+                  "materialId": "banco-de-dados-parte-i",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s3_2",
+              "title": "Modelo Relacional e Normalização",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "banco-de-dados-parte-ii.pdf",
+              "materials": [
+                {
+                  "materialId": "banco-de-dados-parte-ii",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s3_3",
+              "title": "SQL — DDL, DML, Consultas complexas",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "banco-de-dados-parte-iii.pdf",
+              "materials": [
+                {
+                  "materialId": "banco-de-dados-parte-iii",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s3_4",
+              "title": "SQL Avançado (Joins, Subqueries, Window Functions)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "sql-avancado.pdf",
+              "materials": [
+                {
+                  "materialId": "sql-avancado",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s3_5",
+              "title": "SGBD, ACID, Transações, Performance",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "banco-de-dados-parte-iv.pdf",
+              "materials": [
+                {
+                  "materialId": "banco-de-dados-parte-iv",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s3_6",
+              "title": "Bancos NoSQL (Document, Key-Value, Graph, Column)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "bancos-de-dados-nosql.pdf",
+              "materials": [
+                {
+                  "materialId": "bancos-de-dados-nosql",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s3_7",
+              "title": "ETL, Data Lakes, Big Data (conceitos)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "big-data-hadoop-e-spark.pdf",
+              "materials": [
+                {
+                  "materialId": "big-data-hadoop-e-spark",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-4",
+          "number": "4",
+          "title": "Segurança da Informação",
+          "topics": [
+            {
+              "id": "s4_1",
+              "title": "Segurança Física e Lógica, Firewall, IDS/IPS, WAF",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "seguranca-da-informacao.pdf",
+              "materials": [
+                {
+                  "materialId": "seguranca-da-informacao",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s4_2",
+              "title": "Criptografia, Certificação e Assinatura Digital",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "seguranca-da-informacao-criptografia.pdf",
+              "materials": [
+                {
+                  "materialId": "seguranca-da-informacao-criptografia",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s4_3",
+              "title": "ISO 27002 — Gestão de Segurança",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "gestao-de-seguranca-iso-27002.pdf",
+              "materials": [
+                {
+                  "materialId": "gestao-de-seguranca-iso-27002",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s4_4",
+              "title": "Ataques (DDoS, SQL Injection, XSS, CSRF)",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "seguranca-da-informacao.pdf",
+              "materials": [
+                {
+                  "materialId": "seguranca-da-informacao",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s4_5",
+              "title": "Gestão de Identidade e Acesso (RBAC, ABAC, SSO, MFA)",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "gestao-de-identidade-e-acesso.pdf",
+              "materials": [
+                {
+                  "materialId": "gestao-de-identidade-e-acesso",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s4_6",
+              "title": "NIST SP 800-61, MITRE ATT&CK, Threat Hunting",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "testes-e-incidentes-de-seguranca.pdf",
+              "materials": [
+                {
+                  "materialId": "testes-e-incidentes-de-seguranca",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s4_7",
+              "title": "ISO 31000 (Riscos), ISO 22301 (Continuidade), Sarbanes-Oxley",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "abnt-nbr-22301-2020.pdf",
+              "materials": [
+                {
+                  "materialId": "abnt-nbr-22301-2020",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fase-2",
+      "title": "FASE 2 — CONSTRUÇÃO",
+      "class": "fase2",
+      "subtitle": "Semanas 5-8 · Temas de Alta e Média Prioridade 🔴🟡",
+      "weeks": [
+        {
+          "id": "semana-5",
+          "number": "5",
+          "title": "Arquitetura de Software",
+          "topics": [
+            {
+              "id": "s5_1",
+              "title": "Padrão MVC, N-Camadas, Microsserviços",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "arquitetura-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "arquitetura-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s5_2",
+              "title": "SOA, ESB, Arquitetura Orientada a Eventos",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "arquitetura-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "arquitetura-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s5_3",
+              "title": "Web Services: REST, SOAP, JSON, XML, WSDL",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "web-services-padroes.pdf",
+              "materials": [
+                {
+                  "materialId": "web-services-padroes",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s5_4",
+              "title": "OO, UML (diagramas de classes, sequência, casos de uso)",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "orientacao-a-objetos-e-uml.pdf",
+              "materials": [
+                {
+                  "materialId": "orientacao-a-objetos-e-uml",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s5_5",
+              "title": "Padrões de Projeto (GoF) e Anti-patterns",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "Estudo online / complementar",
+              "materials": []
+            },
+            {
+              "id": "s5_6",
+              "title": "Cloud Native, Serverless, Mensageria",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "arquitetura-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "arquitetura-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-6",
+          "number": "6",
+          "title": "Qualidade + Testes + Requisitos",
+          "topics": [
+            {
+              "id": "s6_1",
+              "title": "Conceitos de Qualidade de Software (ISO 25010)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "conceitos-qualidade-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "conceitos-qualidade-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s6_2",
+              "title": "Testes: Unitário, Integração, Funcional, Carga",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "testes-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "testes-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s6_3",
+              "title": "Técnicas: Caixa-Branca, Caixa-Preta, Regressão",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "testes-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "testes-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s6_4",
+              "title": "Refatoração, Débito Técnico, Code Smell, Métricas",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "conceitos-qualidade-de-software.pdf",
+              "materials": [
+                {
+                  "materialId": "conceitos-qualidade-de-software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s6_5",
+              "title": "Engenharia de Requisitos e Elicitação",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "engenharia-de-requisitos.pdf",
+              "materials": [
+                {
+                  "materialId": "engenharia-de-requisitos",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s6_6",
+              "title": "Design Thinking, MVP, Prototipação, Personas",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "design-thinking.pdf",
+              "materials": [
+                {
+                  "materialId": "design-thinking",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-7",
+          "number": "7",
+          "title": "Algoritmos + Lógica",
+          "topics": [
+            {
+              "id": "s7_1",
+              "title": "Tipos de Dados e Tipos Abstratos (Lista, Fila, Pilha)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "algoritmos-e-estruturas-de-dados.pdf",
+              "materials": [
+                {
+                  "materialId": "algoritmos-e-estruturas-de-dados",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s7_2",
+              "title": "Árvores (Binária, AVL, B, B+) e Grafos",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "algoritmos-e-estruturas-de-dados.pdf",
+              "materials": [
+                {
+                  "materialId": "algoritmos-e-estruturas-de-dados",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s7_3",
+              "title": "Algoritmos de Busca e Ordenação",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "algoritmos-e-estruturas-de-dados.pdf",
+              "materials": [
+                {
+                  "materialId": "algoritmos-e-estruturas-de-dados",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s7_4",
+              "title": "Complexidade de Algoritmos (Big O)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "algoritmos-e-estruturas-de-dados.pdf",
+              "materials": [
+                {
+                  "materialId": "algoritmos-e-estruturas-de-dados",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s7_5",
+              "title": "Lógica de Programação e Recursão",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "logica-de-programacao.pdf",
+              "materials": [
+                {
+                  "materialId": "logica-de-programacao",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-8",
+          "number": "8",
+          "title": "BI + Governança + ITIL",
+          "topics": [
+            {
+              "id": "s8_1",
+              "title": "Business Intelligence — Conceitos e Ferramentas",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "business-intelligence-parte-i.pdf",
+              "materials": [
+                {
+                  "materialId": "business-intelligence-parte-i",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s8_2",
+              "title": "Data Warehouse, OLAP, Modelagem Dimensional",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "business-intelligence-parte-ii.pdf",
+              "materials": [
+                {
+                  "materialId": "business-intelligence-parte-ii",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s8_3",
+              "title": "Dashboards e Relatórios interativos",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "business-intelligence-parte-ii.pdf",
+              "materials": [
+                {
+                  "materialId": "business-intelligence-parte-ii",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s8_4",
+              "title": "ITIL v4 — Práticas e Processos",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "itil-4-parte-i.pdf + parte-ii.pdf",
+              "materials": [
+                {
+                  "materialId": "itil-4-parte-i-parte-ii",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s8_5",
+              "title": "Governança de Dados (DAMA-DMBoK)",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "governanca-de-dados.pdf",
+              "materials": [
+                {
+                  "materialId": "governanca-de-dados",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s8_6",
+              "title": "SAFe (Scaled Agile Framework)",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "Estudo online / complementar",
+              "materials": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fase-3",
+      "title": "FASE 3 — CONSOLIDAÇÃO",
+      "class": "fase3",
+      "subtitle": "Semanas 9-12 · Temas Médios + Revisão + Simulados 🟡🟢",
+      "weeks": [
+        {
+          "id": "semana-9",
+          "number": "9",
+          "title": "Nuvem + Infra + Redes",
+          "topics": [
+            {
+              "id": "s9_1",
+              "title": "Computação em Nuvem (IaaS, PaaS, SaaS, Alta Disponibilidade)",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "arquitetura-de-sistemas-em-nuvem.pdf",
+              "materials": [
+                {
+                  "materialId": "arquitetura-de-sistemas-em-nuvem",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s9_2",
+              "title": "Segurança em Cloud Native",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "seguranca-em-cloud-native.pdf",
+              "materials": [
+                {
+                  "materialId": "seguranca-em-cloud-native",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s9_3",
+              "title": "IaC (Infrastructure as Code) e Terraform",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "infrastructure-as-code-iac.pdf",
+              "materials": [
+                {
+                  "materialId": "infrastructure-as-code-iac",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s9_4",
+              "title": "Redes — TCP/IP, HTTP, HTTPS, FTP, SMTP, LDAP",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "redes-de-computadores-parte-i.pdf",
+              "materials": [
+                {
+                  "materialId": "redes-de-computadores-parte-i",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s9_5",
+              "title": "Protocolos de Autenticação: OAuth, SAML 2.0, SSL",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "redes-de-computadores-parte-ii.pdf",
+              "materials": [
+                {
+                  "materialId": "redes-de-computadores-parte-ii",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s9_6",
+              "title": "Virtualização e HPC",
+              "tag": "Bloco III",
+              "tagClass": "tag-green",
+              "detail": "virtualizacao.pdf",
+              "materials": [
+                {
+                  "materialId": "virtualizacao",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-10",
+          "number": "10",
+          "title": "Linguagens + Frontend",
+          "topics": [
+            {
+              "id": "s10_1",
+              "title": "Python 3.7+ (conceitos, OO, bibliotecas)",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "linguagem-python.pdf + bibliotecas.pdf",
+              "materials": [
+                {
+                  "materialId": "linguagem-python-bibliotecas",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s10_2",
+              "title": "JavaScript (fundamentos, DOM, ES6+)",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "linguagem-javascript.pdf",
+              "materials": [
+                {
+                  "materialId": "linguagem-javascript",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s10_3",
+              "title": "HTML5 e Semântica Web",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "html.pdf",
+              "materials": [
+                {
+                  "materialId": "html",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s10_4",
+              "title": "CSS3 (Flexbox, Grid, Responsividade)",
+              "tag": "Bloco I",
+              "tagClass": "tag-red",
+              "detail": "linguagem-css.pdf",
+              "materials": [
+                {
+                  "materialId": "linguagem-css",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s10_5",
+              "title": "Persistência e Integração de Dados",
+              "tag": "Bloco II",
+              "tagClass": "tag-yellow",
+              "detail": "persistencia-e-integracao-de-dados.pdf",
+              "materials": [
+                {
+                  "materialId": "persistencia-e-integracao-de-dados",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-11",
+          "number": "11",
+          "title": "Revisão Geral + Provas",
+          "topics": [
+            {
+              "id": "s11_1",
+              "title": "Revisão Bloco I — Eng. Software + Arquitetura",
+              "tag": "Revisão",
+              "tagClass": "tag-purple",
+              "detail": "Resumos das semanas 1-6",
+              "materials": []
+            },
+            {
+              "id": "s11_2",
+              "title": "Revisão Bloco II — BD + Qualidade + Algoritmos",
+              "tag": "Revisão",
+              "tagClass": "tag-purple",
+              "detail": "Resumos das semanas 3, 6, 7",
+              "materials": []
+            },
+            {
+              "id": "s11_3",
+              "title": "Revisão Bloco III — Segurança + Governança + BI",
+              "tag": "Revisão",
+              "tagClass": "tag-purple",
+              "detail": "Resumos das semanas 4, 8, 9",
+              "materials": []
+            },
+            {
+              "id": "s11_4",
+              "title": "Prova Anterior 2022 (Analista Eng. Software)",
+              "tag": "Prova",
+              "tagClass": "tag-blue",
+              "detail": "analise_de_sistemas_engenharia_de_software.pdf",
+              "materials": [
+                {
+                  "materialId": "analise_de_sistemas_engenharia_de_software",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "s11_5",
+              "title": "Prova Anterior (Caderno C)",
+              "tag": "Prova",
+              "tagClass": "tag-blue",
+              "detail": "petro_005_3.pdf",
+              "materials": [
+                {
+                  "materialId": "petro_005_3",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "semana-12",
+          "number": "12",
+          "title": "Simulados Finais",
+          "topics": [
+            {
+              "id": "s12_1",
+              "title": "Simulado Completo Cronometrado #1",
+              "tag": "Simulado",
+              "tagClass": "tag-blue",
+              "detail": "3min/questão — todas as disciplinas",
+              "materials": []
+            },
+            {
+              "id": "s12_2",
+              "title": "Análise de Erros e Revisão Direcionada",
+              "tag": "Revisão",
+              "tagClass": "tag-purple",
+              "detail": "Focar nos temas com menor acerto",
+              "materials": []
+            },
+            {
+              "id": "s12_3",
+              "title": "Simulado Completo Cronometrado #2",
+              "tag": "Simulado",
+              "tagClass": "tag-blue",
+              "detail": "3min/questão — todas as disciplinas",
+              "materials": []
+            },
+            {
+              "id": "s12_4",
+              "title": "Revisão Final — Fórmulas, Tabelas, Conceitos-chave",
+              "tag": "Revisão",
+              "tagClass": "tag-purple",
+              "detail": "Resumo de 1 página por tema",
+              "materials": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fase-4",
+      "title": "ELIMINATÓRIAS — Português e Inglês",
+      "class": "basico",
+      "subtitle": "Domingos · ~1h30/semana · Apenas nota mínima",
+      "weeks": [
+        {
+          "id": "semana-PT/EN",
+          "number": "PT/EN",
+          "title": "Português e Inglês (Manutenção)",
+          "topics": [
+            {
+              "id": "e1",
+              "title": "Interpretação e Compreensão de Textos",
+              "tag": "Português",
+              "tagClass": "tag-purple",
+              "detail": "compreensao-e-interpretacao-de-textos.pdf",
+              "materials": [
+                {
+                  "materialId": "compreensao-e-interpretacao-de-textos",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "e2",
+              "title": "Coesão, Coerência, Figuras de Linguagem",
+              "tag": "Português",
+              "tagClass": "tag-purple",
+              "detail": "coesao-e-coerencia.pdf",
+              "materials": [
+                {
+                  "materialId": "coesao-e-coerencia",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "e3",
+              "title": "Classes Gramaticais (Parte I e II)",
+              "tag": "Português",
+              "tagClass": "tag-purple",
+              "detail": "classes-gramaticais.pdf",
+              "materials": [
+                {
+                  "materialId": "classes-gramaticais",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "e4",
+              "title": "Sintaxe do Período Simples e Composto",
+              "tag": "Português",
+              "tagClass": "tag-purple",
+              "detail": "sintaxe.pdf",
+              "materials": [
+                {
+                  "materialId": "sintaxe",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "e5",
+              "title": "Concordância, Regência e Crase",
+              "tag": "Português",
+              "tagClass": "tag-purple",
+              "detail": "sintaxe.pdf",
+              "materials": [
+                {
+                  "materialId": "sintaxe",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "e6",
+              "title": "Fonética, Acentuação e Ortografia",
+              "tag": "Português",
+              "tagClass": "tag-purple",
+              "detail": "fonetica-acentuacao-ortografia.pdf",
+              "materials": [
+                {
+                  "materialId": "fonetica-acentuacao-ortografia",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "e7",
+              "title": "Inglês — Vocabulário e Gramática Básica",
+              "tag": "Inglês",
+              "tagClass": "tag-blue",
+              "detail": "vocabulario-basico-e-gramatica.pdf",
+              "materials": [
+                {
+                  "materialId": "vocabulario-basico-e-gramatica",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            },
+            {
+              "id": "e8",
+              "title": "Inglês — Leitura e Interpretação de Texto Técnico",
+              "tag": "Inglês",
+              "tagClass": "tag-blue",
+              "detail": "leitura-e-interpretacao-de-texto.pdf",
+              "materials": [
+                {
+                  "materialId": "leitura-e-interpretacao-de-texto",
+                  "startPage": 1,
+                  "endPage": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,21 @@
 .env
-node_modules/*
+*.db
+*.db-shm
+*.db-wal
+content/
+data/backups/
+node_modules/
+frontend/node_modules/
+frontend/dist/
+.DS_Store
 pdfjs/*
 *.zip
 yarn.lock
-package-lock.json
+Engenharia de Software/*
+frontend/materials/*
+Gerenciamento de Produtos de Software/*
+Ingles/*
+Portugues/*
+Provas anteriores/*
+Qualidade de Software/*
+scratch/

@@ -1,0 +1,21 @@
+{
+  "id": "petrobras-eng-software-2026",
+  "programId": "petrobras-eng-software-2026",
+  "name": "Petrobras — Engenharia de Software",
+  "institution": "Petrobras",
+  "role": "Profissional Petrobras NS Júnior",
+  "emphasis": "Ênfase 4",
+  "board": "Cesgranrio",
+  "examStyle": "multiple_choice_a_e",
+  "ui": {
+    "icon": "🛢️",
+    "title": "Plano Petrobras",
+    "subtitle": "Ênfase 4 — Engenharia de Software | Cesgranrio"
+  },
+  "examProfile": {
+    "format": "multiple_choice",
+    "alternatives": ["A", "B", "C", "D", "E"],
+    "negativeMarking": false,
+    "questionCountDefault": 10
+  }
+}

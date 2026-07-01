@@ -4,13 +4,22 @@
   "description": "Plano de Estudos Petrobras — Engenharia de Software",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "better-sqlite3": "^11.7.0",
     "dotenv": "^17.4.2",
     "express": "^4.21.0",
+    "express-session": "^1.19.0",
+    "multer": "^2.2.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }
